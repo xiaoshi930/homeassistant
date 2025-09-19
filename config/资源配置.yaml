@@ -1,0 +1,40 @@
+mode: yaml
+resources:
+  - url: /hacsfiles/apexcharts-card/apexcharts-card.js
+    type: module
+  - url: /hacsfiles/button-card/button-card.js
+    type: module
+  - url: /hacsfiles/kiosk-mode/kiosk-mode.js
+    type: module
+  - url: /hacsfiles/lovelace-mushroom/mushroom.js
+    type: module
+  - url: /hacsfiles/mini-graph-card/mini-graph-card-bundle.js
+    type: module
+  - url: /hacsfiles/mini-media-player/mini-media-player-bundle.js
+    type: module
+  - url: /hacsfiles/lovelace-card-mod/card-mod.js
+    type: module
+  - url: /hacsfiles/Bubble-Card/bubble-card.js
+    type: module
+  - url: /hacsfiles/battery-state-card/battery-state-card.js
+    type: module
+  - url: /hacsfiles/browser-mod/browser-mod.js
+    type: module
+  - url: /hacsfiles/xiaoshi-card/xiaoshi-card.js
+    type: module
+  - url: /hacsfiles/test/test.js
+    type: module
+
+dashboards:
+  xiaoshi-pad-ui:
+    mode: yaml
+    title: 平板
+    icon: hass:tablet
+    show_in_sidebar: true
+    filename: 仪表盘-平板端/平板端主UI.yaml
+  xiaoshi-phone-ui:
+    mode: yaml
+    title: 手机
+    icon: hass:phone
+    show_in_sidebar: true
+    filename: 仪表盘-手机端/手机端主UI.yaml

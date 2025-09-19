@@ -1,0 +1,13 @@
+homeassistant:
+default_config:
+api:
+lovelace: !include 资源配置.yaml
+panel_custom:
+  - name: Supervisor
+    url_path: hassio/system # url_path needs to be unique for each panel_custom config
+    sidebar_title: Supervisor
+    sidebar_icon: mdi:home-assistant # https://materialdesignicons.com/
+    module_url: /local/panel-redirect.js # 'local' is '/config/www/'
+logger:
+  logs:
+    homeassistant.components.recorder.db_schema: error
