@@ -1,0 +1,100 @@
+每月燃气曲线:
+  series:
+    - entity: ""
+      data_generator: |
+        const rawData = [...entity.attributes.充值明细].reverse();
+        const aggregatedData = rawData.reduce((acc, curr) => {
+          const date = curr.date;
+          const cost = parseFloat(curr.cost);
+          if (!acc[date]) {
+            acc[date] = { date, cost: 0 };
+          }
+          acc[date].cost += cost;
+          return acc;
+        }, {});
+        const result = Object.values(aggregatedData).map(item => {
+          return [new Date(item.date).getTime(), item.cost];
+        });
+        if (entity.state) {
+          const today = new Date();
+          today.setHours(12, 0, 0, 0); 
+          result.push([
+            today.getTime(),
+            parseFloat(entity.state)
+          ]);
+        }
+        return result;
+      name: 用气金额
+      unit: 元
+      color: "#f9d505"
+      opacity: 1
+      stroke_width: 0
+      type: column
+      curve: smooth
+      extend_to: end
+      float_precision: 2
+      fill_raw: last
+      show:
+        datalabels: false
+        extremas: false
+        name_in_header: true
+      color_threshold:
+        - value: 100
+          color: "#68ca96"
+          opacity: 1
+        - value: 200
+          color: "#0fccc3"
+          opacity: 1
+        - value: 500
+          color: "#3980c7"
+          opacity: 1
+  update_interval: 5s
+  cache: true
+  graph_span: 12month
+  span:
+    end: month
+  header:
+    title: ""
+    show: true
+    show_states: true
+    colorize_states: true
+    standard_format: false
+  apex_config:
+    grid:
+      position: front
+      row:
+        colors:
+          - black
+          - transparent
+        opacity: 0.1
+      xaxis:
+        lines:
+          show: false
+      yaxis:
+        lines:
+          show: false
+    chart:
+      height: 210
+    xaxis:
+      labels:
+        show: true
+        style:
+          colors: "#acb4dc"
+          fontSize: 12px
+        format: yyyy-MM
+      axisBorder:
+        show: true
+        color: "#acb4dc"
+        height: 1
+      axisTicks:
+        show: true
+        borderType: solid
+        color: "#acb4dc"
+        height: 2
+    yaxis:
+      show: true
+    markers:
+      size: 2
+      strokeWidth: 1
+  experimental:
+    color_threshold: true

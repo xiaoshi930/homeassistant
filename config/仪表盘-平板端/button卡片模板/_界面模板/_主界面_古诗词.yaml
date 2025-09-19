@@ -1,0 +1,96 @@
+主界面_古诗词:
+  triggers_update: 
+    - '[[[ return variables.古诗词]]]'
+  styles:   
+    grid:
+      - grid-template-areas: >-
+          "标题"
+          "正文1"
+          "正文2"
+          "刷新按钮"
+          "播放按钮"
+      - grid-template-columns: 100%
+      - grid-template-rows: 25px 20px 20px 0 0
+      - font-size: 13px
+      - color: rgb(255,255,255)
+      - text-align: left
+      - font-weight: bold
+    card:
+      - padding: 0 
+      - width: 460px 
+      - height: 80px   
+      - border-radius: 0
+      - background: rgb(0,0,0,0)
+  custom_fields: 
+    标题: |
+      [[[ 
+          var title = states[variables.古诗词].attributes.标题;
+          var dynasty = states[variables.古诗词].attributes.朝代;
+          var author = states[variables.古诗词].attributes.作者;
+          return "「" + title + "」" + dynasty + "&ensp;•&ensp;" + author;
+      ]]]
+    正文1: '[[[ return "&emsp;"+states[variables.古诗词].attributes.正文1 ]]]'
+    正文2: '[[[ return "&emsp;"+states[variables.古诗词].attributes.正文2 ]]]'
+    刷新按钮:
+      card:
+        type: custom:button-card
+        show_icon: true
+        icon: mdi:refresh
+        styles:
+          icon:
+           - width: 20px
+           - height: 20px
+           - color: rgb(255,255,255)
+          card:
+           - padding: 0 
+           - margin-top: -62px
+           - margin-left: |
+              [[[
+                  var title = states[variables.古诗词].attributes.标题.length;
+                  var dynasty = states[variables.古诗词].attributes.朝代.length;
+                  var author = states[variables.古诗词].attributes.作者.length;
+                  var num = 5 + title + dynasty + author;
+                  return num*12.5+"px";
+              ]]]
+           - width: 20px
+           - height: 20px
+           - background: rgb(0,0,0,0)
+        tap_action:
+          action: call-service
+          service: button.press
+          data: {}
+          target:
+            entity_id: '[[[ return  variables.随机 ]]]'
+    播放按钮:
+      card:
+        type: custom:button-card
+        show_icon: true
+        icon: mdi:volume-high
+        styles:
+          icon:
+           - width: 20px
+           - height: 20px
+           - color: rgb(255,255,255)
+          card:
+           - padding: 0 
+           - margin-top: -20px
+           - margin-left: |
+              [[[
+                  var title = states[variables.古诗词].attributes.正文1.length;
+                  return title*12.5+30+"px";
+              ]]]
+           - width: 20px
+           - height: 20px
+           - background: rgb(0,0,0,0)
+        tap_action:
+          action: call-service
+          service: text.set_value
+          data: 
+            value: |
+              [[[
+                return "[播放"+states[variables.古诗词].attributes.标题+",false]";
+              ]]]
+          target:
+            entity_id: '[[[ return  variables.音箱执行文本 ]]]'
+
+  

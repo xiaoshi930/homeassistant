@@ -1,0 +1,167 @@
+洗衣机信息卡片:         
+  triggers_update:
+    - '[[[ return variables.实体列表 ?? ""]]]'
+  styles:
+    grid:   
+      - grid-template-areas: >
+          "名称"
+          "项目1" 
+          "项目2"
+          "项目3"
+          "项目4" 
+          "项目5"
+          "项目6"
+          "项目7"
+          "项目8"
+          "项目9"
+      - grid-template-columns: 100%
+      - grid-template-rows: 0 0 0 0 0 0 0 0 0 0 0 
+    card: 
+      - padding: 0
+      - cursor: none
+      - --mdc-ripple-press-opacity: 0
+      - border-width: 0
+      - border-radius: 10px
+      - background: '[[[ return theme_color(2) ]]]' 
+      - height: |
+          [[[
+              var num = variables.实体列表.length;
+              return (num * 50 + 65) + 'px';
+          ]]]
+  custom_fields:
+    名称:
+      card: 
+        type: custom:button-card 
+        label: 洗衣机信息
+        show_label: true
+        styles:
+          card:  
+            - margin-top: 50px
+            - padding: 0
+            - border-width: 0
+            - cursor: none
+            - --mdc-ripple-press-opacity: 0
+            - border-radius: 10px
+            - height: 50px
+            - background: rgb(0,0,0,0)
+          label:
+            - font-size: 20px
+            - font-weight: bold
+            - color: '[[[ return theme_color(1) ]]]' 
+    项目1:
+      card: 
+        type: custom:button-card 
+        template: 洗衣机信息样式模板
+        variables:
+          实体列表: '[[[ return variables.实体列表 ]]]' 
+          id: 0
+          top: 150px
+    项目2:
+      card: 
+        type: custom:button-card 
+        template: 洗衣机信息样式模板
+        variables:
+          实体列表: '[[[ return variables.实体列表 ]]]' 
+          id: 1
+          top: 250px
+    项目3:
+      card: 
+        type: custom:button-card 
+        template: 洗衣机信息样式模板
+        variables:
+          实体列表: '[[[ return variables.实体列表 ]]]' 
+          id: 2
+          top: 350px
+    项目4:
+      card: 
+        type: custom:button-card 
+        template: 洗衣机信息样式模板
+        variables:
+          实体列表: '[[[ return variables.实体列表 ]]]' 
+          id: 3
+          top: 450px
+    项目5:
+      card: 
+        type: custom:button-card 
+        template: 洗衣机信息样式模板
+        variables:
+          实体列表: '[[[ return variables.实体列表 ]]]' 
+          id: 4
+          top: 550px
+    项目6:
+      card: 
+        type: custom:button-card 
+        template: 洗衣机信息样式模板
+        variables:
+          实体列表: '[[[ return variables.实体列表 ]]]' 
+          id: 5
+          top: 650px
+    项目7:
+      card: 
+        type: custom:button-card 
+        template: 洗衣机信息样式模板
+        variables:
+          实体列表: '[[[ return variables.实体列表 ]]]' 
+          id: 6
+          top: 750px
+    项目8:
+      card: 
+        type: custom:button-card 
+        template: 洗衣机信息样式模板
+        variables:
+          实体列表: '[[[ return variables.实体列表 ]]]' 
+          id: 7
+          top: 850px
+    项目9:
+      card: 
+        type: custom:button-card 
+        template: 洗衣机信息样式模板
+        variables:
+          实体列表: '[[[ return variables.实体列表 ]]]' 
+          id: 8
+          top: 950px
+
+
+ 
+洗衣机信息样式模板:
+  entity: '[[[ return variables.实体列表[variables.id] ]]]' 
+  layout: icon_name
+  show_icon: true
+  show_label: true
+  show_state: true
+  styles:  
+    card: 
+      - margin-top: '[[[ return variables.top ]]]'
+      - margin-left: 0px
+      - padding: 0
+      - cursor: none
+      - --mdc-ripple-press-opacity: 0
+      - border-width: 0
+      - border-radius: 0
+      - background: rgb(0,0,0,0)
+      - height: 50px
+      - width: 300px
+    icon:
+      - z-index: 2
+      - margin-left: -40px
+      - margin-top: 0px
+      - width: 20px
+      - color: '[[[ return theme_color(1) ]]]' 
+    name:
+      - z-index: 2
+      - margin-top: 0px
+      - margin-left: -120px
+      - font-size: 15px
+      - font-weight: bold
+      - text-align: left
+      - width: 200px
+      - color: '[[[ return theme_color(1) ]]]' 
+    state:
+      - z-index: 2
+      - margin-top: -50px
+      - margin-left: 100px
+      - font-size: 15px
+      - font-weight: bold
+      - text-align: right
+      - width: 150px
+      - color: '[[[ return theme_color(1) ]]]' 

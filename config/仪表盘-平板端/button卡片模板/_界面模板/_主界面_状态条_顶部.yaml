@@ -1,0 +1,370 @@
+主界面_状态条_顶部:
+  triggers_update: all
+  styles:
+    grid:
+      - grid-template-areas: |
+          "按钮1 按钮2 按钮3 按钮4 按钮5"
+      - grid-template-columns: 80px 80px 80px 80px 80px
+      - grid-template-rows: 0px 0px
+    card:
+      - --mdc-ripple-press-opacity: 0
+      - width: 440px
+      - height: 30px
+      - padding: 15px 0 0 15px
+      - background: |
+          [[[
+             return theme()=="on" ? "rgb(0,0,0,0.3)" : "rgb(255,255,255,0.25)"
+          ]]]
+      - border-radius: 15px
+  custom_fields: 
+    按钮1: 
+      card: 
+        type: custom:button-card
+        name: |
+          [[[
+              var sum = 0;
+              if (variables.灯光){
+                for (var i=0; i< variables.灯光.length; i++){
+                    if (states[variables.灯光[i]].state=="on"){
+                      sum++;
+                    }
+                }   
+              }
+              window.全屋灯光 = sum;
+              if(全屋灯光> 0) return '<font color="#FF8C00"><b>灯光&ensp;'+sum+'</b></font>';
+              if(全屋灯光==0) return '灯光&ensp;&ensp;';
+          ]]]
+        layout: icon_name
+        show_icon: true
+        show_name: true
+        icon: mdi:lightbulb-group
+        styles:
+          icon:
+            - margin-top: '-2.2px' 
+            - width: 18px
+            - color: |
+                [[[
+                  return 全屋灯光 > 0 ? "#FF8C00" : "#FFFFFF"
+                ]]]
+          name:
+            - margin-left: '-10px'
+            - font-size: 14px
+            - font-weight: bold
+            - color: white 
+          card:
+            - background: transparent 
+        tap_action:
+          action: fire-dom-event
+          browser_mod: 
+            service: browser_mod.popup
+            data:
+              style: |
+                [[[ 
+                    var columns = variables.灯光显示列数 || 3;
+                    var width = parseInt(variables.灯光显示宽度, 10) || 270;
+                    var widthsum = (width + 34) * columns + 8;
+                    return theme_none(widthsum) ;
+                ]]]
+              content: 
+                type: custom:xiaoshi-light-card
+                entities: '[[[ return variables.灯光 ]]]'
+                theme: '[[[ return theme() ]]]'
+                rgb: true
+                columns: '[[[ return variables.灯光显示列数 || "3" ]]]'
+                width: '[[[ return variables.灯光显示宽度 || "270px" ]]]'
+                height: '[[[ return variables.灯光显示高度 || "70px" ]]]'
+    按钮2:
+      card:
+        type: custom:button-card
+        name: |
+          [[[
+              var sum1 =0;
+              for (var i1=0; i1<variables.通用设备?.length; i1++){
+                  var entityConfig1 = variables.通用设备?.[i1];  
+                  var statesum1 = variables.通用设备?.[i1]?.states;
+                  if (Array.isArray(entityConfig1.entity)) { 
+                    var activenumber1 =0;
+                    for (var j1=0; j1 < entityConfig1.entity.length; j1++){
+                        var singleEntity1  = entityConfig1.entity[j1];
+                        var currentState1 = states[singleEntity1].state;
+                        if (statesum1.includes(currentState1)) {
+                          activenumber1 ++;
+                        }
+                    }
+                    if (activenumber1 >0) sum1++;
+                  } else {
+                    var currentState1 = states[entityConfig1.entity].state;
+                    if (statesum1.includes(currentState1)){
+                          sum1++;
+                    }
+                  }
+              } 
+              window.通用设备=sum1;
+
+              var sum2 =0;
+              for (var i2=0; i2<variables.厨房设备?.length; i2++){
+                  var entityConfig2 = variables.厨房设备?.[i2];  
+                  var statesum2 = variables.厨房设备?.[i2]?.states;
+                  if (Array.isArray(entityConfig2.entity)) { 
+                    var activenumber2 =0;
+                    for (var j2=0; j2 < entityConfig2.entity.length; j2++){
+                        var singleEntity2  = entityConfig2.entity[j2];
+                        var currentState2 = states[singleEntity2].state;
+                        var isMatch = statesum2.some(function(condition) {
+                            if (condition.startsWith(">") && !isNaN(condition.substring(1))) {
+                                var threshold = parseFloat(condition.substring(1));
+                                return !isNaN(currentState2) && parseFloat(currentState2) > threshold;
+                            }
+                            else {
+                                return currentState2 === condition;
+                            }
+                        });
+                        if (isMatch) {
+                            activenumber2++;
+                        }
+                    }
+                    if (activenumber2 >0) sum2++;
+                  } else {
+                      var currentState2 = states[entityConfig2.entity].state;
+                      var isMatch = statesum2.some(function(condition) {
+                          if (condition.startsWith(">") && !isNaN(condition.substring(1))) {
+                              var threshold = parseFloat(condition.substring(1));
+                              return !isNaN(currentState2) && parseFloat(currentState2) > threshold;
+                          }
+                          else {
+                              return currentState2 === condition;
+                          }
+                      });
+                      
+                      if (isMatch) {
+                          sum2++;
+                      }
+                  }
+              }
+              window.厨房设备=sum2;
+              var sum =sum1+sum2;
+              if(sum > 0 && sum2>0 && sum1>=0) return '<font color="#FF6A6A"><b>设备&ensp;'+sum+'</b></font>';
+              if(sum > 0 && sum1>0 && sum2==0) return '<font color="#0AAA0A"><b>设备&ensp;'+sum+'</b></font>';
+              if(sum ==0) return '设备&ensp;&ensp;';
+          ]]]
+        layout: icon_name
+        show_icon: true
+        show_name: true 
+        icon: mdi:devices
+        styles:
+          icon:
+            - margin-top: '-2.2px'
+            - width: 18px
+            - color: |
+                [[[
+                    if(通用设备+厨房设备 > 0 && 厨房设备>0 && 通用设备>=0) return "#FF6A6A";
+                    if(通用设备+厨房设备 > 0 && 通用设备>0 && 厨房设备==0) return "#0AAA0A";
+                    if(通用设备+厨房设备 ==0) return "#FFFFFF";
+                ]]]
+          name:
+            - margin-left: '-10px'
+            - font-size: 14px
+            - font-weight: bold
+            - color: white 
+          card:
+            - background: transparent 
+        tap_action: !include  "/config/仪表盘-平板端/button卡片模板/主界面弹出菜单/顶部状态栏-设备.yaml"
+    按钮3:
+      card:
+        type: custom:button-card
+        name: |
+          [[[
+              var sum =0;
+              for (var i=0; i<variables.耗材?.length; i++){
+                  var convert = 1;
+                  if (variables.耗材?.[i]?.convert !== undefined){
+                    convert = variables.耗材?.[i]?.convert;
+                  }
+                  var state = states[variables.耗材?.[i]?.entity].state; //数值
+                  var entity = variables.耗材?.[i]?.entity;              //实体
+                  var domain = entity.split(".")[0];                     //类型
+                  
+                  if (domain=='sensor'){
+                    if (state/convert <21) sum++;
+                  } 
+                  else if (domain=='event'){
+                    if(state!='unknown' && state.length>10) {
+                        var stateDate  = new Date(state);
+                        var todayDate = new Date();
+                        var dayDifference = (todayDate -stateDate) / (1000 * 60 * 60 * 24);
+                        if( dayDifference < 5) sum++;
+                      }
+                  }
+                  else if (domain=='binary_sensor'){
+                    if(state=='on') sum++;
+                  }
+              }
+              
+              window.全屋耗材=sum;
+              if(sum>0) return  '<font color="#FF6A6A"><b>耗材&ensp;'+sum+'</b></font>';
+              if(sum==0) return '耗材&ensp;&ensp;';
+          ]]]
+        layout: icon_name
+        show_icon: true
+        show_name: true 
+        icon: mdi:battery-sync
+        styles:
+          icon:  
+            - margin-top: '-2.2px' 
+            - width: 18px
+            - color: |
+                [[[
+                  return 全屋耗材 > 0 ? "#FF6A6A" : "#FFFFFF"
+                ]]]
+          name:
+            - margin-left: '-10px'
+            - font-size: 14px
+            - font-weight: bold
+            - color: white 
+          card:
+            - background: transparent 
+        tap_action:
+          action: fire-dom-event 
+          browser_mod:
+            service: browser_mod.popup
+            data:
+              style: '[[[ return theme_none(600); ]]]'
+              content:
+                type: vertical-stack
+                cards:          
+                  - type: custom:button-card
+                    template: 耗材信息卡片   
+                    variables:
+                      主题: '[[[return theme()]]]'
+                      耗材: '[[[return variables.耗材]]]'
+    按钮4:
+      card: 
+        type: custom:button-card
+        name: |
+          [[[
+              var sum = Object.values(hass.states).filter(entity => entity.entity_id.startsWith("update.") && entity.state === "on").length;
+              window.更新设备 = sum;
+              if(更新设备> 0) return '<font color="#FF2000"><b>更新&ensp;'+sum+'</b></font>';
+              if(更新设备==0) return '更新&ensp;&ensp;';
+          ]]]
+        layout: icon_name
+        show_icon: true
+        show_name: true
+        icon: mdi:update
+        styles:
+          icon:
+            - margin-top: '-2.2px' 
+            - width: 18px
+            - color: |
+                [[[
+                  return 更新设备 > 0 ? "#FF2000" : "#FFFFFF"
+                ]]]
+          name:
+            - margin-left: '-10px'
+            - font-size: 14px
+            - font-weight: bold
+            - color: white 
+            - overflow: visible
+          card:
+            - background: transparent 
+        tap_action:
+          action: fire-dom-event 
+          browser_mod:
+            service: browser_mod.popup
+            data:
+              style: '[[[ return theme_none(600); ]]]'
+              content:
+                type: vertical-stack
+                cards:
+                  - type: custom:button-card
+                    template: HA版本信息卡片    
+                    variables:
+                      主题: '[[[ return theme() ]]]'
+                      operating_system: '[[[ return variables.HA信息?.operating_system ]]]'
+                      ha_core: '[[[ return variables.HA信息?.ha_core ]]]'
+                      ha_supervisor: '[[[ return variables.HA信息?.ha_supervisor ]]]'
+                      node_red: '[[[ return variables.HA信息?.node_red ]]]'
+                  - type: custom:button-card
+                    template: HA资源信息卡片    
+                    variables:
+                      主题: '[[[ return theme() ]]]'
+                      ha_core_cpu: '[[[ return variables.HA信息?.ha_core_cpu ]]]'
+                      ha_core_memory: '[[[ return variables.HA信息?.ha_core_memory ]]]'
+                      ha_supervisor_cpu: '[[[ return variables.HA信息?.ha_supervisor_cpu ]]]'
+                      ha_supervisor_memory: '[[[ return variables.HA信息?.ha_supervisor_memory ]]]'
+                      node_red_cpu: '[[[ return variables.HA信息?.node_red_cpu ]]]'
+                      node_red_memory: '[[[ return variables.HA信息?.node_red_memory ]]]'
+                      ha_host_disk_free: '[[[ return variables.HA信息?.ha_host_disk_free ]]]'
+                      ha_host_disk_used: '[[[ return variables.HA信息?.ha_host_disk_used ]]]'
+                      ha_host_disk_total: '[[[ return variables.HA信息?.ha_host_disk_total ]]]'
+                  - type: custom:button-card
+                    template: HA备份信息卡片    
+                    variables:
+                      主题: '[[[ return theme() ]]]'
+                      backup_last: '[[[ return variables.HA信息?.backup_last ]]]'
+                      backup_next: '[[[ return variables.HA信息?.backup_next ]]]'
+                  - type: custom:button-card
+                    template: HA更新信息卡片    
+                    variables:
+                      主题: '[[[ return theme() ]]]'
+    按钮5:
+      card:  
+        type: custom:button-card
+        name: |
+          [[[
+              const excludePatterns = [
+                    /^[a-z]+\.dmaker_cn_921911289_/i,   //排除以【dmaker_cn_921911289_】开头的风扇得实体  
+                    /^[a-z]+\.xunhuanshan/i,   //排除以【dmaker_cn_921911289_】开头的风扇得实体  
+                    /^[a-z]+\.xiaomi_cn_mitv_/i,        //排除以【xiaomi_cn_mitv_】开头的实体  
+                    /^[a-z]+\.pc_/i,                    //排除以【pc_】开头的实体  
+                    /select.xiaomidianshi_app/i, 
+                    /weather.sou_suo/i, 
+                    /media_player.xiaomi_cn_mitv/i, 
+                  ];
+              const offlineStates = [
+                "unavailable","undefined"
+              ];
+              const offlineEntities = Object.values(hass.states).filter(entity => {
+                const isExcluded = excludePatterns.some(regex => 
+                  regex.test(entity.entity_id)
+                );
+                if (isExcluded) return false;
+                return offlineStates.includes(entity.state.toLowerCase());
+              });
+              window.离线设备 = offlineEntities.length;
+              if(离线设备> 0) return '<font color="#FF2000"><b>离线&ensp;'+离线设备+'</b></font>';
+              if(离线设备==0) return '离线&ensp;&ensp;';
+          ]]]
+        layout: icon_name
+        show_icon: true
+        show_name: true
+        icon: mdi:power-plug-off
+        styles:
+          icon:
+            - margin-top: '-2.2px' 
+            - width: 18px
+            - color: |
+                [[[
+                  return 离线设备 > 0 ? "#FF2000" : "#FFFFFF"
+                ]]]
+          name:
+            - margin-left: '-10px'
+            - font-size: 14px
+            - font-weight: bold
+            - color: white 
+            - overflow: visible
+          card:
+            - background: transparent 
+        tap_action:
+          action: fire-dom-event 
+          browser_mod:
+            service: browser_mod.popup
+            data:
+              style: '[[[ return theme_none(600); ]]]'
+              content:
+                type: vertical-stack
+                cards:
+                  - type: custom:button-card
+                    template: HA离线信息卡片
+                    variables:
+                      主题: '[[[ return theme() ]]]'

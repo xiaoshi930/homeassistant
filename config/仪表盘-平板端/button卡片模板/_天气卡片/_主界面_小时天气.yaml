@@ -1,0 +1,2548 @@
+主界面_小时天气:
+  triggers_update: all
+  styles:
+    grid:
+      - grid-template-areas: |
+          "天气小时主图标" 
+          "天气小时主温度" 
+          "天气小时主信息" 
+          "天气小时时间" 
+          "天气小时日期" 
+          "天气小时温度" 
+          "天气小时温度连接线" 
+          "天气小时降雨量" 
+          "天气小时降雨量数值" 
+          "天气小时状况图标" 
+          "天气小时风力图标" 
+          "天气小时风力等级" 
+          "天气小时边框线" 
+          "天气小时预警信息" 
+      - grid-template-columns: 100%
+      - grid-template-rows: 0px 0px 0px 0px 0px 0px 0px 0px 0px 0px 0px 0px 0px 0px 0px 0px 0px 0px 
+    card:
+      - padding: 20px 0 0 0
+      - height: |
+          [[[
+              const warning = states[variables.entity]?.attributes?.warning ?? "";
+              const Height = 350 + warning.length * 40;
+              return `${Height}px`;
+          ]]]
+      - width: 960px
+      - border-radius: 10px
+      - background: '[[[ return theme_color(2) ]]]'
+  custom_fields:
+    天气小时主图标:
+      card:
+        type: custom:button-card 
+        triggers_update:
+          - '[[[ return variables.entity ]]]' 
+        show_entity_picture: true
+        entity_picture: |
+          [[[ 
+              var sun = states['sun.sun'].state;
+              var icon = states[variables.entity].attributes.condition_cn;
+              if ( theme()=='off' && icon=='晴'   && sun == 'above_horizon') return "/local/UI/天气/图标/晴-白天.svg";
+              if ( theme()=='off' && icon=='晴'   && sun == 'below_horizon') return "/local/UI/天气/图标/晴-夜晚.svg";
+              if ( theme()=='off' && icon=='少云' && sun == 'above_horizon') return "/local/UI/天气/图标/少云-白天.svg";
+              if ( theme()=='off' && icon=='少云' && sun == 'below_horizon') return "/local/UI/天气/图标/少云-夜晚.svg";
+              if ( theme()=='off' && icon=='多云' && sun == 'above_horizon') return "/local/UI/天气/图标/多云-白天.svg";
+              if ( theme()=='off' && icon=='多云' && sun == 'below_horizon') return "/local/UI/天气/图标/多云-夜晚.svg";
+
+              if ( theme()=='on' && icon=='晴'   && sun == 'above_horizon') return "/local/UI/天气/图标/晴-白天-暗黑.svg";
+              if ( theme()=='on' && icon=='晴'   && sun == 'below_horizon') return "/local/UI/天气/图标/晴-夜晚-暗黑.svg";
+              if ( theme()=='on' && icon=='少云' && sun == 'above_horizon') return "/local/UI/天气/图标/少云-白天-暗黑.svg";
+              if ( theme()=='on' && icon=='少云' && sun == 'below_horizon') return "/local/UI/天气/图标/少云-夜晚-暗黑.svg";
+              if ( theme()=='on' && icon=='多云' && sun == 'above_horizon') return "/local/UI/天气/图标/多云-白天-暗黑.svg";
+              if ( theme()=='on' && icon=='多云' && sun == 'below_horizon') return "/local/UI/天气/图标/多云-夜晚-暗黑.svg";
+
+              if ( theme()=='off')  return "/local/UI/天气/图标/"+icon+".svg";
+              if ( theme()=='on' )  return "/local/UI/天气/图标/"+icon+"-暗黑.svg";
+          ]]] 
+        styles:
+          card:
+            - width: 60px
+            - height: 60px
+            - margin-top: 35px
+            - border-width: 0
+            - background: transparent 
+          entity_picture:
+            - width: 100% 
+    天气小时主温度:
+      card:
+        type: custom:button-card
+        triggers_update:
+          - '[[[ return variables.entity ]]]'
+        show_label: true 
+        label: |
+          [[[
+              var wendu =states[variables.entity].attributes.temperature;
+              var shidu =states[variables.entity].attributes.humidity;
+              if ( wendu.toString().includes(".") != true) wendu = wendu + ".0";
+              if ( shidu.toString().includes(".") != true) shidu = shidu + ".0";
+              return wendu+'<font size="3px"><b> ℃&emsp;&ensp;</b></font>' + shidu+'<font size="3px"><b> % </b></font>';
+          ]]] 
+        styles:  
+          label: 
+            - justify-self: start
+            - font-size: 25px
+            - color: '[[[ return theme_color(1) ]]]'
+          card:
+            - padding: 0
+            - width: 300px
+            - height: 40px 
+            - margin-top: 20px 
+            - margin-left: 75px
+            - border-width: 0
+            - background: transparent
+    天气小时主信息:
+      card:
+        type: custom:button-card
+        triggers_update:
+          - '[[[ return variables.entity ]]]'
+        show_label: true 
+        label: | 
+          [[[
+              var tianqi  = states[variables.entity].attributes.condition_cn;
+              var wind    = states[variables.entity].attributes.wind_speed;
+              var category= states[variables.entity].attributes.aqi.category;     
+              var aqi= states[variables.entity].attributes.aqi.aqi;   
+              var level= states[variables.entity].attributes.aqi.level+"级";
+              return tianqi +"   "+wind+" km/h" + "   " +category+" ("+level+aqi+")"; 
+          ]]] 
+        styles:
+          label: 
+            - width: 300px
+            - text-align: left
+            - font-size: 13px
+            - color: '[[[ return theme_color(1) ]]]'
+          card:
+            - padding: 0
+            - width: 300px
+            - height: 40px 
+            - margin-top: 65px 
+            - margin-left: 75px
+            - border-width: 0
+            - background: transparent
+    天气小时时间:
+      card:
+        type: custom:button-card
+        triggers_update:
+          - '[[[ return variables.entity ]]]'
+        styles:
+          grid:
+            - grid-template-areas: |
+                "week0 week1 week2 week3 week4 week5 week6 week7 week8 week9 week10 week11 week12 week13 week14 week15 week16 week17 week18 week19 week20 week21 week22 week23"
+            - grid-template-columns: repeat(24, 1fr);
+            - grid-template-rows: 20px
+          card:
+            - padding: 0
+            - margin-top: 120px 
+            - border-width: 0
+            - background: transparent
+        custom_fields:
+          week0:
+            card:
+              type: custom:button-card
+              template: 天气小时时间样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 0
+          week1:
+            card:
+              type: custom:button-card
+              template: 天气小时时间样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 1
+          week2:
+            card:
+              type: custom:button-card
+              template: 天气小时时间样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 2
+          week3:
+            card:
+              type: custom:button-card
+              template: 天气小时时间样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 3
+          week4:
+            card:
+              type: custom:button-card
+              template: 天气小时时间样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 4
+          week5:
+            card:
+              type: custom:button-card
+              template: 天气小时时间样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 5
+          week6:
+            card:
+              type: custom:button-card
+              template: 天气小时时间样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 6
+          week7:
+            card:
+              type: custom:button-card
+              template: 天气小时时间样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 7
+          week8:
+            card:
+              type: custom:button-card
+              template: 天气小时时间样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 8
+          week9:
+            card:
+              type: custom:button-card
+              template: 天气小时时间样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 9
+          week10:
+            card:
+              type: custom:button-card
+              template: 天气小时时间样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 10
+          week11:
+            card:
+              type: custom:button-card
+              template: 天气小时时间样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 11
+          week12:
+            card:
+              type: custom:button-card
+              template: 天气小时时间样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 12
+          week13:
+            card:
+              type: custom:button-card
+              template: 天气小时时间样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 13
+          week14:
+            card:
+              type: custom:button-card
+              template: 天气小时时间样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 14
+          week15:
+            card:
+              type: custom:button-card
+              template: 天气小时时间样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 15
+          week16:
+            card:
+              type: custom:button-card
+              template: 天气小时时间样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 16
+          week17:
+            card:
+              type: custom:button-card
+              template: 天气小时时间样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 17
+          week18:
+            card:
+              type: custom:button-card
+              template: 天气小时时间样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 18
+          week19:
+            card:
+              type: custom:button-card
+              template: 天气小时时间样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 19
+          week20:
+            card:
+              type: custom:button-card
+              template: 天气小时时间样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 20
+          week21:
+            card:
+              type: custom:button-card
+              template: 天气小时时间样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 21
+          week22:
+            card:
+              type: custom:button-card
+              template: 天气小时时间样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 22
+          week23:
+            card:
+              type: custom:button-card
+              template: 天气小时时间样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 23
+    天气小时日期:
+      card:
+        type: custom:button-card
+        triggers_update:
+          - '[[[ return variables.entity ]]]'
+        styles:
+          grid:
+            - grid-template-areas: |
+                "date0 date1 date2 date3 date4 date5 date6 date7 date8 date9 date10 date11 date12 date13 date14 date15 date16 date17 date18 date19 date20 date21 date22 date23"
+            - grid-template-columns: repeat(24, 1fr);
+            - grid-template-rows: 15px
+          card:
+            - padding: 0
+            - margin-top: 150px 
+            - border-width: 0
+            - background: transparent
+        custom_fields:
+          date0:
+            card:
+              type: custom:button-card
+              template: 天气小时日期样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 0
+          date1:
+            card:
+              type: custom:button-card
+              template: 天气小时日期样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 1
+          date2:
+            card:
+              type: custom:button-card
+              template: 天气小时日期样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 2
+          date3:
+            card:
+              type: custom:button-card
+              template: 天气小时日期样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 3
+          date4:
+            card:
+              type: custom:button-card
+              template: 天气小时日期样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 4
+          date5:
+            card:
+              type: custom:button-card
+              template: 天气小时日期样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 5
+          date6:
+            card:
+              type: custom:button-card
+              template: 天气小时日期样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 6
+          date7:
+            card:
+              type: custom:button-card
+              template: 天气小时日期样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 7
+          date8:
+            card:
+              type: custom:button-card
+              template: 天气小时日期样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 8
+          date9:
+            card:
+              type: custom:button-card
+              template: 天气小时日期样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 9
+          date10:
+            card:
+              type: custom:button-card
+              template: 天气小时日期样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 10
+          date11:
+            card:
+              type: custom:button-card
+              template: 天气小时日期样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 11
+          date12:
+            card:
+              type: custom:button-card
+              template: 天气小时日期样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 12
+          date13:
+            card:
+              type: custom:button-card
+              template: 天气小时日期样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 13
+          date14:
+            card:
+              type: custom:button-card
+              template: 天气小时日期样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 14
+          date15:
+            card:
+              type: custom:button-card
+              template: 天气小时日期样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 15
+          date16:
+            card:
+              type: custom:button-card
+              template: 天气小时日期样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 16
+          date17:
+            card:
+              type: custom:button-card
+              template: 天气小时日期样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 17
+          date18:
+            card:
+              type: custom:button-card
+              template: 天气小时日期样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 18
+          date19:
+            card:
+              type: custom:button-card
+              template: 天气小时日期样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 19
+          date20:
+            card:
+              type: custom:button-card
+              template: 天气小时日期样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 20
+          date21:
+            card:
+              type: custom:button-card
+              template: 天气小时日期样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 21
+          date22:
+            card:
+              type: custom:button-card
+              template: 天气小时日期样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 22
+          date23:
+            card:
+              type: custom:button-card
+              template: 天气小时日期样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 23
+    天气小时风力图标:
+      card:
+        type: custom:button-card
+        triggers_update:
+          - '[[[ return variables.entity ]]]'
+        styles:
+          grid:
+            - grid-template-areas: |
+                "wind0 wind1 wind2 wind3 wind4 wind5 wind6 wind7 wind8 wind9 wind10 wind11 wind12 wind13 wind14 wind15 wind16 wind17 wind18 wind19 wind20 wind21 wind22 wind23"
+            - grid-template-columns: repeat(24, 1fr);
+            - grid-template-rows: 15px
+          card:
+            - padding: 0
+            - margin-top: 585px 
+            - margin-left: -17px
+            - border-width: 0
+            - background: transparent
+        custom_fields:
+          wind0:
+            card:
+              type: custom:button-card
+              template: 天气小时风力图标样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 0
+          wind1:
+            card:
+              type: custom:button-card
+              template: 天气小时风力图标样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 1
+          wind2:
+            card:
+              type: custom:button-card
+              template: 天气小时风力图标样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 2
+          wind3:
+            card:
+              type: custom:button-card
+              template: 天气小时风力图标样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 3
+          wind4:
+            card:
+              type: custom:button-card
+              template: 天气小时风力图标样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 4
+          wind5:
+            card:
+              type: custom:button-card
+              template: 天气小时风力图标样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 5
+          wind6:
+            card:
+              type: custom:button-card
+              template: 天气小时风力图标样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 6
+          wind7:
+            card:
+              type: custom:button-card
+              template: 天气小时风力图标样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 7
+          wind8:
+            card:
+              type: custom:button-card
+              template: 天气小时风力图标样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 8
+          wind9:
+            card:
+              type: custom:button-card
+              template: 天气小时风力图标样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 9
+          wind10:
+            card:
+              type: custom:button-card
+              template: 天气小时风力图标样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 10
+          wind11:
+            card:
+              type: custom:button-card
+              template: 天气小时风力图标样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 11
+          wind12:
+            card:
+              type: custom:button-card
+              template: 天气小时风力图标样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 12
+          wind13:
+            card:
+              type: custom:button-card
+              template: 天气小时风力图标样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 13
+          wind14:
+            card:
+              type: custom:button-card
+              template: 天气小时风力图标样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 14
+          wind15:
+            card:
+              type: custom:button-card
+              template: 天气小时风力图标样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 15
+          wind16:
+            card:
+              type: custom:button-card
+              template: 天气小时风力图标样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 16
+          wind17:
+            card:
+              type: custom:button-card
+              template: 天气小时风力图标样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 17
+          wind18:
+            card:
+              type: custom:button-card
+              template: 天气小时风力图标样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 18
+          wind19:
+            card:
+              type: custom:button-card
+              template: 天气小时风力图标样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 19
+          wind20:
+            card:
+              type: custom:button-card
+              template: 天气小时风力图标样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 20
+          wind21:
+            card:
+              type: custom:button-card
+              template: 天气小时风力图标样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 21
+          wind22:
+            card:
+              type: custom:button-card
+              template: 天气小时风力图标样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 22
+          wind23:
+            card:
+              type: custom:button-card
+              template: 天气小时风力图标样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 23
+    天气小时风力等级:
+      card:
+        type: custom:button-card
+        triggers_update:
+          - '[[[ return variables.entity ]]]'
+        styles:
+          grid:
+            - grid-template-areas: |
+                "wind0 wind1 wind2 wind3 wind4 wind5 wind6 wind7 wind8 wind9 wind10 wind11 wind12 wind13 wind14 wind15 wind16 wind17 wind18 wind19 wind20 wind21 wind22 wind23"
+            - grid-template-columns: repeat(24, 1fr);
+            - grid-template-rows: 15px
+          card:
+            - padding: 0
+            - margin-top: 585px 
+            - margin-left: 3px
+            - border-width: 0
+            - background: transparent
+        custom_fields:
+          wind0:
+            card:
+              type: custom:button-card
+              template: 天气小时风力等级样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 0
+          wind1:
+            card:
+              type: custom:button-card
+              template: 天气小时风力等级样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 1
+          wind2:
+            card:
+              type: custom:button-card
+              template: 天气小时风力等级样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 2
+          wind3:
+            card:
+              type: custom:button-card
+              template: 天气小时风力等级样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 3
+          wind4:
+            card:
+              type: custom:button-card
+              template: 天气小时风力等级样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 4
+          wind5:
+            card:
+              type: custom:button-card
+              template: 天气小时风力等级样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 5
+          wind6:
+            card:
+              type: custom:button-card
+              template: 天气小时风力等级样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 6
+          wind7:
+            card:
+              type: custom:button-card
+              template: 天气小时风力等级样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 7
+          wind8:
+            card:
+              type: custom:button-card
+              template: 天气小时风力等级样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 8
+          wind9:
+            card:
+              type: custom:button-card
+              template: 天气小时风力等级样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 9
+          wind10:
+            card:
+              type: custom:button-card
+              template: 天气小时风力等级样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 10
+          wind11:
+            card:
+              type: custom:button-card
+              template: 天气小时风力等级样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 11
+          wind12:
+            card:
+              type: custom:button-card
+              template: 天气小时风力等级样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 12
+          wind13:
+            card:
+              type: custom:button-card
+              template: 天气小时风力等级样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 13
+          wind14:
+            card:
+              type: custom:button-card
+              template: 天气小时风力等级样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 14
+          wind15:
+            card:
+              type: custom:button-card
+              template: 天气小时风力等级样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 15
+          wind16:
+            card:
+              type: custom:button-card
+              template: 天气小时风力等级样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 16
+          wind17:
+            card:
+              type: custom:button-card
+              template: 天气小时风力等级样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 17
+          wind18:
+            card:
+              type: custom:button-card
+              template: 天气小时风力等级样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 18
+          wind19:
+            card:
+              type: custom:button-card
+              template: 天气小时风力等级样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 19
+          wind20:
+            card:
+              type: custom:button-card
+              template: 天气小时风力等级样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 20
+          wind21:
+            card:
+              type: custom:button-card
+              template: 天气小时风力等级样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 21
+          wind22:
+            card:
+              type: custom:button-card
+              template: 天气小时风力等级样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 22
+          wind23:
+            card:
+              type: custom:button-card
+              template: 天气小时风力等级样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 23
+    天气小时状况图标:
+      card:
+        type: custom:button-card
+        triggers_update:
+          - '[[[ return variables.entity ]]]'
+        styles:
+          grid:
+            - grid-template-areas: |
+                "icon0 icon1 icon2 icon3 icon4 icon5 icon6 icon7 icon8 icon9 icon10 icon11 icon12 icon13 icon14 icon15 icon16 icon17 icon18 icon19 icon20 icon21 icon22 icon23"
+            - grid-template-columns: repeat(24, 1fr);
+            - grid-template-rows: 30px
+          card:
+            - padding: 0
+            - margin-top: 550px 
+            - margin-left: 0 
+            - border-width: 0
+            - background: transparent
+        custom_fields:
+          icon0:
+            card:
+              type: custom:button-card
+              template: 天气小时状况图标样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 0
+          icon1:
+            card:
+              type: custom:button-card
+              template: 天气小时状况图标样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 1
+          icon2:
+            card:
+              type: custom:button-card
+              template: 天气小时状况图标样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 2
+          icon3:
+            card:
+              type: custom:button-card
+              template: 天气小时状况图标样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 3
+          icon4:
+            card:
+              type: custom:button-card
+              template: 天气小时状况图标样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 4
+          icon5:
+            card:
+              type: custom:button-card
+              template: 天气小时状况图标样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 5
+          icon6:
+            card:
+              type: custom:button-card
+              template: 天气小时状况图标样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 6
+          icon7:
+            card:
+              type: custom:button-card
+              template: 天气小时状况图标样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 7
+          icon8:
+            card:
+              type: custom:button-card
+              template: 天气小时状况图标样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 8
+          icon9:
+            card:
+              type: custom:button-card
+              template: 天气小时状况图标样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 9
+          icon10:
+            card:
+              type: custom:button-card
+              template: 天气小时状况图标样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 10
+          icon11:
+            card:
+              type: custom:button-card
+              template: 天气小时状况图标样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 11
+          icon12:
+            card:
+              type: custom:button-card
+              template: 天气小时状况图标样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 12
+          icon13:
+            card:
+              type: custom:button-card
+              template: 天气小时状况图标样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 13
+          icon14:
+            card:
+              type: custom:button-card
+              template: 天气小时状况图标样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 14
+          icon15:
+            card:
+              type: custom:button-card
+              template: 天气小时状况图标样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 15
+          icon16:
+            card:
+              type: custom:button-card
+              template: 天气小时状况图标样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 16
+          icon17:
+            card:
+              type: custom:button-card
+              template: 天气小时状况图标样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 17
+          icon18:
+            card:
+              type: custom:button-card
+              template: 天气小时状况图标样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 18
+          icon19:
+            card:
+              type: custom:button-card
+              template: 天气小时状况图标样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 19
+          icon20:
+            card:
+              type: custom:button-card
+              template: 天气小时状况图标样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 20
+          icon21:
+            card:
+              type: custom:button-card
+              template: 天气小时状况图标样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 21
+          icon22:
+            card:
+              type: custom:button-card
+              template: 天气小时状况图标样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 22
+          icon23:
+            card:
+              type: custom:button-card
+              template: 天气小时状况图标样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 23
+    天气小时降雨量:
+      card:
+        type: custom:button-card
+        triggers_update:
+          - '[[[ return variables.entity ]]]'
+        styles:
+          grid:
+            - grid-template-areas: |
+                "rain0 rain1 rain2 rain3 rain4 rain5 rain6 rain7 rain8 rain9 rain10 rain11 rain12 rain13 rain14 rain15 rain16 rain17 rain18 rain19 rain20 rain21 rain22 rain23"
+            - grid-template-columns: repeat(24, 1fr);
+            - grid-template-rows: 165px
+          card:
+            - padding: 0
+            - margin-top: 340px 
+            - margin-left: 1px
+            - border-width: 0
+            - background: transparent
+        custom_fields:
+          rain0:
+            card:
+              type: custom:button-card
+              template: 天气小时降雨量样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 0
+          rain1:
+            card:
+              type: custom:button-card
+              template: 天气小时降雨量样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 1
+          rain2:
+            card:
+              type: custom:button-card
+              template: 天气小时降雨量样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 2
+          rain3:
+            card:
+              type: custom:button-card
+              template: 天气小时降雨量样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 3
+          rain4:
+            card:
+              type: custom:button-card
+              template: 天气小时降雨量样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 4
+          rain5:
+            card:
+              type: custom:button-card
+              template: 天气小时降雨量样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 5
+          rain6:
+            card:
+              type: custom:button-card
+              template: 天气小时降雨量样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 6
+          rain7:
+            card:
+              type: custom:button-card
+              template: 天气小时降雨量样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 7
+          rain8:
+            card:
+              type: custom:button-card
+              template: 天气小时降雨量样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 8
+          rain9:
+            card:
+              type: custom:button-card
+              template: 天气小时降雨量样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 9
+          rain10:
+            card:
+              type: custom:button-card
+              template: 天气小时降雨量样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 10
+          rain11:
+            card:
+              type: custom:button-card
+              template: 天气小时降雨量样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 11
+          rain12:
+            card:
+              type: custom:button-card
+              template: 天气小时降雨量样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 12
+          rain13:
+            card:
+              type: custom:button-card
+              template: 天气小时降雨量样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 13
+          rain14:
+            card:
+              type: custom:button-card
+              template: 天气小时降雨量样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 14
+          rain15:
+            card:
+              type: custom:button-card
+              template: 天气小时降雨量样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 15
+          rain16:
+            card:
+              type: custom:button-card
+              template: 天气小时降雨量样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 16
+          rain17:
+            card:
+              type: custom:button-card
+              template: 天气小时降雨量样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 17
+          rain18:
+            card:
+              type: custom:button-card
+              template: 天气小时降雨量样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 18
+          rain19:
+            card:
+              type: custom:button-card
+              template: 天气小时降雨量样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 19
+          rain20:
+            card:
+              type: custom:button-card
+              template: 天气小时降雨量样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 20
+          rain21:
+            card:
+              type: custom:button-card
+              template: 天气小时降雨量样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 21
+          rain22:
+            card:
+              type: custom:button-card
+              template: 天气小时降雨量样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 22
+          rain23:
+            card:
+              type: custom:button-card
+              template: 天气小时降雨量样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 23
+    天气小时边框线:
+      card:
+        type: custom:button-card
+        triggers_update:
+          - '[[[ return variables.entity ]]]'
+        styles:
+          grid:
+            - grid-template-areas: |
+                "line0 line1 line2 line3 line4 line5 line6 line7 line8 line9 line10 line11 line12 line13 line14 line15 line16 line17 line18 line19 line20 line21 line22 line23"
+            - grid-template-columns: repeat(24, 1fr);
+            - grid-template-rows: 165px
+          card:
+            - padding: 0 0 0 0 
+            - border-radius: 0
+            - margin-top: 340px 
+            - border-width: 0
+            - background: transparent
+        custom_fields:
+          line0:
+            card:
+              type: custom:button-card
+              template: 天气小时边框线样式模板
+          line1:
+            card:
+              type: custom:button-card
+              template: 天气小时边框线样式模板
+          line2:
+            card:
+              type: custom:button-card
+              template: 天气小时边框线样式模板
+          line3:
+            card:
+              type: custom:button-card
+              template: 天气小时边框线样式模板
+          line4:
+            card:
+              type: custom:button-card
+              template: 天气小时边框线样式模板
+          line5:
+            card:
+              type: custom:button-card
+              template: 天气小时边框线样式模板
+          line6:
+            card:
+              type: custom:button-card
+              template: 天气小时边框线样式模板
+          line7:
+            card:
+              type: custom:button-card
+              template: 天气小时边框线样式模板
+          line8:
+            card:
+              type: custom:button-card
+              template: 天气小时边框线样式模板
+          line9:
+            card:
+              type: custom:button-card
+              template: 天气小时边框线样式模板
+          line10:
+            card:
+              type: custom:button-card
+              template: 天气小时边框线样式模板
+          line11:
+            card:
+              type: custom:button-card
+              template: 天气小时边框线样式模板
+          line12:
+            card:
+              type: custom:button-card
+              template: 天气小时边框线样式模板
+          line13:
+            card:
+              type: custom:button-card
+              template: 天气小时边框线样式模板
+          line14:
+            card:
+              type: custom:button-card
+              template: 天气小时边框线样式模板
+          line15:
+            card:
+              type: custom:button-card
+              template: 天气小时边框线样式模板
+          line16:
+            card:
+              type: custom:button-card
+              template: 天气小时边框线样式模板
+          line17:
+            card:
+              type: custom:button-card
+              template: 天气小时边框线样式模板
+          line18:
+            card:
+              type: custom:button-card
+              template: 天气小时边框线样式模板
+          line19:
+            card:
+              type: custom:button-card
+              template: 天气小时边框线样式模板
+          line20:
+            card:
+              type: custom:button-card
+              template: 天气小时边框线样式模板
+          line21:
+            card:
+              type: custom:button-card
+              template: 天气小时边框线样式模板
+          line22:
+            card:
+              type: custom:button-card
+              template: 天气小时边框线样式模板
+          line23:
+            card:
+              type: custom:button-card
+              template: 天气小时边框线样式模板
+              styles:
+                card:
+                  - border-right: 1px solid;
+    天气小时降雨量数值:
+      card:
+        type: custom:button-card
+        triggers_update:
+          - '[[[ return variables.entity ]]]'
+        styles:
+          grid:
+            - grid-template-areas: |
+                "rain0 rain1 rain2 rain3 rain4 rain5 rain6 rain7 rain8 rain9 rain10 rain11 rain12 rain13 rain14 rain15 rain16 rain17 rain18 rain19 rain20 rain21 rain22 rain23"
+            - grid-template-columns: repeat(24, 1fr);
+            - grid-template-rows: 18px
+          card:
+            - padding: 0
+            - margin-top: 505px 
+            - margin-left: 0
+            - border-width: 0
+            - background: transparent
+        custom_fields:
+          rain0:
+            card:
+              type: custom:button-card
+              template: 天气小时降雨量数值样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                rain_border: '[[[return variables.rain_border]]]'
+                weizhi: 0
+          rain1:
+            card:
+              type: custom:button-card
+              template: 天气小时降雨量数值样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                rain_border: '[[[return variables.rain_border]]]'
+                weizhi: 1
+          rain2:
+            card:
+              type: custom:button-card
+              template: 天气小时降雨量数值样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                rain_border: '[[[return variables.rain_border]]]'
+                weizhi: 2
+          rain3:
+            card:
+              type: custom:button-card
+              template: 天气小时降雨量数值样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                rain_border: '[[[return variables.rain_border]]]'
+                weizhi: 3
+          rain4:
+            card:
+              type: custom:button-card
+              template: 天气小时降雨量数值样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                rain_border: '[[[return variables.rain_border]]]'
+                weizhi: 4
+          rain5:
+            card:
+              type: custom:button-card
+              template: 天气小时降雨量数值样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                rain_border: '[[[return variables.rain_border]]]'
+                weizhi: 5
+          rain6:
+            card:
+              type: custom:button-card
+              template: 天气小时降雨量数值样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                rain_border: '[[[return variables.rain_border]]]'
+                weizhi: 6
+          rain7:
+            card:
+              type: custom:button-card
+              template: 天气小时降雨量数值样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                rain_border: '[[[return variables.rain_border]]]'
+                weizhi: 7
+          rain8:
+            card:
+              type: custom:button-card
+              template: 天气小时降雨量数值样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                rain_border: '[[[return variables.rain_border]]]'
+                weizhi: 8
+          rain9:
+            card:
+              type: custom:button-card
+              template: 天气小时降雨量数值样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                rain_border: '[[[return variables.rain_border]]]'
+                weizhi: 9
+          rain10:
+            card:
+              type: custom:button-card
+              template: 天气小时降雨量数值样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                rain_border: '[[[return variables.rain_border]]]'
+                weizhi: 10
+          rain11:
+            card:
+              type: custom:button-card
+              template: 天气小时降雨量数值样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                rain_border: '[[[return variables.rain_border]]]'
+                weizhi: 11
+          rain12:
+            card:
+              type: custom:button-card
+              template: 天气小时降雨量数值样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                rain_border: '[[[return variables.rain_border]]]'
+                weizhi: 12
+          rain13:
+            card:
+              type: custom:button-card
+              template: 天气小时降雨量数值样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                rain_border: '[[[return variables.rain_border]]]'
+                weizhi: 13
+          rain14:
+            card:
+              type: custom:button-card
+              template: 天气小时降雨量数值样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                rain_border: '[[[return variables.rain_border]]]'
+                weizhi: 14
+          rain15:
+            card:
+              type: custom:button-card
+              template: 天气小时降雨量数值样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                rain_border: '[[[return variables.rain_border]]]'
+                weizhi: 15
+          rain16:
+            card:
+              type: custom:button-card
+              template: 天气小时降雨量数值样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                rain_border: '[[[return variables.rain_border]]]'
+                weizhi: 16
+          rain17:
+            card:
+              type: custom:button-card
+              template: 天气小时降雨量数值样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                rain_border: '[[[return variables.rain_border]]]'
+                weizhi: 17
+          rain18:
+            card:
+              type: custom:button-card
+              template: 天气小时降雨量数值样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                rain_border: '[[[return variables.rain_border]]]'
+                weizhi: 18
+          rain19:
+            card:
+              type: custom:button-card
+              template: 天气小时降雨量数值样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                rain_border: '[[[return variables.rain_border]]]'
+                weizhi: 19
+          rain20:
+            card:
+              type: custom:button-card
+              template: 天气小时降雨量数值样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                rain_border: '[[[return variables.rain_border]]]'
+                weizhi: 20
+          rain21:
+            card:
+              type: custom:button-card
+              template: 天气小时降雨量数值样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                rain_border: '[[[return variables.rain_border]]]'
+                weizhi: 21
+          rain22:
+            card:
+              type: custom:button-card
+              template: 天气小时降雨量数值样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                rain_border: '[[[return variables.rain_border]]]'
+                weizhi: 22
+          rain23:
+            card:
+              type: custom:button-card
+              template: 天气小时降雨量数值样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                rain_border: '[[[return variables.rain_border]]]'
+                weizhi: 23
+    天气小时温度连接线:
+      card:
+        type: custom:button-card
+        triggers_update:
+          - '[[[ return variables.entity ]]]'
+        styles:
+          grid:
+            - grid-template-areas: |
+                "wendu0 wendu1 wendu2 wendu3 wendu4 wendu5 wendu6 wendu7 wendu8 wendu9 wendu10 wendu11 wendu12 wendu13 wendu14 wendu15 wendu16 wendu17 wendu18 wendu19 wendu20 wendu21 wendu22 wendu23"
+            - grid-template-columns: repeat(24, 1fr);
+            - grid-template-rows: 300px
+          card:
+            - padding: 0
+            - margin-top: 195px 
+            - margin-left: 20px 
+            - border-width: 0
+            - background: transparent
+        custom_fields:
+          wendu0:
+            card:
+              type: custom:button-card
+              template: 天气小时温度连接线样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 0
+          wendu1:
+            card:
+              type: custom:button-card
+              template: 天气小时温度连接线样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 1
+          wendu2:
+            card:
+              type: custom:button-card
+              template: 天气小时温度连接线样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 2
+          wendu3:
+            card:
+              type: custom:button-card
+              template: 天气小时温度连接线样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 3
+          wendu4:
+            card:
+              type: custom:button-card
+              template: 天气小时温度连接线样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 4
+          wendu5:
+            card:
+              type: custom:button-card
+              template: 天气小时温度连接线样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 5
+          wendu6:
+            card:
+              type: custom:button-card
+              template: 天气小时温度连接线样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 6
+          wendu7:
+            card:
+              type: custom:button-card
+              template: 天气小时温度连接线样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 7
+          wendu8:
+            card:
+              type: custom:button-card
+              template: 天气小时温度连接线样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 8
+          wendu9:
+            card:
+              type: custom:button-card
+              template: 天气小时温度连接线样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 9
+          wendu10:
+            card:
+              type: custom:button-card
+              template: 天气小时温度连接线样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 10
+          wendu11:
+            card:
+              type: custom:button-card
+              template: 天气小时温度连接线样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 11
+          wendu12:
+            card:
+              type: custom:button-card
+              template: 天气小时温度连接线样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 12
+          wendu13:
+            card:
+              type: custom:button-card
+              template: 天气小时温度连接线样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 13
+          wendu14:
+            card:
+              type: custom:button-card
+              template: 天气小时温度连接线样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 14
+          wendu15:
+            card:
+              type: custom:button-card
+              template: 天气小时温度连接线样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 15
+          wendu16:
+            card:
+              type: custom:button-card
+              template: 天气小时温度连接线样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 16
+          wendu17:
+            card:
+              type: custom:button-card
+              template: 天气小时温度连接线样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 17
+          wendu18:
+            card:
+              type: custom:button-card
+              template: 天气小时温度连接线样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 18
+          wendu19:
+            card:
+              type: custom:button-card
+              template: 天气小时温度连接线样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 19
+          wendu20:
+            card:
+              type: custom:button-card
+              template: 天气小时温度连接线样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 20
+          wendu21:
+            card:
+              type: custom:button-card
+              template: 天气小时温度连接线样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 21
+          wendu22:
+            card:
+              type: custom:button-card
+              template: 天气小时温度连接线样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 22
+          wendu23:
+            card:
+              type: custom:button-card
+              template: 天气小时温度连接线样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                weizhi: 23
+    天气小时温度:
+      card:
+        type: custom:button-card
+        triggers_update:
+          - '[[[ return variables.entity ]]]'
+        styles:
+          grid:
+            - grid-template-areas: |
+                "wendu0 wendu1 wendu2 wendu3 wendu4 wendu5 wendu6 wendu7 wendu8 wendu9 wendu10 wendu11 wendu12 wendu13 wendu14 wendu15 wendu16 wendu17 wendu18 wendu19 wendu20 wendu21 wendu22 wendu23"
+            - grid-template-columns: repeat(24, 1fr);
+            - grid-template-rows: 300px
+          card:
+            - padding: 0
+            - margin-top: 195px 
+            - border-width: 0
+            - background: transparent
+        custom_fields:
+          wendu0:
+            card:
+              type: custom:button-card
+              template: 天气小时温度样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                wendu_border: '[[[return variables.wendu_border]]]'
+                weizhi: 0
+          wendu1:
+            card:
+              type: custom:button-card
+              template: 天气小时温度样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                wendu_border: '[[[return variables.wendu_border]]]'
+                weizhi: 1
+          wendu2:
+            card:
+              type: custom:button-card
+              template: 天气小时温度样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                wendu_border: '[[[return variables.wendu_border]]]'
+                weizhi: 2
+          wendu3:
+            card:
+              type: custom:button-card
+              template: 天气小时温度样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                wendu_border: '[[[return variables.wendu_border]]]'
+                weizhi: 3
+          wendu4:
+            card:
+              type: custom:button-card
+              template: 天气小时温度样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                wendu_border: '[[[return variables.wendu_border]]]'
+                weizhi: 4
+          wendu5:
+            card:
+              type: custom:button-card
+              template: 天气小时温度样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                wendu_border: '[[[return variables.wendu_border]]]'
+                weizhi: 5
+          wendu6:
+            card:
+              type: custom:button-card
+              template: 天气小时温度样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                wendu_border: '[[[return variables.wendu_border]]]'
+                weizhi: 6
+          wendu7:
+            card:
+              type: custom:button-card
+              template: 天气小时温度样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                wendu_border: '[[[return variables.wendu_border]]]'
+                weizhi: 7
+          wendu8:
+            card:
+              type: custom:button-card
+              template: 天气小时温度样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                wendu_border: '[[[return variables.wendu_border]]]'
+                weizhi: 8
+          wendu9:
+            card:
+              type: custom:button-card
+              template: 天气小时温度样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                wendu_border: '[[[return variables.wendu_border]]]'
+                weizhi: 9
+          wendu10:
+            card:
+              type: custom:button-card
+              template: 天气小时温度样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                wendu_border: '[[[return variables.wendu_border]]]'
+                weizhi: 10
+          wendu11:
+            card:
+              type: custom:button-card
+              template: 天气小时温度样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                wendu_border: '[[[return variables.wendu_border]]]'
+                weizhi: 11
+          wendu12:
+            card:
+              type: custom:button-card
+              template: 天气小时温度样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                wendu_border: '[[[return variables.wendu_border]]]'
+                weizhi: 12
+          wendu13:
+            card:
+              type: custom:button-card
+              template: 天气小时温度样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                wendu_border: '[[[return variables.wendu_border]]]'
+                weizhi: 13
+          wendu14:
+            card:
+              type: custom:button-card
+              template: 天气小时温度样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                wendu_border: '[[[return variables.wendu_border]]]'
+                weizhi: 14
+          wendu15:
+            card:
+              type: custom:button-card
+              template: 天气小时温度样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                wendu_border: '[[[return variables.wendu_border]]]'
+                weizhi: 15
+          wendu16:
+            card:
+              type: custom:button-card
+              template: 天气小时温度样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                wendu_border: '[[[return variables.wendu_border]]]'
+                weizhi: 16
+          wendu17:
+            card:
+              type: custom:button-card
+              template: 天气小时温度样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                wendu_border: '[[[return variables.wendu_border]]]'
+                weizhi: 17
+          wendu18:
+            card:
+              type: custom:button-card
+              template: 天气小时温度样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                wendu_border: '[[[return variables.wendu_border]]]'
+                weizhi: 18
+          wendu19:
+            card:
+              type: custom:button-card
+              template: 天气小时温度样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                wendu_border: '[[[return variables.wendu_border]]]'
+                weizhi: 19
+          wendu20:
+            card:
+              type: custom:button-card
+              template: 天气小时温度样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                wendu_border: '[[[return variables.wendu_border]]]'
+                weizhi: 20
+          wendu21:
+            card:
+              type: custom:button-card
+              template: 天气小时温度样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                wendu_border: '[[[return variables.wendu_border]]]'
+                weizhi: 21
+          wendu22:
+            card:
+              type: custom:button-card
+              template: 天气小时温度样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                wendu_border: '[[[return variables.wendu_border]]]'
+                weizhi: 22
+          wendu23:
+            card:
+              type: custom:button-card
+              template: 天气小时温度样式模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                wendu_border: '[[[return variables.wendu_border]]]'
+                weizhi: 23
+    天气小时预警信息:
+      card:
+        type: custom:button-card
+        styles:
+          grid:
+            - grid-template-areas: |
+                "weather1" "weather2" "weather3" "weather4" "weather5" "weather6" "weather7" "weather8"
+            - grid-template-columns: 100%
+            - grid-auto-rows: minmax(auto, auto)
+            - grid-auto-flow: row
+          card:
+            - padding: 0 
+            - border-width: 0
+            - border-radius: 0
+            - cursor: none
+            - --mdc-ripple-press-opacity: 0
+            - border-radius: 0px
+            - margin-top: | 
+                [[[
+                    var warning  = states[variables.entity]?.attributes?.warning ?? "";
+                    var Height = 630+ warning.length*40
+                    return  `${Height}px`;
+                ]]]
+            - height:  |
+                [[[
+                    var warning  = states[variables.entity]?.attributes?.warning ?? "";
+                    return warning.length*40 +"px"
+                ]]]
+            - background: rgb(0,0,0,0)
+        custom_fields: 
+          weather1:  
+            card: 
+              type: custom:button-card
+              template: 天气预警信息模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                id : 0
+          weather2:  
+            card: 
+              type: custom:button-card
+              template: 天气预警信息模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                id : 1
+          weather3:  
+            card: 
+              type: custom:button-card
+              template: 天气预警信息模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                id : 2
+          weather4:  
+            card: 
+              type: custom:button-card
+              template: 天气预警信息模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                id : 3
+          weather5:  
+            card: 
+              type: custom:button-card
+              template: 天气预警信息模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                id : 4
+          weather6:  
+            card: 
+              type: custom:button-card
+              template: 天气预警信息模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                id : 5
+          weather7:  
+            card: 
+              type: custom:button-card
+              template: 天气预警信息模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                id : 6
+          weather8:  
+            card: 
+              type: custom:button-card
+              template: 天气预警信息模板
+              variables:
+                entity: '[[[return variables.entity]]]'
+                id : 7
+天气预警信息模板:
+  show_name: true 
+  show_label: true  
+  name: | 
+    [[[
+        if(states[variables.entity]?.attributes?.warning?.length > variables.id){
+            const warningItem   = states[variables.entity]?.attributes?.warning[variables.id]  || {};
+            const typeName = warningItem.typeName ?? "";
+            const level = warningItem.level ?? "";
+            const sender = warningItem.sender ?? "";
+            const startTime = warningItem.startTime ? warningItem.startTime.slice(0, 10) : "";
+            const endTime = warningItem.endTime ? warningItem.endTime.slice(0, 10) : "";
+            return ` ${sender}: 【${typeName}】${level}预警&emsp;( ${startTime}至${endTime} )`;
+        }
+    ]]]   
+  label: |
+    [[[
+         if(states[variables.entity]?.attributes?.warning?.length>variables.id){
+            var text  = states[variables.entity]?.attributes?.warning[variables.id]?.text  ?? ""; 
+            return `
+              <div style="display: flex; overflow: hidden; white-space: nowrap; width: 100%;
+              ">
+                <div style="
+                  display: inline-block;
+                  padding-left: 100%;
+                  animation: scroll ${Math.max(5, text.length * 0.3)}s linear infinite;
+                ">
+                  <span>${text}</span>
+                </div>
+              </div>
+              <style>
+                @keyframes scroll {
+                  0% { transform: translateX(0); }
+                  100% { transform: translateX(-100%); }
+                }
+              </style>
+            `;
+          }
+    ]]]
+  styles: 
+    name:  
+      - margin-top: -10px
+      - font-size: 12px 
+      - font-weight: bold
+      - width: 97%
+      - text-align: left
+      - color: |
+          [[[
+              if(states[variables.entity]?.attributes?.warning?.length>variables.id){
+                  const warningItem   = states[variables.entity]?.attributes?.warning[variables.id]  || {};
+                  const level = warningItem.level ?? "";
+                  if (level=="红色") return "rgb(255,50,50)";
+                  if (level=="橙色") return "rgb(255,100,0)";
+                  if (level=="黄色") return "rgb(255,200,0)";
+                  if (level=="蓝色") return "rgb(50,150,200)";
+                  else  return "";
+              }
+          ]]] 
+    label:  
+      - font-size: 12px
+      - font-weight: bold
+      - width: 97%
+      - text-align: left
+      - color: '[[[ return theme_color(1) ]]]' 
+    card:
+      - padding: 0
+      - border-width: 0
+      - border-radius: 0
+      - cursor: none
+      - --mdc-ripple-press-opacity: 0
+      - border-radius: 0px
+      - height: 40px
+      - background: rgb(0,0,0,0)
+
+
+天气小时时间样式模板:
+  triggers_update: all
+  show_label: true
+  label: |
+    [[[
+        return states[variables.entity]?.attributes?.hourly_forecast?.[variables.weizhi]?.datetime?.slice(11,16);
+    ]]] 
+  styles:
+    card:
+      - border-width: 0
+      - background: transparent
+    label:
+      - font-size: 13px
+      - color: '[[[ return theme_color(1) ]]]'
+天气小时日期样式模板:
+  triggers_update: all
+  show_label: true
+  label: |
+    [[[
+        var now = states[variables.entity]?.attributes?.weather?.obsTime?.slice(0,10);
+        var day = states[variables.entity]?.attributes?.hourly_forecast?.[variables.weizhi]?.datetime?.slice(8,10)
+        var hour = states[variables.entity]?.attributes?.hourly_forecast?.[variables.weizhi]?.datetime?.slice(11,13);
+        if(new Date().getDate() == day )  var data="今日";
+        if(new Date().getDate() == day-1) var data="明日";
+        if(hour>=0 && hour<=4)  return data+="凌晨";
+        if(hour>4  && hour<=7)  return data+="早上";
+        if(hour>7  && hour<=10) return data+="上午";
+        if(hour>10 && hour<=12) return data+="中午";
+        if(hour>12 && hour<=17) return data+="下午";
+        if(hour>17 && hour<=19) return data+="傍晚";
+        if(hour>19 && hour<=23) return data+="晚上";
+    ]]]
+  styles:
+    card:
+      - border-width: 0
+      - background: transparent
+    label:
+      - font-size: 9px
+      - color: '[[[ return theme_color(1) ]]]'
+天气小时状况图标样式模板: 
+  triggers_update: all
+  show_entity_picture: true
+  entity_picture: |
+    [[[ 
+        var icon = states[variables.entity].attributes.hourly_forecast[variables.weizhi].text;
+        if(theme()=='on')  return "/local/UI/天气/图标/"+icon+"-暗黑.svg";
+        if(theme()=='off') return "/local/UI/天气/图标/"+icon+".svg"; 
+    ]]]
+  styles:
+    card:
+      - border-width: 0
+      - background: transparent
+    entity_picture:
+      - width: 30px
+天气小时风力图标样式模板:
+  triggers_update: all
+  show_label: true 
+  label: ➤
+  styles: 
+    card:
+      - margin-left: 4px
+      - border-width: 0
+      - background: transparent 
+      - transform: |
+          [[[ 
+              var wind = states[variables.entity].attributes.hourly_forecast[variables.weizhi].wind_bearing-90;
+              return "rotate("+wind+"deg)" 
+          ]]]
+    label:
+      - font-size: 8px
+      - color: '[[[ return theme_color(1) ]]]'
+天气小时风力等级样式模板:
+  triggers_update: all
+  show_label: true
+  label: |
+    [[[ 
+        var wind = states[variables.entity].attributes.hourly_forecast[variables.weizhi].native_wind_speed;
+        return wind + "级"; 
+    ]]]
+  styles:
+    card:
+      - border-width: 0
+      - background: transparent
+    label:
+      - margin-left: 0
+      - font-size: 10px
+      - color: '[[[ return theme_color(1) ]]]'
+天气小时边框线样式模板:
+  triggers_update: all
+  styles:  
+    card:
+      - padding: 0 0 0 0
+      - height: 165px
+      - border-radius: 0
+      - border-top: 0px solid;
+      - border-right: 0px solid;
+      - border-bottom: 1px solid;
+      - border-left: 1px solid;  
+      - background: transparent
+      - border-image: "linear-gradient(0deg, rgb(0,191,255) , rgb(255,165,0)) 1"
+天气小时温度样式模板:
+  triggers_update: all
+  show_label: true
+  label: |
+    [[[
+        var wendu = states[variables.entity].attributes.hourly_forecast[variables.weizhi].native_temperature*1;
+        return wendu +"°";
+    ]]]
+  styles: 
+    label:
+      - font-size: 13px
+      - color: '[[[ return theme_color(1) ]]]'
+    card:
+      - width: 32px
+      - height: 18px
+      - border-radius: '[[[return variables.wendu_border]]]'
+      - background: '[[[ return theme_color(2) ]]]'
+      - border: 2px solid rgb(255,165,0)
+      - margin-left: 4px
+      - margin-top: |
+          [[[      
+              var t0 = states[variables.entity].attributes.hourly_forecast[0].native_temperature*1;
+              var t1 = states[variables.entity].attributes.hourly_forecast[1].native_temperature*1;
+              var t2 = states[variables.entity].attributes.hourly_forecast[2].native_temperature*1;
+              var t3 = states[variables.entity].attributes.hourly_forecast[3].native_temperature*1;
+              var t4 = states[variables.entity].attributes.hourly_forecast[4].native_temperature*1;
+              var t5 = states[variables.entity].attributes.hourly_forecast[5].native_temperature*1;
+              var t6 = states[variables.entity].attributes.hourly_forecast[6].native_temperature*1;
+              var t7 = states[variables.entity].attributes.hourly_forecast[7].native_temperature*1;
+              var t8 = states[variables.entity].attributes.hourly_forecast[8].native_temperature*1;
+              var t9 = states[variables.entity].attributes.hourly_forecast[9].native_temperature*1;
+              var t10 = states[variables.entity].attributes.hourly_forecast[10].native_temperature*1;
+              var t11 = states[variables.entity].attributes.hourly_forecast[11].native_temperature*1;
+              var t12 = states[variables.entity].attributes.hourly_forecast[12].native_temperature*1;
+              var t13 = states[variables.entity].attributes.hourly_forecast[13].native_temperature*1;
+              var t14 = states[variables.entity].attributes.hourly_forecast[14].native_temperature*1;
+              var t15 = states[variables.entity].attributes.hourly_forecast[15].native_temperature*1;
+              var t16 = states[variables.entity].attributes.hourly_forecast[16].native_temperature*1;
+              var t17 = states[variables.entity].attributes.hourly_forecast[17].native_temperature*1;
+              var t18 = states[variables.entity].attributes.hourly_forecast[18].native_temperature*1;
+              var t19 = states[variables.entity].attributes.hourly_forecast[19].native_temperature*1;
+              var t20 = states[variables.entity].attributes.hourly_forecast[20].native_temperature*1;
+              var t21 = states[variables.entity].attributes.hourly_forecast[21].native_temperature*1;
+              var t22 = states[variables.entity].attributes.hourly_forecast[22].native_temperature*1;
+              var t23 = states[variables.entity].attributes.hourly_forecast[23].native_temperature*1;
+              var temps = [t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23];
+              var max = Math.max(...temps);
+              var min = Math.min(...temps);
+              var range = 250/(max-min);  
+              return range*(max - temps[variables.weizhi]) + "px";
+          ]]]
+天气小时温度连接线样式模板:      
+  triggers_update: all
+  styles: 
+    card:
+      - padding: 0 0 0 0
+      - border-radius: 0
+      - width: 40px
+      - height: | 
+          [[[ 
+              var t0 = states[variables.entity].attributes.hourly_forecast[0].native_temperature*1;
+              var t1 = states[variables.entity].attributes.hourly_forecast[1].native_temperature*1;
+              var t2 = states[variables.entity].attributes.hourly_forecast[2].native_temperature*1;
+              var t3 = states[variables.entity].attributes.hourly_forecast[3].native_temperature*1;
+              var t4 = states[variables.entity].attributes.hourly_forecast[4].native_temperature*1;
+              var t5 = states[variables.entity].attributes.hourly_forecast[5].native_temperature*1;
+              var t6 = states[variables.entity].attributes.hourly_forecast[6].native_temperature*1;
+              var t7 = states[variables.entity].attributes.hourly_forecast[7].native_temperature*1;
+              var t8 = states[variables.entity].attributes.hourly_forecast[8].native_temperature*1;
+              var t9 = states[variables.entity].attributes.hourly_forecast[9].native_temperature*1;
+              var t10 = states[variables.entity].attributes.hourly_forecast[10].native_temperature*1;
+              var t11 = states[variables.entity].attributes.hourly_forecast[11].native_temperature*1;
+              var t12 = states[variables.entity].attributes.hourly_forecast[12].native_temperature*1;
+              var t13 = states[variables.entity].attributes.hourly_forecast[13].native_temperature*1;
+              var t14 = states[variables.entity].attributes.hourly_forecast[14].native_temperature*1;
+              var t15 = states[variables.entity].attributes.hourly_forecast[15].native_temperature*1;
+              var t16 = states[variables.entity].attributes.hourly_forecast[16].native_temperature*1;
+              var t17 = states[variables.entity].attributes.hourly_forecast[17].native_temperature*1;
+              var t18 = states[variables.entity].attributes.hourly_forecast[18].native_temperature*1;
+              var t19 = states[variables.entity].attributes.hourly_forecast[19].native_temperature*1;
+              var t20 = states[variables.entity].attributes.hourly_forecast[20].native_temperature*1;
+              var t21 = states[variables.entity].attributes.hourly_forecast[21].native_temperature*1;
+              var t22 = states[variables.entity].attributes.hourly_forecast[22].native_temperature*1;
+              var t23 = states[variables.entity].attributes.hourly_forecast[23].native_temperature*1;
+              var temps = [t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23];
+              var max = Math.max(...temps);
+              var min = Math.min(...temps);
+              var range = 125/(max-min);   
+              if (variables.weizhi=='0' && t0!=t1) return range * Math.abs(t0-t1) + "px";
+              if (variables.weizhi=='1' && t1!=t2) return range * Math.abs(t1-t2) + "px";
+              if (variables.weizhi=='2' && t2!=t3) return range * Math.abs(t2-t3) + "px";
+              if (variables.weizhi=='3' && t3!=t4) return range * Math.abs(t3-t4) + "px";
+              if (variables.weizhi=='4' && t4!=t5) return range * Math.abs(t4-t5) + "px";
+              if (variables.weizhi=='5' && t5!=t6) return range * Math.abs(t5-t6) + "px";
+              if (variables.weizhi=='6' && t6!=t7) return range * Math.abs(t6-t7) + "px";
+              if (variables.weizhi=='7' && t7!=t8) return range * Math.abs(t7-t8) + "px";
+              if (variables.weizhi=='8' && t8!=t9) return range * Math.abs(t8-t9) + "px";
+              if (variables.weizhi=='9' && t9!=t10) return range * Math.abs(t9-t10) + "px";
+              if (variables.weizhi=='10' && t10!=t11) return range * Math.abs(t10-t11) + "px";
+              if (variables.weizhi=='11' && t11!=t12) return range * Math.abs(t11-t12) + "px";
+              if (variables.weizhi=='12' && t12!=t13) return range * Math.abs(t12-t13) + "px";
+              if (variables.weizhi=='13' && t13!=t14) return range * Math.abs(t13-t14) + "px";
+              if (variables.weizhi=='14' && t14!=t15) return range * Math.abs(t14-t15) + "px";
+              if (variables.weizhi=='15' && t15!=t16) return range * Math.abs(t15-t16) + "px";
+              if (variables.weizhi=='16' && t16!=t17) return range * Math.abs(t16-t17) + "px";
+              if (variables.weizhi=='17' && t17!=t18) return range * Math.abs(t17-t18) + "px";
+              if (variables.weizhi=='18' && t18!=t19) return range * Math.abs(t18-t19) + "px";
+              if (variables.weizhi=='19' && t19!=t20) return range * Math.abs(t19-t20) + "px";
+              if (variables.weizhi=='20' && t20!=t21) return range * Math.abs(t20-t21) + "px";
+              if (variables.weizhi=='21' && t21!=t22) return range * Math.abs(t21-t22) + "px";
+              if (variables.weizhi=='22' && t22!=t23) return range * Math.abs(t22-t23) + "px";
+              else return "1px";
+          ]]]  
+      - background: |
+          [[[
+              var t0 = states[variables.entity].attributes.hourly_forecast[0].native_temperature*1;
+              var t1 = states[variables.entity].attributes.hourly_forecast[1].native_temperature*1;
+              var t2 = states[variables.entity].attributes.hourly_forecast[2].native_temperature*1;
+              var t3 = states[variables.entity].attributes.hourly_forecast[3].native_temperature*1;
+              var t4 = states[variables.entity].attributes.hourly_forecast[4].native_temperature*1;
+              var t5 = states[variables.entity].attributes.hourly_forecast[5].native_temperature*1;
+              var t6 = states[variables.entity].attributes.hourly_forecast[6].native_temperature*1;
+              var t7 = states[variables.entity].attributes.hourly_forecast[7].native_temperature*1;
+              var t8 = states[variables.entity].attributes.hourly_forecast[8].native_temperature*1;
+              var t9 = states[variables.entity].attributes.hourly_forecast[9].native_temperature*1;
+              var t10 = states[variables.entity].attributes.hourly_forecast[10].native_temperature*1;
+              var t11 = states[variables.entity].attributes.hourly_forecast[11].native_temperature*1;
+              var t12 = states[variables.entity].attributes.hourly_forecast[12].native_temperature*1;
+              var t13 = states[variables.entity].attributes.hourly_forecast[13].native_temperature*1;
+              var t14 = states[variables.entity].attributes.hourly_forecast[14].native_temperature*1;
+              var t15 = states[variables.entity].attributes.hourly_forecast[15].native_temperature*1;
+              var t16 = states[variables.entity].attributes.hourly_forecast[16].native_temperature*1;
+              var t17 = states[variables.entity].attributes.hourly_forecast[17].native_temperature*1;
+              var t18 = states[variables.entity].attributes.hourly_forecast[18].native_temperature*1;
+              var t19 = states[variables.entity].attributes.hourly_forecast[19].native_temperature*1;
+              var t20 = states[variables.entity].attributes.hourly_forecast[20].native_temperature*1;
+              var t21 = states[variables.entity].attributes.hourly_forecast[21].native_temperature*1;
+              var t22 = states[variables.entity].attributes.hourly_forecast[22].native_temperature*1;
+              var t23 = states[variables.entity].attributes.hourly_forecast[23].native_temperature*1;
+              if ((variables.weizhi=='0' && t0==t1) ||
+                  (variables.weizhi=='1' && t1==t2) ||
+                  (variables.weizhi=='2' && t2==t3) ||
+                  (variables.weizhi=='3' && t3==t4) ||
+                  (variables.weizhi=='4' && t4==t5) ||
+                  (variables.weizhi=='5' && t5==t6) ||
+                  (variables.weizhi=='6' && t6==t7) ||
+                  (variables.weizhi=='7' && t7==t8) ||
+                  (variables.weizhi=='8' && t8==t9) ||
+                  (variables.weizhi=='9' && t9==t10) ||
+                  (variables.weizhi=='10' && t10==t11) ||
+                  (variables.weizhi=='11' && t11==t12) ||
+                  (variables.weizhi=='12' && t12==t13) ||
+                  (variables.weizhi=='13' && t13==t14) ||
+                  (variables.weizhi=='14' && t14==t15) ||
+                  (variables.weizhi=='15' && t15==t16) ||
+                  (variables.weizhi=='16' && t16==t17) ||
+                  (variables.weizhi=='17' && t17==t18) ||
+                  (variables.weizhi=='18' && t18==t19) ||
+                  (variables.weizhi=='19' && t19==t20) ||
+                  (variables.weizhi=='20' && t20==t21) ||
+                  (variables.weizhi=='21' && t21==t22) ||
+                  (variables.weizhi=='22' && t22==t23))  return 'rgb(255,165,0)';
+              if ((variables.weizhi=='0' && t0>t1) ||
+                  (variables.weizhi=='1' && t1>t2) ||
+                  (variables.weizhi=='2' && t2>t3) ||
+                  (variables.weizhi=='3' && t3>t4) ||
+                  (variables.weizhi=='4' && t4>t5) ||
+                  (variables.weizhi=='5' && t5>t6) ||
+                  (variables.weizhi=='6' && t6>t7) ||
+                  (variables.weizhi=='7' && t7>t8) ||
+                  (variables.weizhi=='8' && t8>t9) ||
+                  (variables.weizhi=='9' && t9>t10) ||
+                  (variables.weizhi=='10' && t10>t11) ||
+                  (variables.weizhi=='11' && t11>t12) ||
+                  (variables.weizhi=='12' && t12>t13) ||
+                  (variables.weizhi=='13' && t13>t14) ||
+                  (variables.weizhi=='14' && t14>t15) ||
+                  (variables.weizhi=='15' && t15>t16) ||
+                  (variables.weizhi=='16' && t16>t17) ||
+                  (variables.weizhi=='17' && t17>t18) ||
+                  (variables.weizhi=='18' && t18>t19) ||
+                  (variables.weizhi=='19' && t19>t20) ||
+                  (variables.weizhi=='20' && t20>t21) ||
+                  (variables.weizhi=='21' && t21>t22) ||
+                  (variables.weizhi=='22' && t22>t23))
+                  return 'linear-gradient(to bottom left, rgb(0,0,0,0) calc(50% - 0.5px), rgb(255,165,0) 0, rgb(255,165,0) calc(50% + 0.5px), rgb(0,0,0,0) 0)';
+              if ((variables.weizhi=='0' && t0<t1) ||
+                  (variables.weizhi=='1' && t1<t2) ||
+                  (variables.weizhi=='2' && t2<t3) ||
+                  (variables.weizhi=='3' && t3<t4) ||
+                  (variables.weizhi=='4' && t4<t5) ||
+                  (variables.weizhi=='5' && t5<t6) ||
+                  (variables.weizhi=='6' && t6<t7) ||
+                  (variables.weizhi=='7' && t7<t8) ||
+                  (variables.weizhi=='8' && t8<t9) ||
+                  (variables.weizhi=='9' && t9<t10) ||
+                  (variables.weizhi=='10' && t10<t11) ||
+                  (variables.weizhi=='11' && t11<t12) ||
+                  (variables.weizhi=='12' && t12<t13) ||
+                  (variables.weizhi=='13' && t13<t14) ||
+                  (variables.weizhi=='14' && t14<t15) ||
+                  (variables.weizhi=='15' && t15<t16) ||
+                  (variables.weizhi=='16' && t16<t17) ||
+                  (variables.weizhi=='17' && t17<t18) ||
+                  (variables.weizhi=='18' && t18<t19) ||
+                  (variables.weizhi=='19' && t19<t20) ||
+                  (variables.weizhi=='20' && t20<t21) ||
+                  (variables.weizhi=='21' && t21<t22) ||
+                  (variables.weizhi=='22' && t22<t23))
+                  return 'linear-gradient(to bottom right, rgb(0,0,0,0) calc(50% - 0.5px), rgb(255,165,0) 0, rgb(255,165,0) calc(50% + 0.5px), rgb(0,0,0,0) 0)'; 
+          ]]]  
+      - margin-top: |
+          [[[      
+              var t0 = states[variables.entity].attributes.hourly_forecast[0].native_temperature*1;
+              var t1 = states[variables.entity].attributes.hourly_forecast[1].native_temperature*1;
+              var t2 = states[variables.entity].attributes.hourly_forecast[2].native_temperature*1;
+              var t3 = states[variables.entity].attributes.hourly_forecast[3].native_temperature*1;
+              var t4 = states[variables.entity].attributes.hourly_forecast[4].native_temperature*1;
+              var t5 = states[variables.entity].attributes.hourly_forecast[5].native_temperature*1;
+              var t6 = states[variables.entity].attributes.hourly_forecast[6].native_temperature*1;
+              var t7 = states[variables.entity].attributes.hourly_forecast[7].native_temperature*1;
+              var t8 = states[variables.entity].attributes.hourly_forecast[8].native_temperature*1;
+              var t9 = states[variables.entity].attributes.hourly_forecast[9].native_temperature*1;
+              var t10 = states[variables.entity].attributes.hourly_forecast[10].native_temperature*1;
+              var t11 = states[variables.entity].attributes.hourly_forecast[11].native_temperature*1;
+              var t12 = states[variables.entity].attributes.hourly_forecast[12].native_temperature*1;
+              var t13 = states[variables.entity].attributes.hourly_forecast[13].native_temperature*1;
+              var t14 = states[variables.entity].attributes.hourly_forecast[14].native_temperature*1;
+              var t15 = states[variables.entity].attributes.hourly_forecast[15].native_temperature*1;
+              var t16 = states[variables.entity].attributes.hourly_forecast[16].native_temperature*1;
+              var t17 = states[variables.entity].attributes.hourly_forecast[17].native_temperature*1;
+              var t18 = states[variables.entity].attributes.hourly_forecast[18].native_temperature*1;
+              var t19 = states[variables.entity].attributes.hourly_forecast[19].native_temperature*1;
+              var t20 = states[variables.entity].attributes.hourly_forecast[20].native_temperature*1;
+              var t21 = states[variables.entity].attributes.hourly_forecast[21].native_temperature*1;
+              var t22 = states[variables.entity].attributes.hourly_forecast[22].native_temperature*1;
+              var t23 = states[variables.entity].attributes.hourly_forecast[23].native_temperature*1;
+              var temps = [t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23];
+              var max = Math.max(...temps);
+              var min = Math.min(...temps);
+              var range = 125/(max-min);     
+              if (variables.weizhi=='0') return range*(2*max-t1-t0)+ "px";
+              if (variables.weizhi=='1') return range*(2*max-t2-t1)+ "px";
+              if (variables.weizhi=='2') return range*(2*max-t3-t2)+ "px";
+              if (variables.weizhi=='3') return range*(2*max-t4-t3)+ "px";
+              if (variables.weizhi=='4') return range*(2*max-t5-t4)+ "px";
+              if (variables.weizhi=='5') return range*(2*max-t6-t5)+ "px";
+              if (variables.weizhi=='6') return range*(2*max-t7-t6)+ "px";
+              if (variables.weizhi=='7') return range*(2*max-t8-t7)+ "px";
+              if (variables.weizhi=='8') return range*(2*max-t9-t8)+ "px";
+              if (variables.weizhi=='9') return range*(2*max-t10-t9)+ "px";
+              if (variables.weizhi=='10') return range*(2*max-t11-t10)+ "px";
+              if (variables.weizhi=='11') return range*(2*max-t12-t11)+ "px";
+              if (variables.weizhi=='12') return range*(2*max-t13-t12)+ "px";
+              if (variables.weizhi=='13') return range*(2*max-t14-t13)+ "px";
+              if (variables.weizhi=='14') return range*(2*max-t15-t14)+ "px";
+              if (variables.weizhi=='15') return range*(2*max-t16-t15)+ "px";
+              if (variables.weizhi=='16') return range*(2*max-t17-t16)+ "px";
+              if (variables.weizhi=='17') return range*(2*max-t18-t17)+ "px";
+              if (variables.weizhi=='18') return range*(2*max-t19-t18)+ "px";
+              if (variables.weizhi=='19') return range*(2*max-t20-t19)+ "px";
+              if (variables.weizhi=='20') return range*(2*max-t21-t20)+ "px";
+              if (variables.weizhi=='21') return range*(2*max-t22-t21)+ "px";
+              if (variables.weizhi=='22') return range*(2*max-t23-t22)+ "px";
+              if (variables.weizhi=='23') return range*(2*max-t23-t22)+ "px"; 
+          ]]]
+天气小时降雨量数值样式模板:
+  triggers_update: all
+  show_label: true
+  label: |
+    [[[
+        var rain = states[variables.entity].attributes.hourly_forecast[variables.weizhi].native_precipitation;
+        if (rain>0) return  rain+"mm";    
+      ]]]
+  styles:
+    label:
+      - font-size: 8px
+      - color: |
+          [[[  
+              var rain = states[variables.entity].attributes.hourly_forecast[variables.weizhi].native_precipitation;
+              if ( rain>0 ) return  theme_color(1);
+              if ( rain==0) return 'transparent'; 
+          ]]]  
+    card:
+      - border-radius: '[[[return variables.rain_border]]]'
+      - margin-left: 2px
+      - width: 36px
+      - height: 16px
+      - background: |
+          [[[  
+              var rain = states[variables.entity].attributes.hourly_forecast[variables.weizhi].native_precipitation;
+              if ( rain>0 ) return theme_color(2);
+              if ( rain==0) return 'transparent'; 
+          ]]]   
+      - border: |
+          [[[  
+              var rain = states[variables.entity].attributes.hourly_forecast[variables.weizhi].native_precipitation;
+              if ( rain>0)  return  '1.5px solid rgb(0,255,255)';
+              else return '0px solid'; 
+          ]]]  
+天气小时降雨量样式模板:
+  triggers_update: all
+  styles: 
+    card:
+      - padding: 0 0 0 0
+      - border-radius: 0
+      - border-width: 0
+      - width: 40px 
+      - margin-top: |
+          [[[  
+              var rain = states[variables.entity].attributes.hourly_forecast[variables.weizhi].native_precipitation;
+              if (rain >=0 && rain <= 2)  return 165-rain*82.5+'px'; 
+              if (rain >2 ) return '0'; 
+          ]]]  
+      - height: |
+          [[[  
+              var rain = states[variables.entity].attributes.hourly_forecast[variables.weizhi].native_precipitation;
+              if (rain >=0 && rain <= 2)  return rain*82.5+'px'; 
+              if (rain >2 ) return '165px'; 
+          ]]]  
+      - background: |
+          [[[  
+              var rain = states[variables.entity].attributes.hourly_forecast[variables.weizhi].native_precipitation;
+              if ( rain>0 ) return 'rgb(0,255,255)';
+              if ( rain==0) return 'transparent'; 
+          ]]]    

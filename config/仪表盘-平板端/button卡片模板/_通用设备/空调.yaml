@@ -1,0 +1,863 @@
+######################## 空调 ########################
+空调:
+  triggers_update:
+    - '[[[ return variables.空调 ]]]'
+    - '[[[ return variables.附加信息 ]]]'
+    - '[[[ return variables.辅热 ]]]'
+    - '[[[ return variables.干燥 ]]]'
+    - '[[[ return variables.节能 ]]]'
+    - '[[[ return variables.睡眠 ]]]'
+    - '[[[ return variables.指示灯 ]]]'
+    - '[[[ return variables.提示音 ]]]'
+  styles:
+    grid: 
+      - grid-template-areas: | 
+          [[[
+             if (variables.附加信息=='左侧')  return '"副背景 主背景 主背景 主背景 主背景 主背景 主背景 主背景 主背景"' +
+                                                    '"副背景 空白一 温度环 温度环 温度环 温度环 温度环 温度环 空白二"' +
+                                                    '"副背景 空白一 渐变圆 渐变圆 渐变圆 渐变圆 渐变圆 渐变圆 空白二"' +
+                                                    '"副背景 空白一 第一排 第一排 第一排 第一排 第一排 第一排 空白二"' +
+                                                    '"副背景 空白一 第二排 第二排 第二排 第二排 第二排 第二排 空白二"' +
+                                                    '"副背景 空白一 第三排 第三排 第三排 第三排 第三排 第三排 空白二"' +
+                                                    '"副背景 空白一 空白三 减按钮 减按钮 加按钮 加按钮 空白四 空白二"' +
+                                                    '"副背景 空白一 按钮一 按钮一 按钮一 按钮一 按钮一 按钮一 空白二"' +
+                                                    '"副背景 空白一 按钮二 按钮二 按钮二 按钮二 按钮二 按钮二 空白二"' +
+                                                    '"副背景 空白一 按钮三 按钮三 按钮三 按钮三 按钮三 按钮三 空白二"' ;
+             if (variables.附加信息=='右侧')  return '"主背景 主背景 主背景 主背景 主背景 主背景 主背景 主背景 副背景"' +
+                                                    '"空白一 温度环 温度环 温度环 温度环 温度环 温度环 空白二 副背景"' +
+                                                    '"空白一 渐变圆 渐变圆 渐变圆 渐变圆 渐变圆 渐变圆 空白二 副背景"' +
+                                                    '"空白一 第一排 第一排 第一排 第一排 第一排 第一排 空白二 副背景"' +
+                                                    '"空白一 第二排 第二排 第二排 第二排 第二排 第二排 空白二 副背景"' +
+                                                    '"空白一 第三排 第三排 第三排 第三排 第三排 第三排 空白二 副背景"' +
+                                                    '"空白一 空白三 减按钮 减按钮 加按钮 加按钮 空白四 空白二 副背景"' +
+                                                    '"空白一 按钮一 按钮一 按钮一 按钮一 按钮一 按钮一 空白二 副背景"' +
+                                                    '"空白一 按钮二 按钮二 按钮二 按钮二 按钮二 按钮二 空白二 副背景"' +
+                                                    '"空白一 按钮三 按钮三 按钮三 按钮三 按钮三 按钮三 空白二 副背景"' ;
+             return '"主背景 主背景 主背景 主背景 主背景 主背景 主背景 主背景"' +
+                    '"空白一 温度环 温度环 温度环 温度环 温度环 温度环 空白二"' +
+                    '"空白一 渐变圆 渐变圆 渐变圆 渐变圆 渐变圆 渐变圆 空白二"' +
+                    '"空白一 第一排 第一排 第一排 第一排 第一排 第一排 空白二"' +
+                    '"空白一 第二排 第二排 第二排 第二排 第二排 第二排 空白二"' +
+                    '"空白一 第三排 第三排 第三排 第三排 第三排 第三排 空白二"' +
+                    '"空白一 空白三 减按钮 减按钮 加按钮 加按钮 空白四 空白二"' +
+                    '"空白一 按钮一 按钮一 按钮一 按钮一 按钮一 按钮一 空白二"' +
+                    '"空白一 按钮二 按钮二 按钮二 按钮二 按钮二 按钮二 空白二"' +
+                    '"空白一 按钮三 按钮三 按钮三 按钮三 按钮三 按钮三 空白二"' ;
+          ]]]
+      - grid-template-columns: | 
+          [[[
+             if (variables.附加信息=='左侧')  return "67px 18px 44px 44px 44px 44px 44px 44px 18px";
+             if (variables.附加信息=='右侧')  return "18px 44px 44px 44px 44px 44px 44px 25px 67px";
+             return "18px 44px 44px 44px 44px 44px 44px 18px";
+          ]]]
+      - grid-template-rows: 0px 340px 0px 0px 0px 0px 0px 0px 0px 0px
+    card:
+      - padding: 0
+      - width: |
+          [[[
+              if (variables.附加信息=='左侧' || variables.附加信息=='右侧') return "370px";
+              return "300px";
+          ]]]
+      - height: 505px
+      - border-width: 0
+      - background: rgb(0,0,0,0)
+  custom_fields: 
+    主背景:
+      card:
+        type: custom:button-card 
+        styles:
+          card:
+            - margin-top: 505px
+            - width: 300px
+            - height: 505px
+            - border-radius: 15px
+            - border-width: 0
+            - background: '[[[ return variables.主题 =="on" ? "rgb(255,255,255)" : "rgb(50,50,50)" ]]]'
+    渐变圆:
+      card:
+        type: custom:button-card
+        styles: 
+          card:
+            - margin-top: -272px
+            - border-width: 0
+            - background: |
+                [[[ 
+                    if(states[variables.空调].state=='cool')     return "radial-gradient(rgba(33,150,243) -20%, rgb(0,0,0,0) 50%)" ;
+                    if(states[variables.空调].state=='dry')      return "radial-gradient(rgba(255,151,0) -20%, rgb(0,0,0,0) 50%)" ;
+                    if(states[variables.空调].state=='fan_only') return "radial-gradient(rgba(0,188,213) -20%, rgb(0,0,0,0) 50%)" ;
+                    if(states[variables.空调].state=='heat')     return "radial-gradient(rgba(254,111,33) -20%, rgb(0,0,0,0) 50%)" ;
+                    return "rgb(0,0,0,0)" ;
+                ]]]
+            - width: 264px
+            - height: 264px
+    温度环:
+      card:   
+        type: thermostat
+        entity: '[[[ return variables.空调 ]]]'
+        card_mod:
+          style: |
+            [[[ 
+                const label_on = `
+                  ha-card{ 
+                    background: rgb(0,0,0,0); 
+                    border-width: 0;
+                    color: rgb(0,0,0);
+                    --disabled-color: rgb(120,120,120);
+                  }
+                `;   
+                const label_off = ` 
+                  ha-card{ 
+                    background: rgb(0,0,0,0);
+                    border-width: 0;
+                    color: rgb(255,255,255);
+                    --disabled-color: rgb(220,220,220);
+                  }
+                `; 
+                return variables.主题 =="on"  ? label_on : label_off; 
+            ]]]
+    第一排:
+      card:
+        type: custom:button-card
+        styles:
+          card:
+            - margin-top: 40px
+            - width: 264px
+            - height: 42px
+            - border-width: 0
+            - background: '[[[ return variables.主题 =="on" ? "rgb(230,230,230)" : "rgb(80,80,80)" ]]]'
+            - border-radius: 10px
+    第二排:
+      card:
+        type: custom:button-card
+        styles:
+          card:
+            - margin-top: 150px
+            - width: 264px
+            - height: 42px
+            - border-width: 0
+            - background: '[[[ return variables.主题 =="on" ? "rgb(230,230,230)" : "rgb(80,80,80)" ]]]'
+            - border-radius: 10px
+    第三排:
+      card:
+        type: custom:button-card
+        styles:
+          card:
+            - margin-top: 260px
+            - width: 264px
+            - height: 42px
+            - border-width: 0
+            - background: '[[[ return variables.主题 =="on" ? "rgb(230,230,230)" : "rgb(80,80,80)" ]]]'
+            - border-radius: 10px
+    减按钮:
+      card:
+        type: custom:button-card
+        entity: '[[[ return  variables.空调 ]]]'
+        show_icon: true
+        show_name: false
+        show_state: false
+        icon: 'mdi:minus'
+        styles:
+          card:
+            - margin-top: -75px
+            - width: 50px
+            - height: 50px
+            - border-radius: 25px
+            - border: '[[[ return variables.主题 =="on" ? "2px solid rgb(150,150,150)" : "2px solid rgb(180,180,180)" ]]]'
+            - margin-left: '27px'
+            - --mdc-ripple-color: white
+            - --mdc-ripple-press-opacity: 0.3
+            - background: rgb(0,0,0,0)
+          icon:
+            - width: 25px
+            - height: 25px
+            - color: '[[[ return variables.主题 =="on" ? "rgb(150,150,150)" : "rgb(180,180,180)"; ]]]'
+        tap_action:
+          action: call-service
+          service: climate.set_temperature
+          data:
+            temperature: '[[[ return states[variables.空调].attributes.temperature-1 ]]]'
+          target:
+            entity_id: '[[[ return  variables.空调 ]]]'
+    加按钮:
+      card:
+        type: custom:button-card
+        entity: '[[[ return  variables.空调 ]]]'
+        show_icon: true
+        show_name: false
+        show_state: false
+        icon: 'mdi:plus'
+        styles:
+          card:
+            - margin-top: -75px
+            - width: 50px
+            - height: 50px
+            - border-radius: 25px
+            - border: '[[[ return variables.主题 =="on" ? "2px solid rgb(150,150,150)" : "2px solid rgb(180,180,180)" ]]]'
+            - margin-left: '12px'
+            - --mdc-ripple-color: white
+            - --mdc-ripple-press-opacity: 0.3 
+            - background: rgb(0,0,0,0)
+          icon:
+            - width: 25px
+            - height: 25px
+            - color: '[[[ return variables.主题 =="on" ? "rgb(150,150,150)" : "rgb(180,180,180)"; ]]]'
+        tap_action:
+          action: call-service
+          service: climate.set_temperature
+          data:
+            temperature: '[[[ return states[variables.空调].attributes.temperature-(-1) ]]]'
+          target:
+            entity_id: '[[[ return  variables.空调 ]]]'
+    按钮一:
+      card:
+        type: custom:button-card
+        styles:
+          grid:
+            - grid-template-areas: |
+                'b1 b2 b3 b4 b5' 
+            - grid-template-columns: 20% 20% 20% 20% 20% 
+            - grid-template-rows: 42px
+          card:
+            - padding: 0
+            - margin-top: 40px
+            - width: 264px
+            - height: 42px
+            - border-width: 0
+            - background: rgb(0,0,0,0) 
+        custom_fields:
+          b1:
+            card:
+              type: custom:button-card
+              icon: mdi:fire
+              template: kongtiao_hvac_modes
+              variables:
+                主题: '[[[ return variables.主题 ]]]'
+                空调: '[[[ return variables.空调 ]]]'
+                hvac_mode: heat
+          b2:
+            card:
+              type: custom:button-card
+              icon: mdi:snowflake
+              template: kongtiao_hvac_modes
+              variables:
+                主题: '[[[ return variables.主题 ]]]'
+                空调: '[[[ return variables.空调 ]]]'
+                hvac_mode: cool
+          b3:
+            card:
+              type: custom:button-card
+              icon: mdi:water-percent
+              template: kongtiao_hvac_modes
+              variables:
+                主题: '[[[ return variables.主题 ]]]'
+                空调: '[[[ return variables.空调 ]]]'
+                hvac_mode: dry
+          b4:
+            card:
+              type: custom:button-card
+              icon: mdi:fan
+              template: kongtiao_hvac_modes
+              variables:
+                主题: '[[[ return variables.主题 ]]]'
+                空调: '[[[ return variables.空调 ]]]'
+                hvac_mode: fan_only
+          b5:
+            card:
+              type: custom:button-card
+              icon: mdi:power
+              template: kongtiao_hvac_modes
+              variables:
+                主题: '[[[ return variables.主题 ]]]'
+                空调: '[[[ return variables.空调 ]]]'
+                hvac_mode: 'off'  
+    按钮二:
+      card:
+        type: custom:button-card
+        styles:
+          grid:
+            - grid-template-areas: |
+                'b1 b2 b3 b4 b5 b6 b7 b8' 
+            - grid-template-columns: 12.5% 12.5% 12.5% 12.5% 12.5% 12.5% 12.5% 12.5% 
+            - grid-template-rows: 42px
+          card:
+            - padding: 0
+            - margin-top: 150px
+            - width: 264px
+            - height: 42px
+            - border-width: 0
+            - background: rgb(0,0,0,0)
+        custom_fields:
+          b1:
+            card:
+              type: custom:button-card
+              template: kongtiao_fan_modes
+              variables:
+                主题: '[[[ return variables.主题 ]]]'
+                空调: '[[[ return variables.空调 ]]]'
+                fan_mode: 自动
+                num: A
+          b2:
+            card:
+              type: custom:button-card
+              template: kongtiao_fan_modes
+              variables:
+                主题: '[[[ return variables.主题 ]]]'
+                空调: '[[[ return variables.空调 ]]]'
+                fan_mode: 档位一
+                num: 1
+          b3:
+            card:
+              type: custom:button-card
+              template: kongtiao_fan_modes
+              variables:
+                主题: '[[[ return variables.主题 ]]]'
+                空调: '[[[ return variables.空调 ]]]'
+                fan_mode: 档位二
+                num: 2
+          b4:
+            card:
+              type: custom:button-card
+              template: kongtiao_fan_modes
+              variables:
+                主题: '[[[ return variables.主题 ]]]'
+                空调: '[[[ return variables.空调 ]]]'
+                fan_mode: 档位三
+                num: 3
+          b5:
+            card:
+              type: custom:button-card
+              template: kongtiao_fan_modes
+              variables:
+                主题: '[[[ return variables.主题 ]]]'
+                空调: '[[[ return variables.空调 ]]]'
+                fan_mode: 档位四
+                num: 4
+          b6:
+            card:
+              type: custom:button-card
+              template: kongtiao_fan_modes
+              variables:
+                主题: '[[[ return variables.主题 ]]]'
+                空调: '[[[ return variables.空调 ]]]'
+                fan_mode: 档位五
+                num: 5
+          b7:
+            card:
+              type: custom:button-card
+              template: kongtiao_fan_modes
+              variables:
+                主题: '[[[ return variables.主题 ]]]'
+                空调: '[[[ return variables.空调 ]]]'
+                fan_mode: 档位六
+                num: 6
+          b8:
+            card:
+              type: custom:button-card
+              template: kongtiao_fan_modes
+              variables:
+                主题: '[[[ return variables.主题 ]]]'
+                空调: '[[[ return variables.空调 ]]]'
+                fan_mode: 档位七
+                num: 7
+    按钮三:
+      card:
+        type: custom:button-card
+        styles:
+          grid:
+            - grid-template-areas: |
+                'b1 b2 b3 b4' 
+            - grid-template-columns: 25% 25% 25% 25%
+            - grid-template-rows: 42px
+          card:
+            - padding: 0
+            - margin-top: 260px
+            - width: 264px
+            - height: 42px
+            - border-width: 0
+            - background: rgb(0,0,0,0)
+        custom_fields:
+          b1:
+            card:
+              type: custom:button-card
+              icon: mdi:arrow-oscillating-off
+              template: kongtiao_swing_modes
+              variables:
+                主题: '[[[ return variables.主题 ]]]'
+                空调: '[[[ return variables.空调 ]]]'
+                swing_mode: 'off'
+          b2:
+            card:
+              type: custom:button-card
+              icon: mdi:arrow-up-down
+              template: kongtiao_swing_modes 
+              variables:
+                主题: '[[[ return variables.主题 ]]]'
+                空调: '[[[ return variables.空调 ]]]'
+                swing_mode: vertical
+          b3:
+            card:
+              type: custom:button-card
+              icon: mdi:arrow-left-right
+              template: kongtiao_swing_modes
+              variables:
+                主题: '[[[ return variables.主题 ]]]'
+                空调: '[[[ return variables.空调 ]]]'
+                swing_mode: horizontal
+          b4:
+            card:
+              type: custom:button-card
+              icon: mdi:arrow-all
+              template: kongtiao_swing_modes
+              variables:
+                主题: '[[[ return variables.主题 ]]]'
+                空调: '[[[ return variables.空调 ]]]'
+                swing_mode: both
+    副背景: 
+      card:
+        type: custom:button-card
+        styles:
+          grid:
+            - grid-template-areas: |
+                'b1' 'b2' 'b3' 'b4' 'b5' 'b6'
+            - grid-template-columns: 60px
+            - grid-template-rows: 0px 0px 0px 0px 0px 0px 
+          card:
+            - padding: 0
+            - margin-top: 165px
+            - width: 60px
+            - height: 505px
+            - border-radius: 15px 
+            - border-width: 0
+            - background: '[[[ return variables.主题 =="on" ? "rgb(255,255,255)" : "rgb(50,50,50)" ]]]'
+        custom_fields:  
+          b1:
+            card:
+              type: custom:button-card
+              icon: |
+                [[[ 
+                    if(variables.附加信息=='左侧' || variables.附加信息=='右侧')
+                    var heater =states[variables.辅热].state;
+                    if( heater=='on' ) return "mdi:heating-coil";
+                    if( heater=='off') return "mdi:heating-coil";
+                ]]]
+              show_icon: true
+              show_label: true  
+              label: 辅热 
+              styles: 
+                card:
+                  - margin-top: 390px
+                  - margin-left: 8px
+                  - border-radius: 10px
+                  - width: 42px
+                  - height: 42px
+                  - border-width: 0
+                  - background: '[[[ return variables.主题 =="on" ? "rgb(230,230,230)" : "rgb(80,80,80)" ]]]'     
+                label:
+                  - font-size: 11px
+                  - color: '[[[ return variables.主题 =="on" ? "rgb(0,0,0)" : "rgb(255,255,255)" ]]]'
+                icon:
+                  - color: |
+                      [[[
+                          if(variables.附加信息=='左侧' || variables.附加信息=='右侧')
+                          var heater =states[variables.辅热].state,
+                              state = states[variables.空调].state;
+                          if( heater=='on' && state=='cool')     return "rgb(33,150,243)" ;
+                          if( heater=='on' && state=='dry')      return "rgb(255,151,0)" ;
+                          if( heater=='on' && state=='fan_only') return "rgb(0,188,213)" ;
+                          if( heater=='on' && state=='heat')     return "rgb(254,111,33)" ;
+                          if( heater=='on' && state=='off')      return "rgb(0,245,255)" ; 
+                          if( heater=='off') return variables.主题 =="on" ? "rgb(0,0,0)" : "rgb(255,255,255)"; 
+                      ]]]
+              variables:
+                主题: '[[[ return variables.主题 ]]]'
+              tap_action:
+                action: call-service
+                service: switch.toggle
+                data: {}
+                target:
+                  entity_id: |
+                    [[[ 
+                        if (variables.附加信息=='左侧' || variables.附加信息=='右侧')
+                        return  variables.辅热 
+                    ]]]
+          b2:
+            card:
+              type: custom:button-card
+              icon: |
+                [[[ 
+                    if(variables.附加信息=='左侧' || variables.附加信息=='右侧')
+                    var dryer =states[variables.干燥].state;
+                    if( dryer=='on' ) return "mdi:heat-wave";
+                    if( dryer=='off') return "mdi:heat-wave";
+                ]]]
+              show_icon: true
+              show_label: true 
+              label: 干燥
+              styles: 
+                card:
+                  - margin-top: 500px
+                  - margin-left: 8px
+                  - border-radius: 10px
+                  - width: 42px
+                  - height: 42px 
+                  - border-width: 0
+                  - background: '[[[ return variables.主题 =="on" ? "rgb(230,230,230)" : "rgb(80,80,80)" ]]]'  
+                label:
+                  - font-size: 11px
+                  - color: '[[[ return variables.主题 =="on" ? "rgb(0,0,0)" : "rgb(255,255,255)" ]]]'
+                icon:
+                  - color: |
+                      [[[
+                          if(variables.附加信息=='左侧' || variables.附加信息=='右侧')
+                          var dryer = states[variables.干燥].state,
+                              state = states[variables.空调].state;
+                          if( dryer=='on' && state=='cool')     return "rgb(33,150,243)" ;
+                          if( dryer=='on' && state=='dry')      return "rgb(255,151,0)" ;
+                          if( dryer=='on' && state=='fan_only') return "rgb(0,188,213)" ;
+                          if( dryer=='on' && state=='heat')     return "rgb(254,111,33)" ;
+                          if( dryer=='on' && state=='off')      return "rgb(0,245,255)" ; 
+                          if( dryer=='off') return variables.主题 =="on" ? "rgb(0,0,0)" : "rgb(255,255,255)"; 
+                      ]]]
+              variables:
+                主题: '[[[ return variables.主题 ]]]'
+              tap_action:
+                action: call-service
+                service: switch.toggle 
+                data: {}
+                target:
+                  entity_id: |
+                    [[[ 
+                        if (variables.附加信息=='左侧' || variables.附加信息=='右侧')
+                        return  variables.干燥 
+                    ]]]
+          b3:
+            card:
+              type: custom:button-card
+              icon: |
+                [[[ 
+                    if(variables.附加信息=='左侧' || variables.附加信息=='右侧')
+                    var eco =states[variables.节能].state;
+                    if( eco=='on' ) return "mdi:leaf";
+                    if( eco=='off') return "mdi:leaf-off";
+                ]]]
+              show_icon: true
+              show_label: true 
+              label: 节能
+              styles: 
+                card:
+                  - margin-top: 610px
+                  - margin-left: 8px
+                  - border-radius: 10px
+                  - width: 42px
+                  - height: 42px
+                  - border-width: 0
+                  - background: '[[[ return variables.主题 =="on" ? "rgb(230,230,230)" : "rgb(80,80,80)" ]]]'  
+                label:
+                  - font-size: 11px
+                  - color: '[[[ return variables.主题 =="on" ? "rgb(0,0,0)" : "rgb(255,255,255)" ]]]'
+                icon:
+                  - color: |
+                      [[[
+                          if(variables.附加信息=='左侧' || variables.附加信息=='右侧')
+                          var eco = states[variables.节能].state,
+                              state = states[variables.空调].state;
+                          if( eco=='on' && state=='cool')     return "rgb(33,150,243)" ;
+                          if( eco=='on' && state=='dry')      return "rgb(255,151,0)" ;
+                          if( eco=='on' && state=='fan_only') return "rgb(0,188,213)" ;
+                          if( eco=='on' && state=='heat')     return "rgb(254,111,33)" ;
+                          if( eco=='on' && state=='off')      return "rgb(0,245,255)" ; 
+                          if( eco=='off') return variables.主题 =="on" ? "rgb(0,0,0)" : "rgb(255,255,255)"; 
+                      ]]]
+              variables:
+                主题: '[[[ return variables.主题 ]]]'
+              tap_action:
+                action: call-service
+                service: switch.toggle
+                data: {}
+                target:
+                  entity_id: |
+                    [[[ 
+                        if (variables.附加信息=='左侧' || variables.附加信息=='右侧')
+                        return  variables.节能 
+                    ]]]
+          b4:
+            card:
+              type: custom:button-card
+              icon: |
+                [[[ 
+                    if(variables.附加信息=='左侧' || variables.附加信息=='右侧')
+                    var sleep =states[variables.睡眠].state;
+                    if( sleep=='on' ) return "mdi:sleep";
+                    if( sleep=='off') return "mdi:sleep-off";
+                ]]]
+              show_icon: true
+              show_label: true 
+              label: 睡眠
+              styles: 
+                card:
+                  - margin-top: 720px
+                  - margin-left: 8px
+                  - border-radius: 10px
+                  - width: 42px
+                  - height: 42px
+                  - border-width: 0
+                  - background: '[[[ return variables.主题 =="on" ? "rgb(230,230,230)" : "rgb(80,80,80)" ]]]'  
+                label:
+                  - font-size: 11px
+                  - color: '[[[ return variables.主题 =="on" ? "rgb(0,0,0)" : "rgb(255,255,255)" ]]]'
+                icon:
+                  - color: |
+                      [[[
+                          if(variables.附加信息=='左侧' || variables.附加信息=='右侧')
+                          var sleep =states[variables.睡眠].state,
+                              state = states[variables.空调].state;
+                          if( sleep=='on' && state=='cool')     return "rgb(33,150,243)" ;
+                          if( sleep=='on' && state=='dry')      return "rgb(255,151,0)" ;
+                          if( sleep=='on' && state=='fan_only') return "rgb(0,188,213)" ;
+                          if( sleep=='on' && state=='heat')     return "rgb(254,111,33)" ;
+                          if( sleep=='on' && state=='off')      return "rgb(0,245,255)" ; 
+                          if( sleep=='off') return variables.主题 =="on" ? "rgb(0,0,0)" : "rgb(255,255,255)"; 
+                      ]]]
+              variables:
+                主题: '[[[ return variables.主题 ]]]'
+              tap_action:
+                action: call-service
+                service: switch.toggle
+                data: {}
+                target:
+                  entity_id: |
+                    [[[ 
+                        if (variables.附加信息=='左侧' || variables.附加信息=='右侧')
+                        return  variables.睡眠 
+                    ]]]
+          b5:
+            card:
+              type: custom:button-card
+              icon: |
+                [[[ 
+                    if(variables.附加信息=='左侧' || variables.附加信息=='右侧')
+                    var light =states[variables.指示灯].state;
+                    if( light=='on' ) return "mdi:lightbulb-on";
+                    if( light=='off') return "mdi:lightbulb-off";
+                ]]]
+              show_icon: true
+              show_label: true 
+              label: 指示灯
+              styles: 
+                card:
+                  - margin-top: 830px
+                  - margin-left: 8px
+                  - border-radius: 10px
+                  - width: 42px
+                  - height: 42px
+                  - border-width: 0
+                  - background: '[[[ return variables.主题 =="on" ? "rgb(230,230,230)" : "rgb(80,80,80)" ]]]'  
+                label:
+                  - font-size: 11px
+                  - color: '[[[ return variables.主题 =="on" ? "rgb(0,0,0)" : "rgb(255,255,255)" ]]]'
+                icon:
+                  - color: |
+                      [[[
+                          if(variables.附加信息=='左侧' || variables.附加信息=='右侧')
+                          var light = states[variables.指示灯].state,
+                              state = states[variables.空调].state;
+                          if( light=='on' && state=='cool')     return "rgb(33,150,243)" ;
+                          if( light=='on' && state=='dry')      return "rgb(255,151,0)" ;
+                          if( light=='on' && state=='fan_only') return "rgb(0,188,213)" ;
+                          if( light=='on' && state=='heat')     return "rgb(254,111,33)" ;
+                          if( light=='on' && state=='off')      return "rgb(0,245,255)" ; 
+                          if( light=='off') return variables.主题 =="on" ? "rgb(0,0,0)" : "rgb(255,255,255)"; 
+                      ]]]
+              variables:
+                主题: '[[[ return variables.主题 ]]]'
+              tap_action:
+                action: call-service
+                service: light.toggle
+                data: {}
+                target:
+                  entity_id: |
+                    [[[ 
+                        if (variables.附加信息=='左侧' || variables.附加信息=='右侧')
+                        return  variables.指示灯 
+                    ]]]
+          b6:
+            card:
+              type: custom:button-card
+              icon: |
+                [[[ 
+                    if(variables.附加信息=='左侧' || variables.附加信息=='右侧')
+                    var alarm =states[variables.提示音].state;
+                    if( alarm=='on' ) return "mdi:volume-high";
+                    if( alarm=='off') return "mdi:volume-mute";
+                ]]]
+              show_icon: true
+              show_label: true 
+              label: 提示音
+              styles: 
+                card:
+                  - margin-top: 940px
+                  - margin-left: 8px
+                  - border-radius: 10px
+                  - width: 42px
+                  - height: 42px
+                  - border-width: 0
+                  - background: '[[[ return variables.主题 =="on" ? "rgb(230,230,230)" : "rgb(80,80,80)" ]]]'  
+                label:
+                  - font-size: 11px
+                  - color: '[[[ return variables.主题 =="on" ? "rgb(0,0,0)" : "rgb(255,255,255)" ]]]'
+                icon:
+                  - color: |
+                      [[[
+                          if(variables.附加信息=='左侧' || variables.附加信息=='右侧')
+                          var alarm = states[variables.提示音].state,
+                              state = states[variables.空调].state;
+                          if( alarm=='on' && state=='cool')     return "rgb(33,150,243)" ;
+                          if( alarm=='on' && state=='dry')      return "rgb(255,151,0)" ;
+                          if( alarm=='on' && state=='fan_only') return "rgb(0,188,213)" ;
+                          if( alarm=='on' && state=='heat')     return "rgb(254,111,33)" ;
+                          if( alarm=='on' && state=='off')      return "rgb(0,245,255)" ; 
+                          if( alarm=='off') return variables.主题 =="on" ? "rgb(0,0,0)" : "rgb(255,255,255)"; 
+                      ]]]
+              variables:
+                主题: '[[[ return variables.主题 ]]]'
+              tap_action:
+                action: call-service
+                service: switch.toggle
+                data: {}
+                target:
+                  entity_id: |
+                    [[[ 
+                        if (variables.附加信息=='左侧' || variables.附加信息=='右侧')
+                        return  variables.提示音 
+                    ]]]
+kongtiao_hvac_modes:
+  triggers_update:
+    - '[[[ return variables.空调 ]]]'
+  show_icon: true
+  styles:
+    card: 
+      - width: 52.8px 
+      - height: 42px
+      - border-radius: 10px
+      - border-width: 0
+      - background: |
+          [[[
+              var state = states[variables.空调].state;  
+              if( state =='cool'     && state ==variables.hvac_mode)  return "rgb(33,150,243)";
+              if( state =='heat'     && state ==variables.hvac_mode)  return "rgb(254,111,33)";
+              if( state =='dry'      && state ==variables.hvac_mode)  return "rgb(255,151,0)";
+              if( state =='fan_only' && state ==variables.hvac_mode)  return "rgb(0,188,213)";  
+              if( state =='off'      && state ==variables.hvac_mode)  
+                return variables.主题 =="on" ? "rgb(180,180,180)" : "rgb(150,150,150)";
+              return "rgb(0,0,0,0)";
+          ]]] 
+    icon:  
+      - width: 20px
+      - height: 20px
+      - color: '[[[ return variables.主题 =="on" ? "rgb(0,0,0)" : "rgb(255,255,255)" ]]]'
+  tap_action:
+    action: call-service
+    service: climate.set_hvac_mode
+    target:
+      entity_id: '[[[ return  variables.空调 ]]]'
+    data:
+      hvac_mode: '[[[ return  variables.hvac_mode ]]]'
+kongtiao_fan_modes:
+  triggers_update:
+    - '[[[ return variables.空调 ]]]'
+  show_icon: true
+  icon: mdi:fan
+  styles: 
+    card:
+      - width: 33px
+      - height: 42px
+      - border-radius: 10px 
+      - border-width: 0
+      - background: |
+          [[[
+              var state  = states[variables.空调].state;
+              var fan_mode = states[variables.空调].attributes.fan_mode;
+              if( state =='cool'     && fan_mode ==variables.fan_mode)  return "rgb(33,150,243)";
+              if( state =='heat'     && fan_mode ==variables.fan_mode)  return "rgb(254,111,33)";
+              if( state =='dry'      && fan_mode ==variables.fan_mode)  return "rgb(255,151,0)";
+              if( state =='fan_only' && fan_mode ==variables.fan_mode)  return "rgb(0,188,213)";  
+              if( state =='off'      && fan_mode ==variables.fan_mode)  
+                return variables.主题 =="on" ? "rgb(180,180,180)" : "rgb(150,150,150)"
+              return "rgb(0,0,0,0)";
+          ]]]
+    icon:
+      - width: 20px
+      - height: 20px
+      - color: '[[[ return variables.主题 =="on" ? "rgb(0,0,0)" : "rgb(255,255,255)" ]]]' 
+    custom_fields:
+      num: 
+        - position: absolute
+        - font-weight: bold
+        - font-size: 9px 
+        - margin-top: 10px 
+        - margin-left: 18px
+        - width: 9px 
+        - height: 9px 
+        - border-radius: 9px 
+        - color: '[[[ return variables.主题 =="on" ? "rgb(0,0,0)" : "rgb(255,255,255)" ]]]'
+        - background: |
+            [[[
+                var state  = states[variables.空调].state;
+                var fan_mode = states[variables.空调].attributes.fan_mode;
+                if( state =='cool'     && fan_mode ==variables.fan_mode)  return "rgb(33,150,243)";
+                if( state =='heat'     && fan_mode ==variables.fan_mode)  return "rgb(254,111,33)";
+                if( state =='dry'      && fan_mode ==variables.fan_mode)  return "rgb(255,151,0)";
+                if( state =='fan_only' && fan_mode ==variables.fan_mode)  return "rgb(0,188,213)";  
+                if( state =='off'      && fan_mode ==variables.fan_mode)  
+                  return variables.主题 =="on" ? "rgb(180,180,180)" : "rgb(150,150,150)"
+                return variables.主题=="on" ? "rgb(230,230,230)" : "rgb(80,80,80)";
+            ]]]
+  custom_fields:
+    num: '[[[ return  variables.num ]]]'
+  tap_action:
+    action: call-service
+    service: climate.set_fan_mode
+    target:
+      entity_id: '[[[ return  variables.空调 ]]]'
+    data:
+      fan_mode: '[[[ return  variables.fan_mode ]]]'
+kongtiao_swing_modes:
+  triggers_update:
+    - '[[[ return variables.空调 ]]]'
+  show_icon: true
+  styles: 
+    card: 
+      - width: 66px
+      - height: 42px
+      - border-radius: 10px
+      - border-width: 0
+      - background: |
+          [[[
+              var swing_mode = states[variables.空调].attributes.swing_mode;
+              var state  = states[variables.空调].state;
+              var swing_mode = states[variables.空调].attributes.swing_mode;
+              if( state =='cool'     && swing_mode ==variables.swing_mode)  return "rgb(33,150,243)";
+              if( state =='heat'     && swing_mode ==variables.swing_mode)  return "rgb(254,111,33)";
+              if( state =='dry'      && swing_mode ==variables.swing_mode)  return "rgb(255,151,0)";
+              if( state =='fan_only' && swing_mode ==variables.swing_mode)  return "rgb(0,188,213)";  
+              if( state =='off'      && swing_mode ==variables.swing_mode)  
+                return variables.主题 =="on" ? "rgb(180,180,180)" : "rgb(150,150,150)"
+              if( state =='cool'     && swing_mode ==null && variables.swing_mode=='off')  return "rgb(33,150,243)";
+              if( state =='heat'     && swing_mode ==null && variables.swing_mode=='off')  return "rgb(254,111,33)";
+              if( state =='dry'      && swing_mode ==null && variables.swing_mode=='off')  return "rgb(255,151,0)";
+              if( state =='fan_only' && swing_mode ==null && variables.swing_mode=='off')  return "rgb(0,188,213)";  
+              if( state =='off'      && swing_mode ==null && variables.swing_mode=='off')  
+                return variables.主题 =="on" ? "rgb(180,180,180)" : "rgb(150,150,150)"
+              return "rgb(0,0,0,0)";
+          ]]]
+    icon: 
+      - width: 20px 
+      - height: 20px
+      - color: '[[[ return variables.主题 == "on" ? "rgb(0,0,0)" : "rgb(255,255,255)" ]]]'
+  tap_action:
+    action: call-service
+    service: climate.set_swing_mode
+    target:
+      entity_id: '[[[ return  variables.空调 ]]]'
+    data:
+      swing_mode: '[[[ return  variables.swing_mode ]]]'

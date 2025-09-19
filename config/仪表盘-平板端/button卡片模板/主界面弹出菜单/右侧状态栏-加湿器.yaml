@@ -1,0 +1,30 @@
+action: fire-dom-event
+browser_mod:
+  service: browser_mod.popup
+  data:
+    style:  '[[[ return theme_none(780); ]]]'  ## 单卡宽度310,侧边栏宽度80,[80+310+310+80=780]
+    content: 
+      type: horizontal-stack
+      cards:
+        - type: custom:button-card
+          template: 加湿器 
+          variables: 
+            主题: '[[[ return theme() ]]]'
+            加湿器: humidifier.jiashiqi_zhuwo
+            模式: select.jiashiqi_zhuwo
+            附加信息: 左侧  ## 附加信息位置 [左侧] [右侧] [无] [无：可删除下方引用]
+            指示灯: light.jiashiqi_light_zhuwo
+            提示音: switch.jiashiqi_alarm_zhuwo
+            水箱提起: sensor.jiashiqi_tank_zhuwo
+            水箱缺水: sensor.jiashiqi_water_zhuwo
+        - type: custom:button-card    
+          template: 加湿器                   
+          variables: 
+            主题: '[[[ return theme() ]]]'
+            加湿器: humidifier.jiashiqi_keting 
+            模式: select.jiashiqi_keting     
+            附加信息: 右侧   ## 附加信息位置 [左侧] [右侧] [无] [无：可删除下方引用]
+            指示灯: light.jiashiqi_light_keting  
+            提示音: switch.jiashiqi_alarm_keting 
+            水箱提起: sensor.jiashiqi_tank_keting   
+            水箱缺水: sensor.jiashiqi_water_keting 

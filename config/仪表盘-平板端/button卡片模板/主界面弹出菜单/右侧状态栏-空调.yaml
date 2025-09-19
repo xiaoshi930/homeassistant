@@ -1,0 +1,34 @@
+action: fire-dom-event
+browser_mod:
+  service: browser_mod.popup
+  data:
+    style:  '[[[ return theme_none(780); ]]]'  ## 单卡宽度310,侧边栏宽度80,[80+310+310+80=780]
+    content: 
+      type: horizontal-stack
+      cards:
+        - type: custom:button-card   
+          template: 空调
+          variables:         
+            主题: '[[[ return theme() ]]]'
+            空调: climate.kongtiao_zhuwo
+            附加信息: 左侧  ## 附加信息位置 [左侧] [右侧] [无] [无：可删除下方引用]
+            辅热: switch.kongtiao_heater_zhuwo
+            干燥: switch.kongtiao_dryer_zhuwo
+            节能: switch.kongtiao_eco_zhuwo
+            睡眠: switch.kongtiao_sleep_zhuwo
+            指示灯: light.kongtiao_light_zhuwo
+            提示音: switch.kongtiao_alarm_zhuwo
+        - type: custom:button-card
+          template: 空调   
+          variables:        
+            主题: '[[[ return theme() ]]]'
+            空调: climate.kongtiao_keting
+            附加信息: 右侧  ## 附加信息位置 [左侧] [右侧] [无] [无：可删除下方引用]
+            辅热: switch.kongtiao_heater_keting
+            干燥: switch.kongtiao_dryer_keting
+            节能: switch.kongtiao_eco_keting
+            睡眠: switch.kongtiao_sleep_keting
+            指示灯: light.kongtiao_light_keting
+            提示音: switch.kongtiao_alarm_keting
+
+             

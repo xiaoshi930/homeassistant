@@ -1,0 +1,273 @@
+电费信息卡片:
+  styles:
+    grid:
+      - grid-template-areas: >
+          "名称 名称 名称 名称 名称"   
+          "刷新时间 刷新时间 刷新时间 刷新时间 电费余额"   
+          "数据日期 数据日期 数据日期 数据日期 电费余额"
+          "日总用电 日峰用电 日平用电 日谷用电 日用电费"      
+          "月总用电 月峰用电 月平用电 月谷用电 月用电费"     
+          "年总用电 年峰用电 年平用电 年谷用电 年用电费"  
+      - grid-template-columns: 20% 20% 20% 20% 20%  
+      - grid-template-rows: 60px 27.5px 27.5px 55px 55px 55px
+    card:
+      - cursor: none
+      - --mdc-ripple-press-opacity: 0
+      - padding: 0 5px 0 5px
+      - height: 280px
+      - border-radius: 10px
+      - background: '[[[ return variables.主题 == "on" ? "rgb(255,255,255)" : "rgb(50,50,50)"; ]]]' 
+  custom_fields:
+    名称:
+      card: 
+        type: custom:button-card
+        label: 电费信息
+        show_label: true
+        styles:
+          card:
+            - padding: 0
+            - border-width: 0
+            - cursor: none
+            - --mdc-ripple-press-opacity: 0
+            - border-radius: 10px
+            - height: 60px
+            - background: rgb(0,0,0,0)
+          label:
+            - font-size: 20px
+            - font-weight: bold
+            - color: '[[[ return variables.主题 == "on" ? "rgb(0,0,0)" : "rgb(255,255,255)"; ]]]' 
+    刷新时间:
+      card:
+        type: custom:button-card 
+        show_label: true
+        label: |
+          [[[
+              const refresh_time = "sensor.state_grid_" + variables.国网id + "_" + "refresh_time";
+              return "用电刷新时间: "+states[refresh_time]?.state;
+          ]]]
+        styles:
+          card:   
+            - padding: 0
+            - border-width: 0
+            - cursor: none
+            - --mdc-ripple-press-opacity: 0
+            - border-radius: 10px
+            - height: 44px
+            - background: rgb(0,0,0,0)
+          label:
+            - justify-self: start
+            - font-size: 16px
+            - font-weight: bold
+            - color: '[[[ return  variables.主题 == "on" ? "rgb(0,0,0)" : "rgb(255,255,255)"; ]]]'
+    数据日期:
+      card:
+        type: custom:button-card 
+        show_label: true
+        label: |
+          [[[
+              const daily_lasted_date = "sensor.state_grid_" + variables.国网id + "_" + "daily_lasted_date";
+              return "最新用电日期: "+states[daily_lasted_date]?.state;
+          ]]]
+        styles:
+          card:
+            - padding: 0
+            - border-width: 0
+            - cursor: none
+            - --mdc-ripple-press-opacity: 0
+            - border-radius: 10px
+            - height: 44px
+            - background: rgb(0,0,0,0)
+          label:
+            - justify-self: start
+            - font-size: 16px
+            - font-weight: bold
+            - color: '[[[ return  variables.主题 == "on" ? "rgb(0,0,0)" : "rgb(255,255,255)"; ]]]'
+    电费余额:
+      card:
+        type: custom:button-card 
+        template: 电费信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+        name: 电费余额
+        icon: mdi:cash
+        state_display: |
+          [[[
+              var balanceentity = "sensor.state_grid_" + variables.国网id + "_" + "balance";
+              var balance = Math.round(states[balanceentity]?.state*10)/10;
+              return balance>=21 ? balance+'元' : '<font color="#FF2000"><b>'+balance+'元</b></font>';
+          ]]]
+    日用电费:
+      card:
+        type: custom:button-card 
+        template: 电费信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+        name: 日用电费
+        icon: mdi:cash
+        state_display: |
+          [[[ 
+              var daily_ele_num ="sensor.state_grid_" + variables.国网id + "_" + "daily_ele_num";
+              var price = 年电费单价 || 0.5;
+              return Math.round(states[daily_ele_num]?.state*price*10)/10 +"元";
+          ]]]
+    月用电费:
+      card:
+        type: custom:button-card 
+        template: 电费信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+        name: 月用电费
+        icon: mdi:cash
+        state_display: |
+          [[[ 
+              var month_ele_num ="sensor.state_grid_" + variables.国网id + "_" + "month_ele_num";
+              var price = 年电费单价 || 0.5;
+              return Math.round(states[month_ele_num]?.state*price*10)/10 +"元";
+          ]]]
+    年用电费:
+      card:
+        type: custom:button-card 
+        template: 电费信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+        name: 年用电费
+        icon: mdi:cash
+        state_display: |
+          [[[ 
+              var year_ele_num ="sensor.state_grid_" + variables.国网id + "_" + "year_ele_num";
+              var price = 年电费单价 || 0.5;
+              return Math.round(states[year_ele_num]?.state*price*10)/10 +"元";
+          ]]]
+    日总用电:
+      card:
+        type: custom:button-card 
+        template: 电费信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+        name: 日总用电
+        units: °
+        entity: '[[[ return "sensor.state_grid_" + variables.国网id + "_" + "daily_ele_num"]]]'
+    月总用电:
+      card:
+        type: custom:button-card 
+        template: 电费信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+        name: 月总用电
+        units: °
+        entity: '[[[ return "sensor.state_grid_" + variables.国网id + "_" + "month_ele_num"]]]'
+    年总用电:
+      card:
+        type: custom:button-card 
+        template: 电费信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+        name: 年总用电
+        units: °
+        entity: '[[[ return "sensor.state_grid_" + variables.国网id + "_" + "year_ele_num"]]]'
+    日峰用电:
+      card:
+        type: custom:button-card 
+        template: 电费信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+        name: 日峰用电
+        units: °
+        entity: '[[[ return "sensor.state_grid_" + variables.国网id + "_" + "daily_p_ele_num"]]]'
+    月峰用电:
+      card:
+        type: custom:button-card 
+        template: 电费信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+        name: 月峰用电
+        units: °
+        entity: '[[[ return "sensor.state_grid_" + variables.国网id + "_" + "month_p_ele_num"]]]'
+    年峰用电:
+      card:
+        type: custom:button-card 
+        template: 电费信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+        name: 年峰用电
+        units: °
+        entity: '[[[ return "sensor.state_grid_" + variables.国网id + "_" + "year_p_ele_num"]]]'
+    日平用电:
+      card:
+        type: custom:button-card 
+        template: 电费信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+        name: 日平用电
+        units: °
+        entity: '[[[ return "sensor.state_grid_" + variables.国网id + "_" + "daily_n_ele_num"]]]'
+    月平用电:
+      card:
+        type: custom:button-card 
+        template: 电费信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+        name: 月平用电
+        units: °
+        entity: '[[[ return "sensor.state_grid_" + variables.国网id + "_" + "month_n_ele_num"]]]'
+    年平用电:
+      card:
+        type: custom:button-card 
+        template: 电费信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+        name: 年平用电
+        units: °
+        entity: '[[[ return "sensor.state_grid_" + variables.国网id + "_" + "year_n_ele_num"]]]'
+    日谷用电:
+      card:
+        type: custom:button-card 
+        template: 电费信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+        name: 日谷用电
+        units: °
+        entity: '[[[ return "sensor.state_grid_" + variables.国网id + "_" + "daily_v_ele_num"]]]'
+    月谷用电:
+      card:
+        type: custom:button-card 
+        template: 电费信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+        name: 月谷用电
+        units: °
+        entity: '[[[ return "sensor.state_grid_" + variables.国网id + "_" + "month_v_ele_num"]]]'
+    年谷用电:
+      card:
+        type: custom:button-card 
+        template: 电费信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+        name: 年谷用电
+        units: °
+        entity: '[[[ return "sensor.state_grid_" + variables.国网id + "_" + "year_v_ele_num"]]]'
+
+电费信息样式模板:
+  triggers_update: all
+  layout: icon_name_state2nd
+  show_state: true
+  show_label: true
+  show_icon: true
+  styles:
+    card:
+      - width: 74px
+      - height: 40px
+      - border: 1.5px solid rgb(0,200,200,0.5);
+      - border-radius: 23px
+      - background: '[[[ return variables.主题 == "on" ? "rgb(230,230,230)" : "rgb(80,80,80)"; ]]]' 
+    icon:
+      - width: 15px
+      - color: rgb(0,200,200)
+    state: 
+      - margin-left: -10px
+      - font-size: 12px
+      - color: '[[[ return variables.主题 == "on" ? "rgb(0,0,0)" : "rgb(255,255,255)"; ]]]' 
+    name: 
+      - margin-left: -10px
+      - font-size: 9px
+      - color: '[[[ return variables.主题 == "on" ? "rgb(0,0,0)" : "rgb(255,255,255)"; ]]]' 

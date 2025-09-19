@@ -1,0 +1,104 @@
+HA备份信息卡片:         
+  triggers_update: all
+  styles:
+    grid:   
+      - grid-template-areas: >
+          "名称 名称"
+          "back1 back2"
+          "back3 back4"
+      - grid-template-columns: 20% 80%
+      - grid-template-rows: 50px 40px 40px
+    card: 
+      - padding: 0
+      - cursor: none
+      - --mdc-ripple-press-opacity: 0
+      - border-width: 0
+      - border-radius: 10px
+      - background: '[[[ return variables.主题 == "on" ? "rgb(255,255,255)" : "rgb(50,50,50)"; ]]]' 
+      - height: 130px
+      - font-size: 15px
+      - font-weight: bold
+      - text-align: left
+      - color: '[[[ return variables.主题 == "on" ? "rgb(0,0,0)" : "rgb(255,255,255)"; ]]]' 
+  custom_fields:
+    名称:
+      card: 
+        type: custom:button-card 
+        label: HA备份信息
+        show_label: true
+        styles:
+          card: 
+            - padding: 0
+            - border-width: 0
+            - cursor: none
+            - --mdc-ripple-press-opacity: 0
+            - border-radius: 10px
+            - height: 50px
+            - background: rgb(0,0,0,0)
+          label:
+            - font-size: 20px
+            - font-weight: bold
+            - color: '[[[ return variables.主题 == "on" ? "rgb(0,0,0)" : "rgb(255,255,255)"; ]]]' 
+    back1: Back备份
+    back3: Back备份
+    back2:
+      card: 
+        type: custom:button-card 
+        template: HA备份信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+          name: 上次备份时间
+          entity: '[[[ return variables.backup_last ?? ""]]]' 
+    back4:
+      card:  
+        type: custom:button-card 
+        template: HA备份信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+          name: 下次备份时间
+          entity: '[[[ return variables.backup_next ?? ""]]]' 
+
+HA备份信息样式模板:
+  layout: name_state
+  show_icon: false
+  show_label: true
+  show_state: true
+  name: '[[[ return variables.name ]]]'
+  state_display: |
+    [[[
+        if (variables.name =='上次备份时间') {
+          var time = states[variables.entity]?.state;
+          var inputDate = new Date(time);
+          var now = new Date();
+          var diffMs = now - inputDate;
+          var diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+          return  time.slice(0,10) + ' ' + time.slice(11,16) + ' (' + diffDays + '天以前)';
+        }
+        if (variables.name =='下次备份时间') {
+          var time = states[variables.entity]?.state;
+          var inputDate = new Date(time);
+          var now = new Date();
+          var diffMs = inputDate- now;
+          var diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+          return  time.slice(0,10) + ' ' + time.slice(11,16) + ' (' + diffDays + '天以后)';
+        }
+    ]]]
+  styles: 
+    card: 
+      - padding: 0
+      - cursor: none
+      - --mdc-ripple-press-opacity: 0
+      - border-width: 0
+      - border-radius: 0
+      - background: rgb(0,0,0,0)
+      - height: 40px
+    name: 
+      - font-size: 15px
+      - text-align: left
+      - width: 320px
+      - color: '[[[ return variables.主题 == "on" ? "rgb(0,0,0)" : "rgb(255,255,255)"; ]]]'
+    state:
+      - font-size: 15px
+      - text-align: left
+      - width: 320px
+      - color: '[[[ return variables.主题 == "on" ? "rgb(0,0,0)" : "rgb(255,255,255)"; ]]]'

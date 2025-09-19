@@ -1,0 +1,26 @@
+action: fire-dom-event
+browser_mod:
+  service: browser_mod.popup
+  data:
+    style:  '[[[ return theme_none(620); ]]]'  ## 单卡宽度310,侧边栏宽度80,[310+310=620]
+    content: 
+      type: horizontal-stack
+      cards:
+        - type: custom:button-card 
+          template: 浴霸
+          variables: 
+            主题: '[[[ return theme() ]]]'
+            浴霸: switch.yuba_zhuwei
+            吹风: switch.yuba_zhuwei_blow 
+            换气: switch.yuba_zhuwei_vent
+            取暖: switch.yuba_zhuwei_heat1
+            温度: sensor.wendu_yuba_zhuwei
+        - type: custom:button-card   
+          template: 浴霸
+          variables: 
+            主题: '[[[ return theme() ]]]'
+            浴霸: switch.yuba_gongwei
+            吹风: switch.yuba_gongwei_blow
+            换气: switch.yuba_gongwei_vent
+            取暖: switch.yuba_gongwei_heat1
+            温度: sensor.wendu_yuba_gongwei

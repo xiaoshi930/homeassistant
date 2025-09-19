@@ -1,0 +1,47 @@
+action: fire-dom-event
+browser_mod:
+  service: browser_mod.popup
+  data:
+    style:  '[[[ return theme_none(930); ]]]' 
+    content: 
+      type: horizontal-stack
+      cards:
+        - type: custom:button-card
+          template: 洗衣机信息卡片 
+          variables:         
+            实体列表: 
+              - select.xiyiji
+              - select.xiyiji_laundrycycle
+              - select.04fa8372e143_drymode
+              - select.04fa8372e143_dirtylevel
+              - select.04fa8372e143_airwashtemplevel
+              - select.04fa8372e143_staintype
+              - binary_sensor.xiyiji_laundrycyclestatus
+              - binary_sensor.04fa8372e143_doorlockstatus
+              - binary_sensor.04fa8372e143_doorstatus
+        - type: custom:button-card
+          template: 洗衣机信息卡片 
+          variables:       
+            实体列表:
+              - switch.04fa8372e143_onoffstatus
+              - switch.04fa8372e143_speedupstatus
+              - switch.04fa8372e143_energysavingstatus
+              - switch.04fa8372e143_soakwashstatus
+              - switch.04fa8372e143_purifiedwashstatus
+              - switch.04fa8372e143_childlockstatus
+              - switch.04fa8372e143_autodisinfectantstatus
+              - switch.04fa8372e143_autosoftenerstatus
+              - switch.04fa8372e143_autodetergentstatus
+        - type: custom:button-card
+          template: 洗衣机信息卡片 
+          variables:      
+            实体列表: 
+              - sensor.xiyiji_cyclephase
+              - sensor.04fa8372e143_currentelectricityused
+              - sensor.xiyiji_currentwaterused
+              - sensor.04fa8372e143_totalelectricityused
+              - sensor.04fa8372e143_totalwaterused
+              - sensor.04fa8372e143_totalwashcycle
+              - sensor.04fa8372e143_remainingrinsetimes
+              - sensor.04fa8372e143_remainingmainwashtime
+              - sensor.04fa8372e143_actualweight

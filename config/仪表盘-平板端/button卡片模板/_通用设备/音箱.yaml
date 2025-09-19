@@ -1,0 +1,353 @@
+音箱:
+  triggers_update:
+    - '[[[ return variables.播放器 ?? "" ]]]' 
+    - '[[[ return variables.静音 ?? "" ]]]' 
+    - '[[[ return variables.音量 ?? "" ]]]' 
+  styles: 
+    grid:
+      - grid-template-areas: |
+          "背景图"
+          "歌词"
+          "空白" 
+          "播放器" 
+      - grid-template-columns: 100%
+      - grid-template-rows: 0px 150px 50px 100px
+    card:
+      - padding: 0
+      - width: 450px
+      - height: 300px 
+      - border-width: 0
+      - border-radius: 10px
+      - background: rgb(0,0,0,0)
+  custom_fields:
+    背景图:
+      card:
+        type: custom:button-card
+        entity_picture: |
+          [[[
+              return states[variables.播放器].attributes.entity_picture || variables.背景备用图片;
+          ]]]
+        show_entity_picture: true
+        show_name: false
+        styles:
+          entity_picture:
+            - padding: 0
+            - width: 100%
+            - height: 100%
+          card:
+            - filter: |
+                [[[
+                   return "blur(0px) brightness(" + variables.背景图片亮度 + ") grayscale("+ variables.背景图片灰度 +")"
+                ]]]
+            - margin-top: 300px
+            - padding: 0
+            - width: 450px
+            - height: 300px
+            - background: '[[[ return variables.主题=="on" ? "rgb(255,255,255)" : "rgb(50,50,50)" ]]]'
+    歌词:
+      card:
+        type: custom:netease-lyrics-card
+        entity: '[[[ return variables.播放器 ]]]'
+        show_background: true
+        show_header: false
+        show_karaoke: true
+        show_floating_lyrics: false
+        hide_lyrics_container: false
+        show_player_name: false
+        card_mod:
+          style: |
+            ha-card{
+              --mdc-theme-surface: rgb(0,0,0,0);
+              --ha-card-background: rgb(0,0,0,0);
+              --ha-card-border-width: 0;
+            }
+            div.card-background {
+              filter: blur(0px) brightness(1) grayscale(0%);
+              opacity: 0;
+            }
+            div.card-background:after {
+              background: rgb(0,0,0,0)
+            }
+            div.lyric{
+              color: white;
+              line-height: 1;
+              opacity: 1;
+            } 
+            ha-icon.empty-state-icon{
+              color: white;
+              opacity: 1;
+            }
+            div.empty-state-title{
+              color: white;
+              opacity: 1;
+            }
+            div.empty-state-subtitle{
+              color: white;
+              opacity: 1;
+            }
+            button.adjust-button{
+              color: rgb(0,0,0);
+              background: rgb(255,255,255);
+              opacity: 1;
+            }
+            button.adjust-button:hover{
+              color: rgb(0,0,0);
+              background: rgb(0,255,255);
+              opacity: 1;
+            }
+    播放器:
+      card:
+        type: custom:button-card   
+        styles:
+          grid:
+            - grid-template-areas: |
+                "图标 图标 名称 名称 名称 名称 名称 名称 a a a 关机"
+                "图标 图标 信息 信息 信息 信息 信息 信息 a a a b"
+                "图标 图标 音量 静音 音量减 音量条 音量条 音量加 上一首 播放 暂停 下一首"
+                "图标 图标 进度 进度 进度 进度 进度 进度 进度 进度 进度 进度"
+            - grid-template-columns: 37px 37px 37px 37px 37px 37px 37px 37px 37px 37px 37px 37px
+            - grid-template-rows: 25px 25px 25px 25px 
+          card:
+            - padding: 0 8px 0 8px
+            - margin-top: 0px
+            - width: 450px
+            - height: 100px 
+            - border-width: 0
+            - border-radius: 10px
+            - background: rgb(0,0,0,0)
+        custom_fields:
+          图标: 
+            card:
+              type: custom:button-card
+              show_entity_picture: true
+              show_icon: true
+              entity_picture: |
+                [[[
+                  return states[variables.播放器]?.attributes?.entity_picture || "";
+                ]]]
+              icon: mdi:music-circle
+              styles:
+                icon: 
+                  - padding: 0
+                  - width: 100%
+                  - height: 100%
+                entity_picture:
+                  - padding: 0
+                  - width: 100%
+                  - height: 100%
+                card: 
+                  - padding: 0
+                  - width: 60px
+                  - height: 60px
+                  - border-radius: 50%
+                  - animation: |
+                      [[[
+                          var state = states[variables.播放器]?.state;
+                          if(state=="播放" || state=="播放中" || state=="正在播放" || state=="playing" || state=="Playing" )
+                          return "rotating 8s linear infinite";
+                      ]]]
+          名称: 
+            card:
+              type: custom:button-card  
+              show_label: true
+              label: |
+                [[[ 
+                    var state = states[variables.播放器]?.state;
+                    if(state=="播放" || state=="播放中" || state=="正在播放" || state=="playing" || state=="Playing" )
+                    state =  "正在播放";
+                    if(state=="暂停" || state=="paused" || state=="Paused" )
+                    state = "暂停";
+                    if(state=="idle" || state=="空闲")
+                    state = "空闲";
+                    return states[variables.播放器]?.attributes?.friendly_name + " - " + state;
+                ]]]
+              styles:
+                label:
+                  - width: 220px
+                  - text-align: left
+                  - font-size: 15px
+                  - color: rgb(255,255,255)
+                card: 
+                  - height: 30px
+                  - border-radius: 10px
+                  - background: rgb(0,0,0,0)
+          信息: 
+            card:
+              type: custom:button-card  
+              show_label: true
+              label: |
+                [[[ 
+                    var title = states[variables.播放器]?.attributes?.media_title ?? "未播放";
+                    var artist = states[variables.播放器]?.attributes?.media_artist ?? "";
+                    return title + " - " + artist;
+                ]]]
+              styles:
+                label: 
+                  - width: 220px
+                  - text-align: left
+                  - font-size: 13px
+                  - color: rgb(255,255,255)
+                card: 
+                  - height: 30px
+                  - border-radius: 10px
+                  - background: rgb(0,0,0,0)
+          音量: 
+            card:
+              type: custom:button-card   
+              show_label: true
+              label: |
+                [[[ 
+                    return Math.round(states[variables.音量]?.state)+"%";
+                ]]]
+              styles:
+                label: 
+                  - font-size: 15px
+                  - color: rgb(255,255,255)
+                card: 
+                  - height: 30px
+                  - border-radius: 10px
+                  - background: rgb(0,0,0,0)
+          关机: 
+            card:
+              type: custom:button-card
+              icon: mdi:power
+              template: 音箱按钮样式_图标
+              tap_action:
+                action: call-service
+                service:  media_player.media_pause
+                data: {}
+                target:
+                  entity_id: '[[[ return variables.播放器 ]]]'
+          静音: 
+            card:
+              type: custom:button-card
+              icon: |
+                [[[
+                   if(variables.静音){
+                    if (states[variables.静音]?.state == "on" ) return "mdi:volume-mute"
+                    if (states[variables.静音]?.state == "off") return "mdi:volume-medium"
+                   } 
+                ]]]
+              template: 音箱按钮样式_图标
+              tap_action:
+                action: call-service
+                service: |
+                  [[[
+                    return variables.静音 ? "switch.toggle" : "";
+                  ]]]
+                data: {}
+                target:
+                  entity_id: '[[[ return variables.静音 ?? ""]]]'
+          音量减: 
+            card:
+              type: custom:button-card
+              icon: mdi:volume-minus
+              template: 音箱按钮样式_图标
+              tap_action:
+                action: call-service
+                service:  number.set_value
+                data: 
+                  value: |
+                    [[[
+                        var number = states[variables.音量]?.state;
+                        return number >=1 ? number-1 : number;
+                    ]]]
+                target:
+                  entity_id: '[[[ return variables.音量 ]]]'
+          音量加: 
+            card:
+              type: custom:button-card  
+              icon: mdi:volume-plus
+              template: 音箱按钮样式_图标
+              tap_action:
+                action: call-service
+                service:  number.set_value 
+                data: 
+                  value: |
+                    [[[
+                        var number = states[variables.音量]?.state;
+                        return number >= 100 ? number : number-(-1);
+                    ]]]
+                target:
+                  entity_id: '[[[ return variables.音量 ]]]'
+          上一首: 
+            card:
+              type: custom:button-card  
+              icon: mdi:skip-previous
+              template: 音箱按钮样式_图标
+              tap_action:
+                action: call-service
+                service:  media_player.media_previous_track
+                data: {}
+                target:
+                  entity_id: '[[[ return variables.播放器 ]]]'
+          播放: 
+            card:
+              type: custom:button-card  
+              icon: mdi:play
+              template: 音箱按钮样式_图标
+              tap_action:
+                action: call-service
+                service:  media_player.media_play_pause
+                data: {}
+                target:
+                  entity_id: '[[[ return variables.播放器 ]]]'
+          暂停: 
+            card:
+              type: custom:button-card  
+              icon: mdi:pause
+              template: 音箱按钮样式_图标
+              tap_action:
+                action: call-service
+                service:  media_player.media_pause
+                data: {}
+                target:
+                  entity_id: '[[[ return variables.播放器 ]]]'
+          下一首: 
+            card:
+              type: custom:button-card  
+              icon: mdi:skip-next
+              template: 音箱按钮样式_图标
+              tap_action:
+                action: call-service
+                service:  media_player.media_next_track
+                data: {}
+                target:
+                  entity_id: '[[[ return variables.播放器 ]]]'
+          音量条: 
+            card:
+              type: custom:xiaoshi-slider-card
+              entity: '[[[ return variables.音量 ]]]'
+              style:
+                slider-width: 70px
+                track-height: 6px
+                track-radius: 4px
+          进度: 
+            card:
+              type: custom:button-card
+              styles:
+                card:
+                  - padding: 0
+                  - height: 6px
+                  - width: 360px
+                  - border-radius: 3px
+                  - background: |
+                      [[[
+                          var duration = states[variables.播放器]?.attributes?.media_duration;
+                          var position = states[variables.播放器]?.attributes?.media_position;
+                          var percentage = (position / duration) * 100;
+                          return `linear-gradient(to right, rgb(255,115,5) ${percentage}%, rgba(255,255,255,0.5) ${percentage}%)`;
+                      ]]]
+
+音箱按钮样式_图标: 
+  show_icon: true  
+  styles:
+    icon:
+      - width: 20px
+      - height: 20px
+      - color: rgb(255,255,255)
+    card: 
+      - width: 35px
+      - height: 30px
+      - border-radius: 10px
+      - background: rgb(0,0,0,0)
