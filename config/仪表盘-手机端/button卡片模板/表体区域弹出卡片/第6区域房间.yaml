@@ -1,0 +1,315 @@
+action: fire-dom-event
+browser_mod:
+  service: browser_mod.popup
+  data:
+    style:  '[[[ return theme_bubble() ]]]'  ## 引用全局函数【theme_bubble()】style样式
+    content:
+      type: vertical-stack
+      cards: 
+        - type: custom:bubble-card
+          card_type: button
+          button_type: name
+          name: "厨房房间"
+          icon: "mdi:countertop"
+          card_layout: large
+          sub_button:
+            - entity: "sensor.wendu_chufang"
+              show_state: true
+              show_background: false
+              show_icon: true
+            - entity: "sensor.shidu_chufang"
+              show_state: true
+              state_background: false
+              show_background: false
+        - type: custom:bubble-card
+          card_type: separator
+        - type: custom:bubble-card
+          card_type: button
+          button_type: state
+          entity: "light.chufangdeng"
+          tap_action:
+            action: "toggle"
+          button_action:
+            tap_action:
+              action: "toggle"
+          card_layout: "large-2-rows"
+          name: ""
+          styles: ".bubble-button-background {\nbackground-color: ${state === 'on' ? 'rgb(250,105,50)' : ''} ;\n}\n.bubble-icon {\ncolor: ${state === 'on' ? 'rgb(250,105,50)' : ''} !important;\n}"
+        - type: custom:bubble-card
+          card_type: separator
+        - type: custom:bubble-card
+          card_type: button
+          entity: "sensor.chufang_zhengzhuguo"
+          show_state: true
+          show_attribute: false
+          attribute: "supported_features"
+          tap_action:
+            action: "toggle"
+          button_action:
+            tap_action:
+              action: "toggle"
+          sub_button:
+            - entity: "number.deerma_cn_647227974_v3_target_time_p_2_9"
+              show_state: true
+              state_background: false
+              show_background: false
+              show_icon: false
+              show_name: true
+              name: ""
+            - entity: "select.deerma_cn_647227974_v3_mode_p_2_2"
+              show_state: true
+              show_name: true
+              show_icon: false
+              state_background: true
+              name: ""
+              show_background: false
+            - entity: "button.deerma_cn_647227974_v3_pause_a_2_3"
+              icon: "mdi:pause"
+              show_background: false
+            - entity: "button.deerma_cn_647227974_v3_cancel_cooking_a_2_2"
+              icon: "mdi:stop"
+              show_background: false
+            - entity: "button.deerma_cn_647227974_v3_start_cook_a_2_1"
+              tap_action:
+                action: "toggle"
+              show_background: false
+              icon: "mdi:play"
+          card_layout: large
+          icon: "mdi:pot-steam"
+          name: ""
+          force_icon: false
+        - type: custom:bubble-card
+          card_type: button
+          entity: "sensor.chufang_kongqizhaguo"
+          show_state: true
+          show_attribute: false
+          attribute: "supported_features"
+          tap_action:
+            action: "toggle"
+          button_action:
+            tap_action:
+              action: "toggle"
+          sub_button:
+            - entity: "number.careli_cn_426704626_maf03_target_time_p_2_3"
+              show_state: true
+              state_background: false
+              show_background: false
+              show_icon: false
+              show_name: true
+              name: ""
+            - entity: "number.careli_cn_426704626_maf03_target_temperature_p_2_4"
+              show_state: true
+              show_name: true
+              show_icon: false
+              state_background: true
+              name: ""
+              show_background: false
+            - entity: "button.careli_cn_426704626_maf03_pause_a_2_3"
+              icon: "mdi:pause"
+              show_background: false
+            - entity: "button.careli_cn_426704626_maf03_cancel_cooking_a_2_2"
+              icon: "mdi:stop"
+              show_background: false
+            - entity: "text.careli_cn_426704626_maf03_start_cook_a_3_1"
+              tap_action:
+                action: "perform-action"
+                perform_action: "text.set_value"
+                target:
+                  entity_id: "text.careli_cn_426704626_maf03_start_cook_a_3_1"
+                data:
+                  value: "[M0,手动,180,2,0,0,0]"
+              show_background: false
+              icon: "mdi:play"
+          card_layout: large
+          icon: "mdi:toaster-oven"
+          name: ""
+          force_icon: false
+        - type: custom:bubble-card
+          card_type: button
+          entity: "sensor.chufang_dianfanbao"
+          show_state: true
+          show_attribute: false
+          attribute: "supported_features"
+          tap_action:
+            action: "toggle"
+          button_action:
+            tap_action:
+              action: "toggle"
+          sub_button:
+            - entity: "button.chunmi_cn_119441120_normal3_cancel_cooking_a_2_2"
+              icon: "mdi:stop"
+              show_background: false
+            - entity: "text.chunmi_cn_119441120_normal3_start_cook_a_2_1"
+              tap_action:
+                action: "perform-action"
+                perform_action: "text.set_value"
+                target:
+                  entity_id: "text.chunmi_cn_119441120_normal3_start_cook_a_2_1"
+                data:
+                  value: "1"
+              show_background: false
+              icon: "mdi:play"
+          card_layout: large
+          icon: "mdi:pot-mix"
+          name: ""
+          force_icon: false
+        - type: custom:bubble-card
+          card_type: button
+          entity: "sensor.chufang_dianyaliguo"
+          show_state: true
+          show_attribute: false
+          attribute: "supported_features"
+          tap_action:
+            action: "toggle"
+          button_action:
+            tap_action:
+              action: "toggle"
+          sub_button:
+            - entity: "sensor.chunmi_cn_824782007_mini1_left_time_p_2_5"
+              show_state: true
+              show_icon: false
+              state_background: false
+              show_background: false
+            - entity: "button.chunmi_cn_824782007_mini1_cancel_cooking_a_2_2"
+              icon: "mdi:stop"
+              show_background: false
+            - entity: "text.chunmi_cn_824782007_mini1_start_cook_a_2_1"
+              tap_action:
+                action: "perform-action"
+                perform_action: "text.set_value"
+                target:
+                  entity_id: "text.chunmi_cn_824782007_mini1_start_cook_a_2_1"
+                data:
+                  value: "1"
+              show_background: false
+              icon: "mdi:play"
+          card_layout: large
+          icon: "mdi:pot-mix"
+          name: ""
+          force_icon: false
+        - type: custom:bubble-card
+          card_type: button
+          entity: "sensor.chufang_pobiji"
+          show_state: true
+          show_attribute: false
+          attribute: "supported_features"
+          tap_action:
+            action: "toggle"
+          button_action:
+            tap_action:
+              action: "toggle"
+          sub_button:
+            - entity: "sensor.chunmi_cn_682421582_a1_left_time_p_2_3"
+              show_state: true
+              show_icon: false
+              state_background: false
+              show_background: false
+            - entity: "button.chunmi_cn_682421582_a1_cancel_cooking_a_2_2"
+              icon: "mdi:stop"
+              show_background: false
+            - entity: "text.chunmi_cn_682421582_a1_start_cook_a_2_1"
+              tap_action:
+                action: "perform-action"
+                perform_action: "text.set_value"
+                target:
+                  entity_id: "text.chunmi_cn_682421582_a1_start_cook_a_2_1"
+                data:
+                  value: "1"
+              show_background: false
+              icon: "mdi:play"
+          card_layout: large
+          icon: "mdi:blender"
+          name: ""
+          force_icon: false
+        - type: custom:bubble-card
+          card_type: button
+          show_state: true
+          show_attribute: false
+          attribute: "supported_features"
+          tap_action:
+            action: "toggle"
+          button_action:
+            tap_action:
+              action: "toggle"
+          sub_button:
+            - entity: "switch.youyanji"
+              icon: "mdi:stop"
+              show_background: false
+          card_layout: large
+          icon: "mdi:fan"
+          name: ""
+          force_icon: false
+          button_type: state
+          entity: "sensor.youyanji"
+        - type: custom:bubble-card
+          card_type: button
+          entity: "switch.180319907614846_power"
+          show_state: true
+          show_attribute: false
+          attribute: "supported_features"
+          tap_action:
+            action: "toggle"
+          button_action:
+            tap_action:
+              action: "toggle"
+          sub_button:
+            - entity: "sensor.180319907614846_time_remaining"
+              tap_action:
+                action: "none"
+              show_background: false
+              icon: ""
+              show_state: true
+              show_icon: false
+            - entity: "switch.180319907614846_storage"
+              show_state: true
+              show_icon: false
+              state_background: false
+              show_background: true
+              tap_action:
+                action: "toggle"
+              name: "保管"
+              show_name: true
+            - entity: "lock.180319907614846_child_lock"
+              icon: "mdi:stop"
+              show_background: true
+              show_name: true
+              name: "童锁"
+              show_state: true
+              show_icon: false
+              state_background: false
+          card_layout: large
+          icon: "mdi:dishwasher"
+          name: "洗碗机"
+          force_icon: false
+        - type: custom:bubble-card
+          card_type: button
+          card_layout: large
+          button_type: name
+          name: 净水器
+          icon: mdi:water
+          sub_button:
+            - entity: sensor.yunmi_cn_103342738_lx5_temperature_p_2_1
+              name: 温度
+              show_state: true
+              show_name: true
+              show_icon: false
+              state_background: true
+              show_background: false
+            - entity: sensor.yunmi_cn_103342738_lx5_tds_in_p_3_1
+              name: 入水
+              show_name: true
+              show_icon: false
+              state_background: false
+              show_background: false
+              show_last_changed: false
+              show_state: true
+            - entity: sensor.yunmi_cn_103342738_lx5_tds_out_p_3_2
+              show_state: true
+              show_icon: false
+              state_background: false
+              show_background: false
+              name: 出水
+              show_name: true   
+        - type: custom:bubble-card
+          card_type: separator
+

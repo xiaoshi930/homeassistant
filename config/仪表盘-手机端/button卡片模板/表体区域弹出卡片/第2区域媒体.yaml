@@ -1,0 +1,45 @@
+action: fire-dom-event
+browser_mod:
+  service: browser_mod.popup
+  data:
+    style:  '[[[ return theme_none() ]]]'  ## 引用全局函数【theme_none_pupup()】style样式
+    content:
+      type: vertical-stack
+      cards: 
+        # - type: custom:button-card 
+        #   template: 音箱
+        #   variables:      
+        #     播放器: media_player.redmiyinxiang                                   ## Xiaomi Miot Auto 集成
+        #     # 静音: switch.xxxxxxxxxxxxx                                         ## Xiaomi Home 集成(如果没有这个实体代表不支持静音)
+        #     音量: number.xiaomi_cn_446812080_x08e_volume_p_2_1                   ## Xiaomi Home 集成
+        #     背景备用图片: https://api.suyanw.cn/api/scenery.php/1                 ## 可选本地图片或网络url
+        #     背景图片亮度: 0.7
+        #     背景图片灰度: 30%
+        #     歌词切换: switch.lyric2                                              ## 辅助元素 或者NR 生成实体都可
+        #     主题: '[[[ return theme() ]]]'
+        # - type: custom:button-card
+        #   template: 电视
+        #   variables:      
+        #     主题: '[[[ return theme() ]]]'
+        #     电视: media_player.xiaomidianshi                          ## Xiaomi Miot Auto 集成
+        #     打开电视: button.xiaomidianshi                            ## 借助音箱的打开电视按钮（Auto与Home集成均有） 
+        #     音量: number.xiaomidianshi                                ## Xiaomi Miot Auto 集成
+        #     播放控制: select.xiaomidianshi                            ## Xiaomi Miot Auto 集成
+        #     播放控制app: select.xiaomidianshi_app                     ## Xiaomi Miot Auto 集成
+        #     app1: "云视听极光 - com.ktcp.video"
+        #     app1logo: "/local/UI/电视/腾讯视频.svg"
+        #     app2: "银河奇异果 - com.gitvdemo.video"
+        #     app2logo: "/local/UI/电视/爱奇艺.svg"
+        #     app3: "芒果TV - com.hunantv.license"
+        #     app3logo: "/local/UI/电视/芒果TV.svg"
+        #     app4: "CIBN酷喵 - com.cibn.tv"
+        #     app4logo: "/local/UI/电视/优酷视频.svg"
+        #     app5: "云视听小电视 - com.xiaodianshi.tv.yst"
+        #     app5logo: "/local/UI/电视/哔哩哔哩视频.svg"
+        #     app6: "QQ音乐 - com.tencent.qqmusictv"
+        #     app6logo: "/local/UI/电视/QQ音乐.svg"
+        #     app7: "网易云音乐 - com.netease.cloudmusic.tv"
+        #     app7logo: "/local/UI/电视/网易云音乐.svg"
+        #     背景备用图片: https://api.suyanw.cn/api/scenery.php/3     ## 可选本地图片或网络url
+        #     背景图片亮度: 0.7
+        #     背景图片灰度: 30%

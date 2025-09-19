@@ -1,0 +1,678 @@
+kiosk_mode:
+  hide_header: true
+  hide_sidebar: true
+button_card_templates:
+  !include_dir_merge_named "/config/仪表盘-手机端/button卡片模板" #引用该文件夹下所 有文件作为button模板
+apexcharts_card_templates:
+  !include_dir_merge_named "/config/仪表盘-手机端/apexcharts卡片模板" #引用该文件夹下所有文件作为apexcharts模板
+views: 
+  - type: custom:button-card  
+    template: 全局函数          
+    triggers_update: all                          
+    styles:                                    
+      card:    
+        - function: |            
+            [[[   
+                window.name1    = "人员A";                         /* HA的用户名 */
+                window.number1  = "number.theme_phone_mode_1";   /* 集成https://github.com/xiaoshi930/xiaoshi_theme生成的实体 */
+                window.switch1  = "switch.theme_phone_mode_1";   /* 集成https://github.com/xiaoshi930/xiaoshi_theme生成的实体 */
+                window.name2    = "人员B";                       /* HA的用户名 */
+                window.number2  = "number.theme_phone_mode_2";   /* 集成https://github.com/xiaoshi930/xiaoshi_theme生成的实体 */
+                window.switch2  = "switch.theme_phone_mode_2";   /* 集成https://github.com/xiaoshi930/xiaoshi_theme生成的实体 */
+                     
+                window.weather1 = "weather.people1";     //个人1天气实体 
+                window.weather2 = "weather.people2";      //个人2天气实体 
+                window.weatherh = "weather.wo_de_jia";           //家天气实体
+                window.weathers = "weather.sou_suo_cheng_shi";         //搜索天气实体
+                window.weathert = "text.weather_sou_suo";          //搜索天气输入框 
+                window.weatherb = "switch.weather_qie_huan";        //切换天气按钮
+                window.weatheryj1 = "switch.weather_people1_yu_jing";  //个人1天气预警
+                window.weatheryj2 = "switch.weather_people2_yu_jing";   //个人2天气预警
+                window.weatheryjh = "switch.weather_home_yu_jing";        //家天气预警
+                window.weatheryjs = "switch.weather_sousuo_yu_jing";      //搜索的天气预警
+  
+                window.温度颜色 = "rgb(190,0,50)";
+                window.湿度颜色 = "rgb(76,141,174)";
+                window.PM25颜色 = "rgb(22,169,81)";   
+                window.灯光按钮开启颜色 = "rgb(255,155,0)";
+                window.设备按钮开启颜色 = "rgb(10,170,10)";
+                window.媒体按钮开启颜色 = "rgb(190,80,220)";
+                window.按钮关闭颜色 = "rgb(150,150,150)";
+            ]]]   
+        - background: |    
+            [[[  
+                if (hass.user.name == name1){
+                    return states[number1]?.state <= 2 ? theme_color(230,0,1) : "rgb(0,0,0,0)";
+                }
+                if (hass.user.name == name2){
+                    return states[number2]?.state <= 2 ? theme_color(230,0,1) : "rgb(0,0,0,0)";
+                }
+                return "rgb(0,0,0,0)";
+            ]]]
+      grid:
+        - grid-template-areas: |
+            [[[
+                if (hass.user.name == name1) {
+                    var count = states[number1]?.state;
+                    if (count == 1 || count == 2) return  grid_空白();
+                    if (count == 3 || count == 4) return  grid_图片();
+                    if (count == 5 || count == 6) return  grid_视频();
+                    if (count == 7 || count == 8) return  grid_全屏视频();
+                }  
+                if (hass.user.name == name2) {
+                    var count = states[number2]?.state; 
+                    if (count == 1 || count == 2) return  grid_空白();
+                    if (count == 3 || count == 4) return  grid_图片();
+                    if (count == 5 || count == 6) return  grid_视频();
+                    if (count == 7 || count == 8) return  grid_全屏视频();
+                }
+                return  grid_空白(); 
+            ]]]         
+        - grid-template-columns: 6vw 47vw 33vw 10vw   
+        - grid-template-rows: |
+            [[[ 
+                if (hass.user.name == name1) {
+                    return states[number1]?.state <= 6 ? "0vh 0vh 0vh 0vh 13vh 4vh 20vh 20vh 20vh 20vh 1.5vh" : "0vh 0vh 0vh 0vh 100vh"; 
+                }
+                if (hass.user.name == name2) {
+                    return states[number2]?.state <= 6 ? "0vh 0vh 0vh 0vh 13vh 4vh 20vh 20vh 20vh 20vh 1.5vh" : "0vh 0vh 0vh 0vh 100vh"; 
+                }
+                return "0vh 0vh 0vh 0vh 13vh 4vh 20vh 20vh 20vh 20vh 1.5vh"; 
+            ]]]
+    custom_fields: 
+      图片:
+        card: 
+          type: custom:xiaoshi-image-card
+          top: 50vh
+          url:
+            - "https://api.yviii.com/img/baisi/"
+            - "https://api.yviii.com/img/heisi/" 
+            - "https://api.suyanw.cn/api/jk.php/"
+            - "https://api.suyanw.cn/api/hs.php/"
+            - "https://api.suyanw.cn/api/ksxjj.php/"
+            - "https://api.suyanw.cn/api/sjmv.php/"
+      视频:
+        card:
+          type: custom:xiaoshi-video-card 
+          top: 50vh
+          url:
+            - "https://api.yviii.com/video/i.php"  
+      表头:
+        card:
+          type: custom:button-card
+          template: UI表头主模板
+          custom_fields:
+            头像1:
+              card:  
+                type: custom:button-card
+                template: UI表头_头像
+                variables:
+                  人员实体: person.people1
+                  人员ip实体: device_tracker.ip_people1            ## 来源于集成Ping(ICMP),需要手动启用实体
+                  人员app实体: device_tracker.app_people1
+                  人员app电量: sensor.people1_dian_chi_dian_liang
+                  人员回家时间: sensor.gaode_people1           ## 来源于NR高德数据【如不需要可以删除这行】
+                  万年历:
+                    实体: sensor.lunar_calendar  ## NR万年历
+                    位置: 0             ## NR万年历中生日的位置
+                  电话费:
+                    - sensor.tel199****2769 
+                    - sensor.tel195****0769  
+                    - sensor.tel_api  
+            头像2:
+              card:
+                type: custom:button-card
+                template: UI表头_头像    
+                variables: 
+                  人员实体: person.people2 
+                  人员ip实体: device_tracker.ip_people2             ## 来源于集成Ping(ICMP),需要手动启用实体
+                  人员app实体: device_tracker.app_people2  
+                  人员app电量: sensor.people2_dian_chi_dian_liang     
+                  人员回家时间: sensor.gaode_people2            ## 来源于NR高德数据【如不需要可以删除这行】
+                  万年历: 
+                    实体: sensor.lunar_calendar   ## NR万年历
+                    位置: 1              ## NR万年历中生日的位置 
+                  电话费:
+                    - sensor.tel137****9221 
+                    - sensor.tel182****7461 
+                    - sensor.tel177****6343  
+            天气:      
+              card:     
+                type: custom:button-card
+                template: UI表头_天气
+            温度:        
+              card:      
+                type: custom:button-card 
+                template: UI表头_温度  
+                variables:  
+                  室外温度: sensor.wendu_shiwai
+            湿度:
+              card:  
+                type: custom:button-card   
+                template: UI表头_湿度
+                variables: 
+                  室外湿度: sensor.shidu_shiwai
+            电费:  
+              card: 
+                type: custom:button-card    
+                entity: sensor.state_grid_610*******8537   
+                template: UI表头_电费 
+            水费:       
+              card:  
+                type: custom:button-card  
+                entity: sensor.xian_water
+                template: UI表头_水费
+                variables:    
+                  水费: sensor.xian_water
+            燃气: 
+              card:  
+                type: custom:button-card
+                entity: sensor.xian_gas
+                template: UI表头_燃气
+                variables:  
+                  燃气: sensor.xian_gas
+            话费:   
+              card:  
+                type: custom:button-card 
+                template: UI表头_话费 
+                variables:  
+                  电话费:          
+                    - sensor.tel199****2769
+                    - sensor.tel195****0769  
+                    - sensor.tel_api  
+                    - sensor.tel137****9221
+                    - sensor.tel182****7461
+                    - sensor.tel177****6343  
+                  油价: sensor.fuel_price_shaanxi  
+            HA信息:
+              card:
+                type: custom:button-card  
+                template: UI表头_HA
+                variables:
+                  operating_system: update.home_assistant_operating_system_update
+                  ha_core: update.home_assistant_core_update
+                  ha_core_cpu: sensor.home_assistant_core_cpu_percent
+                  ha_core_memory: sensor.home_assistant_core_memory_percent
+                  ha_supervisor: update.home_assistant_supervisor_update
+                  ha_supervisor_cpu: sensor.home_assistant_supervisor_cpu_percent
+                  ha_supervisor_memory: sensor.home_assistant_supervisor_memory_percent
+                  ha_host_disk_total: sensor.home_assistant_host_disk_total
+                  ha_host_disk_free: sensor.home_assistant_host_disk_free
+                  ha_host_disk_used: sensor.home_assistant_host_disk_used 
+                  node_red: update.node_red_update
+                  node_red_cpu: sensor.node_red_cpu_percent
+                  node_red_memory: sensor.node_red_memory_percent
+                  backup_last: sensor.backup_last_successful_automatic_backup
+                  backup_next: sensor.backup_next_scheduled_automatic_backup
+            待办:    
+              card:     
+                type: custom:button-card   
+                template: UI表头_待办   
+                variables:
+                  待办清单实体: todo.item
+                  待办清单NR实体: sensor.todo_item
+                  待办清单名称: text.dai_ban_shi_xiang_ming_cheng
+                  待办清单描述: text.dai_ban_shi_xiang_miao_shu
+                  待办清单时间: text.dai_ban_shi_xiang_shi_jian
+                  主题: '[[[ return theme() ]]]' 
+      主题按钮:                      
+        card:           
+          type: custom:button-card    
+          template: UI表体_主题按钮     
+      预留按钮1: "" 
+      预留按钮2: ""     
+      动态区域:       
+        card:                    
+          type: custom:button-card   
+          triggers_update: all           
+          template: UI动态区域                   
+          variables:              
+            显示: 自动隐藏    ## 【总是显示】或者【自动隐藏】
+            常驻显示: ['']  ## ['灯光','动态1','动态2']
+            灯光图标: mdi:ceiling-light  
+            灯光颜色: rgb(233,150,0) 
+            灯光:  
+              - light.zhuwodeng     
+              - light.zhuwomentingdeng     
+              - light.taideng  
+              - light.ketingdeng
+              - light.ketingdengdai  
+              - light.ketingtongdeng 
+              - light.ketingzoulangdeng 
+              - light.xuanguandeng 
+              - light.wangguandeng
+              - light.ertongfangdeng
+              - light.xuexideng  
+              - light.cantingdeng
+              - light.cantingtongdeng
+              - light.ciwodeng  
+              - light.chufangdeng       
+              - light.yuba_zhuwei_deng
+              - light.zhuweijingqiandeng
+              - light.yuba_gongwei_deng
+              - light.gongweijingqiandeng
+            厨房设备图标: mdi:countertop  
+            厨房设备颜色: rgb(200,00,0)
+            厨房设备:      
+              - entity: sensor.chufang_dianfanbao
+                states: ['烹饪中','保温中','预约中']
+              - entity: sensor.chufang_dianyaliguo
+                states: ['烹饪中','保温中','预约中']
+              - entity: sensor.chufang_zhengzhuguo
+                states: ['烹饪中','保温中','预约中']
+              - entity: sensor.chufang_kongqizhaguo 
+                states: ['烹饪中','预约中']
+              - entity: sensor.chufang_pobiji
+                states: ['Busy','Keep Warm']
+              - entity: switch.180319907614846_power
+                states: ['on']
+              - entity: sensor.youyanji  ## 数值类，大于xx
+                states: ['>10']  
+            耗材图标: mdi:battery-sync 
+            耗材颜色: rgb(255,106,106) 
+            耗材:
+              - entity: sensor.dianliang_wenduji_zhuwo
+              - entity: sensor.dianliang_wenduji_ciwo
+              - entity: sensor.dianliang_wenduji_ertongfang
+              - entity: sensor.dianliang_wenduji_zhuwei
+              - entity: sensor.dianliang_wenduji_gongwei 
+              - entity: sensor.dianliang_wenduji_chufang
+              - entity: event.dianliang_wenduji_shiwai
+              - entity: sensor.dianliang_chuanganqi_xuanguanrenti
+              - entity: sensor.dianliang_chufangshuiqin
+              - entity: sensor.dianliang_chuanganqi_chufangrenti
+              - entity: sensor.dianliang_mensuo
+              - entity: sensor.dianliang_chuanganqi_ketingmenchuang
+              - entity: event.dianliang_menling
+              - entity: event.dianliang_chuanganqi_zhuwomenchuang  ## 事件类实体，unknown时显示正常
+              - entity: sensor.dianliang_yashua_people2
+              - entity: sensor.haocai_jingshuiqi_ro
+                convert: 172.80  #仅当需要换算时增加该参数
+              - entity: sensor.dianliang_yashua_people1
+              - entity: sensor.haocai_jingshuiqi_3in1
+                convert: 86.40   #仅当需要换算时增加该参数
+              - entity: sensor.haocai_jinghuaqi_lvxin_keting
+              - entity: binary_sensor.haocai_xiwanji_piaoxiji  ## 二进制类实体，off时显示正常
+              - entity: sensor.haocai_jinghuaqi_lvxin_zhuwo
+              - entity: binary_sensor.haocai_xiwanji_xiwanyan
+              - entity: sensor.dianlaing_zhuwo_wuxiankaiguan
+              - entity: sensor.haocai_saodijiqiren_zhushua
+              - entity: sensor.dianliang_keting_wuxiankaiguan2
+              - entity: sensor.haocai_saodijiqiren_bianshua
+              - entity: sensor.dianliang_keting_wuxiankaiguan3
+              - entity: sensor.haocai_saodijiqiren_lvxin
+ 
+            # 共预制了9个动态图标(动态1-动态9)
+            动态1图标: mdi:laptop
+            动态1颜色: rgb(33,150,213)
+            动态1:    
+              - entity: switch.diannao    
+                states: ['on']
+            动态2图标: mdi:air-conditioner
+            动态2颜色: rgb(0,188,213)
+            动态2:    
+              - entity: climate.kongtiao_zhuwo
+                states: ['cool','heat','dry','fan_only']
+              - entity: climate.kongtiao_keting    
+                states: ['cool','heat','dry','fan_only']
+            动态3图标: mdi:fan   
+            动态3颜色: rgb(0,188,213)
+            动态3:  
+              - entity: fan.xunhuanshan_ertongfang  
+                states: ['on']       
+            动态4图标: mdi:air-filter
+            动态4颜色: rgb(76,191,104)   
+            动态4:     
+              - entity: fan.jinghuaqi_zhuwo   
+                states: ['on']     
+              - entity: fan.jinghuaqi_keting 
+                states: ['on']   
+            动态5图标: mdi:air-humidifier
+            动态5颜色: rgb(30,144,255)
+            动态5: 
+              - entity: humidifier.jiashiqi_zhuwo  
+                states: ['on']
+              - entity: humidifier.jiashiqi_keting  
+                states: ['on']   
+            动态6图标: mdi:hvac
+            动态6颜色: rgb(226,181,4)
+            动态6: 
+              - entity:  
+                  - switch.yuba_gongwei_blow  ## 浴霸是混合实体
+                  - switch.yuba_gongwei_vent
+                  - switch.yuba_gongwei_heat1 
+                states: ['on']   
+              - entity:   
+                  - switch.yuba_zhuwei_blow 
+                  - switch.yuba_zhuwei_vent
+                  - switch.yuba_zhuwei_heat1
+                states: ['on']  
+            动态7图标: mdi:radiator
+            动态7颜色: rgb(226,81,4)  
+            动态7: 
+              - entity: climate.shuinuantan
+                states: ['heat']    
+            动态8图标: mdi:robot-vacuum
+            动态8颜色: rgb(90,205,50)
+            动态8:
+              - entity: vacuum.saodijiqiren   
+                states: ['正在拖地','正在扫地']   
+            动态9图标: mdi:washing-machine
+            动态9颜色: rgb(0,188,213)
+            动态9: 
+              - entity: select.xiyiji 
+                states: ['启动']    
+            动态10图标: mdi:multimedia
+            动态10颜色: rgb(220,22,252)
+            # 动态10: 
+            #   - entity: sensor.media_yinxiang_zhuwo     
+            #     states: ['Playing','播放中']
+            #   - entity: sensor.media_yinxiang_keting     
+            #     states: ['Playing','playing','播放中']
+            #   - entity: media_player.xiaomidianshi 
+            #     states: ['idle','Playing','playing','播放中']
+          custom_fields:  ## 如果没有或者不需要对应的弹出菜单，删除对应的引用 ##
+            动态1:  
+              card:
+                tap_action: !include "button卡片模板/动态区域弹出卡片/电脑弹出卡片.yaml"
+            动态2: 
+              card: 
+                tap_action: !include "button卡片模板/动态区域弹出卡片/空调弹出卡片.yaml"
+            动态3:  
+              card: 
+                tap_action: !include "button卡片模板/动态区域弹出卡片/风扇弹出卡片.yaml"
+            动态4:
+              card:
+                tap_action: !include "button卡片模板/动态区域弹出卡片/净化器弹出卡片.yaml"
+            动态5: 
+              card:
+                tap_action: !include "button卡片模板/动态区域弹出卡片/加湿器弹出卡片.yaml"
+            动态6: 
+              card:
+                tap_action: !include "button卡片模板/动态区域弹出卡片/浴霸弹出卡片.yaml" 
+            动态7: 
+              card: 
+                tap_action: !include "button卡片模板/动态区域弹出卡片/水暖毯弹出卡片.yaml"
+            动态8: 
+              card:
+                tap_action: !include "button卡片模板/动态区域弹出卡片/扫地机器人弹出卡片.yaml"
+            动态9: 
+              card:
+                tap_action: !include "button卡片模板/动态区域弹出卡片/洗衣机弹出卡片.yaml"
+            # 动态10: 
+            #   card:
+            #     tap_action: !include "button卡片模板/动态区域弹出卡片/媒体弹出卡片.yaml"
+            厨房设备: 
+              card:
+                tap_action: !include "button卡片模板/动态区域弹出卡片/厨房设备弹出卡片.yaml"
+      第1区域:      
+        card:                 
+          type: custom:button-card  
+          triggers_update: all           
+          template: UI表体         
+          variables:     
+            区域: 第1区域   
+            名称: 主卧  
+            图标: mdi:bed-king      
+            温度: sensor.wendu_zhuwo    
+            湿度: sensor.shidu_zhuwo 
+            pm25: sensor.jinghuaqi_zhuwo_pm25
+            灯光:    
+              - light.zhuwodeng       
+              - light.zhuwomentingdeng    
+              - light.taideng     
+            设备: 
+              - entity: climate.kongtiao_zhuwo
+                states: ['cool','heat','dry','fan_only']  #设备开启的状态列表
+              - entity: fan.jinghuaqi_zhuwo
+                states: ['on']   
+              - entity: humidifier.jiashiqi_zhuwo
+                states: ['on'] 
+              - entity: climate.shuinuantan    
+                states: ['heat']       
+            # 媒体:   
+            #   - entity: sensor.media_yinxiang_zhuwo     
+            #     states: ['Playing','播放中']
+          custom_fields:  ## 如果没有或者不需要对应的弹出菜单，删除对应的引用 ##
+            房间名:
+              card:
+                tap_action: !include "button卡片模板/表体区域弹出卡片/第1区域房间.yaml"
+            房间图标:
+              card:
+                tap_action: !include "button卡片模板/表体区域弹出卡片/第1区域房间.yaml"
+            设备:
+              card:
+                tap_action: !include "button卡片模板/表体区域弹出卡片/第1区域设备.yaml"
+            媒体: 
+              card:
+                tap_action: !include "button卡片模板/表体区域弹出卡片/第1区域媒体.yaml"
+      第2区域:            
+        card:           
+          type: custom:button-card     
+          triggers_update: all        
+          template: UI表体           
+          variables:
+            区域: 第2区域           
+            名称: 客厅       
+            图标: mdi:sofa      
+            温度: sensor.wendu_keting    
+            湿度: sensor.shidu_keting
+            pm25: sensor.jinghuaqi_keting_pm25   
+            灯光:          
+              - light.ketingdeng  
+              - light.ketingdengdai   
+              - light.ketingtongdeng       
+              - light.ketingzoulangdeng     
+              - light.xuanguandeng       
+              - light.wangguandeng
+            设备:      
+              - entity: climate.kongtiao_keting   
+                states: ['cool','heat','dry','fan_only']   
+              - entity: switch.jinghuaqi_keting
+                states: ['on']     
+              - entity: humidifier.jiashiqi_keting
+                states: ['on']
+              - entity: switch.diannao
+                states: ['on']
+            # 媒体: 
+            #   - entity: sensor.media_yinxiang_keting     
+            #     states: ['Playing','playing','播放中']
+            #   - entity: media_player.xiaomidianshi 
+            #     states: ['idle','Playing','playing','播放中']
+          custom_fields:  ## 如果没有或者不需要对应的弹出菜单，删除对应的引用 ##
+            房间名: 
+              card:
+                tap_action: !include "button卡片模板/表体区域弹出卡片/第2区域房间.yaml"
+            房间图标:
+              card:
+                tap_action: !include "button卡片模板/表体区域弹出卡片/第2区域房间.yaml"
+            设备:
+              card:
+                tap_action: !include "button卡片模板/表体区域弹出卡片/第2区域设备.yaml"
+            媒体: 
+              card:
+                tap_action: !include "button卡片模板/表体区域弹出卡片/第2区域媒体.yaml"
+      第3区域:      
+        card:     
+          type: custom:button-card     
+          triggers_update: all   
+          template: UI表体           
+          variables:   
+            区域: 第3区域      
+            名称: 儿童房 
+            图标: mdi:bed-king  
+            温度: sensor.wendu_ertongfang     
+            湿度: sensor.shidu_ertongfang 
+            灯光:     
+              - light.ertongfangdeng 
+              - light.xuexideng 
+            设备:  
+              - entity: fan.xunhuanshan_ertongfang  
+                states: ['on']        
+          custom_fields:  ## 如果没有或者不需要对应的弹出菜单，删除对应的引用 ##
+            房间名:    
+              card:  
+                tap_action: !include "button卡片模板/表体区域弹出卡片/第3区域房间.yaml"
+            房间图标:   
+              card: 
+                tap_action: !include "button卡片模板/表体区域弹出卡片/第3区域房间.yaml"
+            设备:
+              card:
+                tap_action: !include "button卡片模板/表体区域弹出卡片/第3区域设备.yaml"
+      第4区域:          
+        card:    
+          type: custom:button-card           
+          triggers_update: all    
+          template: UI表体     
+          variables: 
+            区域: 第4区域        
+            名称: 餐厅   
+            图标: mdi:silverware-fork-knife
+            温度: sensor.wendu_keting 
+            湿度: sensor.shidu_keting
+            灯光:     
+              - light.cantingdeng
+              - light.cantingtongdeng   
+            设备:
+              - entity: vacuum.saodijiqiren 
+                states: ['正在拖地']
+          custom_fields:  ## 如果没有或者不需要对应的弹出菜单，删除对应的引用 ## 
+            房间名:
+              card:
+                tap_action: !include "button卡片模板/表体区域弹出卡片/第4区域房间.yaml"  
+            房间图标:  
+              card:
+                tap_action: !include "button卡片模板/表体区域弹出卡片/第4区域房间.yaml"
+            设备:
+              card:     
+                tap_action: !include "button卡片模板/表体区域弹出卡片/第4区域设备.yaml"
+      第5区域:  
+        card:    
+          type: custom:button-card      
+          triggers_update: all       
+          template: UI表体     
+          variables:         
+            区域: 第5区域     
+            名称: 次卧  
+            图标: mdi:bed-king 
+            温度: sensor.wendu_ciwo         
+            湿度: sensor.shidu_ciwo   
+            灯光:            
+              - light.ciwodeng        
+          custom_fields:  ## 如果没有或者不需要对应的弹出菜单，删除对应的引用 ##   
+            房间名:     
+              card:     
+                tap_action: !include "button卡片模板/表体区域弹出卡片/第5区域房间.yaml"   
+            房间图标:        
+              card:    
+                tap_action: !include "button卡片模板/表体区域弹出卡片/第5区域房间.yaml"  
+      第6区域:                   
+        card:          
+          type: custom:button-card     
+          triggers_update: all    
+          template: UI表体        
+          variables:          
+            区域: 第6区域          
+            名称: 厨房           
+            图标: mdi:countertop   
+            温度: sensor.wendu_chufang    
+            湿度: sensor.shidu_chufang    
+            人体: sensor.renti_chufang             
+            灯光:                
+              - light.chufangdeng          
+            设备:   
+              - entity: sensor.chufang_dianfanbao  
+                states: ['烹饪中','保温中','预约中']
+              - entity: sensor.chufang_dianyaliguo
+                states: ['烹饪中','保温中','预约中'] 
+              - entity: sensor.chufang_zhengzhuguo
+                states: ['烹饪中','保温中','预约中'] 
+              - entity: sensor.chufang_kongqizhaguo 
+                states: ['烹饪中','预约中']
+              - entity: sensor.chufang_pobiji
+                states: ['Busy','Keep Warm']   
+              - entity: switch.180319907614846_power
+                states: ['on']
+              - entity: sensor.youyanji    
+                states: ['>10']  
+          custom_fields:  ## 如果没有或者不需要对应的弹出菜单，删除对应的引用 ##
+            房间名: 
+              card:    
+                tap_action: !include "button卡片模板/表体区域弹出卡片/第6区域房间.yaml"
+            房间图标: 
+              card: 
+                tap_action: !include "button卡片模板/表体区域弹出卡片/第6区域房间.yaml"
+            设备:
+              card:    
+                tap_action: !include "button卡片模板/表体区域弹出卡片/第6区域设备.yaml"
+      第7区域:       
+        card:                       
+          type: custom:button-card    
+          triggers_update: all       
+          template: UI表体          
+          variables:     
+            区域: 第7区域         
+            名称: 主卫  
+            图标: mdi:shower 
+            温度: sensor.wendu_zhuwei
+            湿度: sensor.shidu_zhuwei
+            人在: sensor.renzai_zhuwei
+            灯光:     
+              - light.yuba_zhuwei_deng
+              - light.zhuweijingqiandeng
+            设备: 
+              - entity: 
+                  - switch.yuba_zhuwei_blow
+                  - switch.yuba_zhuwei_vent
+                  - switch.yuba_zhuwei_heat1
+                states: ['on']
+          custom_fields:  ## 如果没有或者不需要对应的弹出菜单，删除对应的引用 ##
+            房间名:
+              card:
+                tap_action: !include "button卡片模板/表体区域弹出卡片/第7区域房间.yaml"
+            房间图标:
+              card:
+                tap_action: !include "button卡片模板/表体区域弹出卡片/第7区域房间.yaml"
+            设备:
+              card:
+                tap_action: !include "button卡片模板/表体区域弹出卡片/第7区域设备.yaml"
+      第8区域:          
+        card:         
+          type: custom:button-card     
+          triggers_update: all   
+          template: UI表体            
+          variables:     
+            区域: 第8区域     
+            名称: 公卫    
+            图标: mdi:shower  
+            温度: sensor.wendu_gongwei    
+            湿度: sensor.shidu_gongwei  
+            人在: sensor.renzai_gongwei 
+            灯光:    
+              - light.yuba_gongwei_deng 
+              - light.gongweijingqiandeng 
+            设备:   
+              - entity:   
+                  - switch.yuba_gongwei_blow
+                  - switch.yuba_gongwei_vent 
+                  - switch.yuba_gongwei_heat1  
+                states: ['on'] 
+              - entity: select.xiyiji   
+                states: ['启动']       
+          custom_fields:  ## 如果没有或者不需要对应的弹出菜单，删除对应的引用 ##
+            房间名:
+              card:
+                tap_action: !include "button卡片模板/表体区域弹出卡片/第8区域房间.yaml"
+            房间图标: 
+              card:
+                tap_action: !include "button卡片模板/表体区域弹出卡片/第8区域房间.yaml" 
+            设备:
+              card:  
+                tap_action: !include "button卡片模板/表体区域弹出卡片/第8区域设备.yaml" 
+      表尾:           
+        card:                    
+          type: custom:lunar-calendar-phone-date      
+          theme: '[[[ return theme()]]]'
+                              
+       
+ 

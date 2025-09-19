@@ -1,0 +1,20 @@
+action: fire-dom-event
+browser_mod:
+  service: browser_mod.popup
+  data:
+    style:  '[[[ return theme_none_pupup() ]]]'  ## 引用全局函数【theme_none_pupup()】style样式
+    content:
+      type: vertical-stack
+      cards:    
+        - type: custom:button-card
+          template: 电脑卡片
+          variables:
+            电脑: switch.diannao
+            cpu: sensor.pc_cpu_usage
+            内存: sensor.pc_memory_usage
+            c盘: sensor.pc_storage_c_usage
+            d盘: sensor.pc_storage_d_usage
+            e盘: sensor.pc_storage_e_usage
+            f盘: sensor.pc_storage_f_usage
+            主题: '[[[ return theme() ]]]'  ## 主题颜色[on]或[off]或[函数返回值]
+      

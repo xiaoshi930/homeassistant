@@ -1,0 +1,284 @@
+油烟机卡片:
+  triggers_update:
+    - '[[[ return variables.关闭 ?? ""]]]'
+    - '[[[ return variables.油烟机 ?? ""]]]'
+  styles: 
+    grid:
+      - grid-template-areas: >
+          [[[
+              window.油烟机颜色 = "rgb(255,106,106)";  
+              if(variables.油烟机 !="none"){
+                  return `"背景 背景 背景 背景"
+                          "名称 名称 状态 开关"
+                          "图标 空白区域 主按钮区域 主按钮区域"`
+              } 
+               if(variables.油烟机 =="none"){
+                  return `` 
+              }  
+          ]]]  
+      - grid-template-columns: 13% 14% 61% 12%
+      - grid-template-rows: 0 8vw 12vw
+    card:
+      - padding: 0
+      - cursor: none
+      - --mdc-ripple-press-opacity: 0
+      - height: |
+          [[[ 
+              if( variables.油烟机 !="none") {
+                return "calc(20vw + 8px);"
+              } 
+              else return "0";
+          ]]]
+      - display: |
+          [[[
+              if (variables.油烟机 == "none") {
+                  return "none";
+              }
+          ]]]
+  custom_fields:
+    背景:
+      card:
+        type: custom:button-card
+        styles:
+          card:
+            - margin-top: 20vw
+            - padding: 0
+            - border-width: 0
+            - cursor: none
+            - --mdc-ripple-press-opacity: 0
+            - border-radius: 3vw
+            - height: 20vw
+            - background: | 
+                [[[
+                    var state = states[variables.油烟机]?.state;
+                    if(variables.主题=='off' && state>10 && state<=250)  return "linear-gradient(135deg, "+油烟机颜色+" -50%, rgb(50,50,50)    50%)";
+                    if(variables.主题=='on'  && state>10 && state<=250)  return "linear-gradient(135deg, "+油烟机颜色+" -50%, rgb(255,255,255) 50%)";
+                    return variables.主题 == "on" ? "rgb(255,255,255)" : "rgb(50,50,50)";
+                ]]]
+    开关:
+      card:
+        type: custom:button-card
+        tap_action:
+          action: call-service
+          service: switch.turn_off
+          data: {}
+          target:
+            entity_id: '[[[ return  variables.关闭 ?? ""]]]'
+        show_name: false
+        show_icon: true
+        icon: |
+          [[[ 
+              var state = states[variables.油烟机]?.state;      
+              if( state > 10) return "mdi:toggle-switch";
+              return "mdi:toggle-switch-off";
+          ]]]
+        styles:
+          card:
+            - cursor: none
+            - --mdc-ripple-press-opacity: 0.2
+            - padding: 0
+            - border-radius: 2vw
+            - width: 8vw
+            - height: 8vw
+            - border-width: 0
+            - background: transparent
+          icon:
+            - width: 8vw
+            - height: 8vw
+            - color: |
+                [[[
+                    var state = states[variables.油烟机]?.state;
+                    if( state>10 && state<=250) return 油烟机颜色;
+                    return variables.主题 == "on" ? "rgb(50,50,50)" : "rgb(255,255,255)";
+                ]]]
+    图标:
+      card:
+        type: custom:button-card
+        show_icon: true
+        icon: |
+          [[[ 
+              var state = states[variables.油烟机]?.state;    
+              if( state > 10) return "mdi:fan";
+              return "mdi:fan-off";
+          ]]] 
+        styles:
+          card:
+            - padding: 0
+            - border-radius: 0
+            - width: 20vw 
+            - height: 20vw
+            - margin-left: '-2vw'
+            - border-width: 0
+            - background: transparent
+          icon: 
+            - color: |
+                [[[
+                    var state = states[variables.油烟机]?.state;
+                    if( state>10 && state<=250) return 油烟机颜色;
+                    return variables.主题 == "on" ? "rgb(50,50,50)" : "rgb(255,255,255)";
+                ]]]
+            - animation: |
+                [[[ 
+                    var state = states[variables.油烟机]?.state;   
+                    if( state > 10)  return "rotating 1.5s linear infinite";
+                    return ""; 
+                ]]]
+    名称:
+      card:
+        type: custom:button-card
+        show_label: true
+        label: '[[[  return states[variables.油烟机]?.attributes?.friendly_name ?? "名称"]]]'
+        styles:
+          card:
+            - padding: 0
+            - border-radius: 0
+            - width: 50vw
+            - margin-left: 2.5vw  
+            - border-width: 0
+            - background: transparent
+          label:
+            - justify-self: start
+            - font-size: 4vw
+            - font-weight: bold
+            - color: '[[[ return variables.主题 == "on" ? "rgb(50,50,50)" : "rgb(255,255,255)"; ]]]'
+    状态:
+      card:
+        type: custom:button-card
+        label: |
+          [[[ 
+              var state = states[variables.油烟机]?.state;
+              if( state>130 && state<=250) return "高档 "+state +"w";
+              if( state>110 && state<=130) return "中档 "+state +"w";
+              if( state>10  && state<=110) return "低挡 "+state +"w";
+              if( state<=10) return "关闭 "+state +"w";
+              return state ? 关闭 : "离线";  
+          ]]]
+        show_label: true
+        styles: 
+          card:
+            - padding: 0
+            - border-radius: 0
+            - border-width: 0
+            - background: transparent
+          label:
+            - justify-self: start
+            - font-size: 3vw
+            - font-weight: bold
+            - margin-top: 0.5vw
+            - margin-left: 0vw
+            - color: '[[[ return variables.主题 == "on" ? "rgb(50,50,50)" : "rgb(255,255,255)"; ]]]'
+    主按钮区域:
+      card:
+        type: custom:button-card
+        tap_action:
+          action: none
+        hold_action:
+          action: none
+        styles:
+          grid:
+            - grid-template-areas: |
+                'b1 b2 b3' 
+            - grid-template-columns: 33.33% 33.33% 33.33% 
+            - grid-template-rows: 100%
+          card:
+            - cursor: none
+            - width: 66vw
+            - padding: 0
+            - border-radius: 0
+            - border-width: 0
+            - background: transparent
+        custom_fields:
+          b1:
+            card:
+              type: custom:button-card
+              template: 油烟机按钮样式模板
+              icon: mdi:fan-speed-1
+              name: 低档 
+              variables:
+                主题: '[[[ return variables.主题 ?? ""]]]'
+              styles:
+                icon:
+                  - color: |
+                      [[[ 
+                          var state = states[variables.油烟机]?.state;    
+                          if( state>10  && state<=110) return 油烟机颜色 ;
+                          return "rgb(255,255,255)";
+                      ]]] 
+                name:
+                  - color: |
+                      [[[ 
+                          var state = states[variables.油烟机]?.state;    
+                          if( state>10  && state<=110) return 油烟机颜色;
+                          return "rgb(255,255,255)";
+                      ]]] 
+          b2:
+            card:
+              type: custom:button-card
+              template: 油烟机按钮样式模板
+              icon: mdi:fan-speed-2
+              name: 中档
+              variables:
+                主题: '[[[ return variables.主题 ?? ""]]]'
+              styles:
+                icon:
+                  - color: |
+                      [[[ 
+                          var state = states[variables.油烟机]?.state;    
+                          if( state>110 && state<=130) return 油烟机颜色;
+                          return "rgb(255,255,255)";
+                      ]]] 
+                name:
+                  - color: |
+                      [[[ 
+                          var state = states[variables.油烟机]?.state;    
+                          if( state>110 && state<=130) return 油烟机颜色;
+                          return "rgb(255,255,255)";
+                      ]]] 
+          b3:
+            card:
+              type: custom:button-card
+              template: 油烟机按钮样式模板
+              icon: mdi:fan-speed-3
+              name: 高档
+              variables:
+                主题: '[[[ return variables.主题 ?? ""]]]'
+              styles:
+                icon:
+                  - color: |
+                      [[[ 
+                          var state = states[variables.油烟机]?.state;    
+                          if( state>130 && state<=250) return 油烟机颜色;
+                          return "rgb(255,255,255)";
+                      ]]] 
+                name:
+                  - color: |
+                      [[[ 
+                          var state = states[variables.油烟机]?.state;    
+                          if( state>130 && state<=250) return 油烟机颜色;
+                          return "rgb(255,255,255)";
+                      ]]] 
+     
+油烟机按钮样式模板:
+  triggers_update:
+    - '[[[ return variables.关闭 ?? ""]]]'
+  layout: icon_name
+  show_icon: true 
+  show_name: true 
+  styles: 
+    card:
+      - cursor: none
+      - --mdc-ripple-press-opacity: 0.2
+      - width: 21vw
+      - height: 6vw
+      - border-radius: 1.5vw 
+      - background: '[[[ return variables.主题 == "on" ? "rgb(50,50,50)" : "rgb(120,120,120)"; ]]]'
+    name:
+      - color: rgb(255,255,255)
+      - font-size: 0.9vh
+      - margin-left: -4vw
+      - font-weight: bold
+    icon:
+      - width: 3vw
+      - height: 3vw
+      - margin-left: 6vw
+      - color: rgb(255,255,255)

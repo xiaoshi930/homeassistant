@@ -1,0 +1,91 @@
+燃气信息卡片:         
+  triggers_update:
+    - '[[[ return variables.燃气 ?? ""]]]'
+  styles:
+    grid:   
+      - grid-template-areas: >
+          "名称 名称 名称 名称"
+          "信息1 信息1 信息1 信息1"
+          "信息2 信息2 信息2 信息2"
+      - grid-template-columns: 25% 25% 25% 25%
+      - grid-template-rows: 0 0 0 0 0 0 0 0 0 
+    card: 
+      - padding: 0 
+      - cursor: none
+      - --mdc-ripple-press-opacity: 0
+      - border-width: 0
+      - border-radius: 3vw
+      - background: '[[[ return variables.主题 == "on" ? "rgb(255,255,255)" : "rgb(50,50,50)"; ]]]' 
+      - height: 30vw
+  custom_fields:
+    名称:
+      card: 
+        type: custom:button-card 
+        label: 燃气信息
+        show_label: true
+        styles:
+          card: 
+            - margin-top: 10vw
+            - padding: 0
+            - border-width: 0
+            - cursor: none
+            - --mdc-ripple-press-opacity: 0
+            - border-radius: 3vw
+            - height: 10vw
+            - background: '[[[ return variables.主题 == "on" ? "rgb(255,255,255)" : "rgb(50,50,50)"; ]]]' 
+          label:
+            - font-size: 2vh
+            - font-weight: bold
+            - color: '[[[ return variables.主题 == "on" ? "rgb(0,0,0)" : "rgb(255,255,255)"; ]]]' 
+    信息1:
+      card: 
+        type: custom:button-card 
+        label: |
+          [[[
+              var balance = states[variables.燃气]?.state;
+              return "燃气预估余额："+balance +" 元";
+          ]]]
+        show_label: true
+        styles:
+          card: 
+            - margin-top: 30vw
+            - padding: 0
+            - border-width: 0
+            - cursor: none
+            - --mdc-ripple-press-opacity: 0
+            - border-radius: 3vw
+            - height: 10vw
+            - background: rgb(0,0,0,0)
+          label:
+            - width: 100vw
+            - font-size: 1.5vh
+            - text-align: left !important
+            - justify-content: flex-start
+            - padding: 0 0 0 5vw  
+            - color: '[[[ return variables.主题 == "on" ? "rgb(0,0,0)" : "rgb(255,255,255)"; ]]]' 
+    信息2:
+      card: 
+        type: custom:button-card 
+        label: |
+          [[[
+              var usagedays = states[variables.燃气]?.attributes?.剩余天数;
+              return "燃气预估使用："+ usagedays+" 天";
+          ]]]
+        show_label: true
+        styles:
+          card: 
+            - margin-top: 40vw
+            - padding: 0
+            - border-width: 0
+            - cursor: none
+            - --mdc-ripple-press-opacity: 0
+            - border-radius: 3vw
+            - height: 10vw
+            - background: rgb(0,0,0,0)
+          label:
+            - width: 100vw
+            - font-size: 1.5vh
+            - text-align: left !important
+            - justify-content: flex-start
+            - padding: 0 0 0 5vw  
+            - color: '[[[ return variables.主题 == "on" ? "rgb(0,0,0)" : "rgb(255,255,255)"; ]]]' 

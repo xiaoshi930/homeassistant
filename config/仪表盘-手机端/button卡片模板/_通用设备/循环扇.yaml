@@ -1,0 +1,1389 @@
+循环扇:
+  triggers_update:
+    - '[[[ return variables.循环扇 ?? ""]]]'
+    - '[[[ return variables.上下摆风角度 ?? ""]]]'
+    - '[[[ return variables.左右摆风角度 ?? ""]]]'
+    - '[[[ return variables.上下摆风 ?? ""]]]'
+    - '[[[ return variables.循环摆风 ?? ""]]]'
+    - '[[[ return variables.风速档位 ?? ""]]]'
+    - '[[[ return variables.持续向上转 ?? ""]]]'
+    - '[[[ return variables.持续向下转 ?? ""]]]'
+    - '[[[ return variables.持续向左转 ?? ""]]]'
+    - '[[[ return variables.持续向右转 ?? ""]]]'
+    - '[[[ return variables.上下手动摇头 ?? ""]]]'
+    - '[[[ return variables.左右手动摇头 ?? ""]]]'
+    - '[[[ return variables.一键回正 ?? ""]]]'
+    - '[[[ return variables.温度 ?? ""]]]'
+    - '[[[ return variables.湿度 ?? ""]]]'
+    - '[[[ return variables.提示音 ?? ""]]]'
+    - '[[[ return variables.按键锁 ?? ""]]]'
+    - '[[[ return variables.指示灯 ?? ""]]]'
+    - '[[[ return variables.关机回正 ?? ""]]]'
+    - '[[[ return variables.定时关机 ?? ""]]]'
+  styles:
+    grid:
+      - grid-template-areas: > 
+          [[[
+              window.循环扇开启颜色 = "rgb(0,188,213)"
+              if(variables.循环扇 !="none"){
+                  return `"背景 背景 背景"
+                          "名称 状态 开关"
+                          "方向盘 模式区域 模式区域"
+                          "方向盘 风速区域 风速区域"
+                          "方向盘 上下摆风区域 上下摆风区域"
+                          "方向盘 左右摆风区域 左右摆风区域"
+                          "方向盘 定时关机区域 定时关机区域"
+                          "方向盘 副按钮区域 副按钮区域"
+                          "方向盘 副按钮文字 副按钮文字"
+                          "空白行 空白行 空白行"
+                          "曲线图 曲线图 曲线图"`
+              } 
+               if(variables.循环扇 =="none"){
+                  return ``  
+              }
+          ]]] 
+      - grid-template-columns: 37% 51% 12%
+      - grid-template-rows: 0 0 0 0 0 0 0 0 0 42.5vw 12.5vw
+    card:
+      - padding: 0
+      - cursor: none
+      - --mdc-ripple-press-opacity: 0
+      - height: |
+          [[[ 
+              if( variables.循环扇 !="none") {
+                return "calc(55vw + 8px);"
+              } 
+              else return "0";
+          ]]]
+      - display: |
+          [[[
+              if (variables.循环扇 == "none") {
+                  return "none";
+              }
+          ]]]
+  custom_fields:
+    背景:
+      card:
+        type: custom:button-card
+        styles:
+          card:
+            - margin-top: 55vw
+            - padding: 0
+            - border-width: 0
+            - border-radius: 0
+            - cursor: none
+            - --mdc-ripple-press-opacity: 0
+            - border-radius: 3vw
+            - height: 55vw
+            - background: |
+                [[[
+                    var state = states[variables.循环扇]?.state;
+                    if( variables.主题=='off' && state =='on')  return "linear-gradient(90deg, "+循环扇开启颜色+" -50%,rgb(50,50,50) 50%)";
+                    if( variables.主题=='off' && state =='off') return "rgb(50,50,50)"; 
+                    if( variables.主题=='on'  && state =='on')  return "linear-gradient(90deg, "+循环扇开启颜色+" -50%,rgb(255,255,255) 50%)";
+                    if( variables.主题=='on'  && state =='off') return "rgb(255,255,255)";
+                    return variables.主题 == "on" ? "rgb(255,255,255)" : "rgb(50,50,50)";
+                ]]] 
+    曲线图:
+      card:
+        type: custom:mini-graph-card
+        tap_action:
+          action: none
+        hold_action:
+          action: none
+        line_width: 1
+        hours_to_show: 24
+        smoothing: true
+        height: 50
+        show:
+          name: false
+          icon: false
+          state: false
+          legend: false
+          loading_indicator: false
+        cache: true
+        entities:
+          - entity: '[[[ return variables.温度 ?? "" ]]]'
+            color: '[[[ return 循环扇开启颜色  ]]]'
+    名称:
+      card:
+        type: custom:button-card
+        show_label: true
+        label: '[[[ return states[variables.循环扇]?.attributes?.friendly_name ?? "名称"]]]'
+        styles:
+          card:
+            - margin-top: 8.25vw
+            - padding: 0
+            - border-width: 0
+            - border-radius: 0
+            - width: 50vw
+            - margin-left: 2.5vw
+            - background: rgb(0,0,0,0)
+          label:
+            - justify-self: start
+            - font-size: 4vw
+            - font-weight: bold
+            - color: '[[[ return variables.主题 == "on" ? "rgb(50,50,50)" : "rgb(255,255,255)"; ]]]'
+    状态:
+      card:
+        type: custom:button-card
+        label: |
+          [[[ 
+              var state = states[variables.循环扇]?.state;
+              var mode = states[variables.循环扇]?.attributes?.preset_mode;
+              var temp = states[variables.温度]?.state ?? "-";
+              var humi = states[variables.湿度]?.state ?? "-";
+              if( state =='on')  return mode+": "+temp+"<font size='1px'><b>°C&ensp;</b></font>"+humi+"<font size='1px'><b>%</b></font>";
+              if( state =='off') return "关闭: "+temp+"<font size='1px'><b>°C&ensp;</b></font>"+humi+"<font size='1px'><b>%</b></font>";
+              return "离线";
+          ]]]
+        show_label: true
+        styles: 
+          card:
+            - margin-top: 8.25vw
+            - padding: 0
+            - border-radius: 0
+            - border-width: 0 
+            - background: rgb(0,0,0,0)
+          label:
+            - justify-self: start
+            - font-size: 3vw
+            - font-weight: bold
+            - margin-top: 0.5vw
+            - color: '[[[ return variables.主题 == "on" ? "rgb(50,50,50)" : "rgb(255,255,255)"; ]]]'
+    开关:
+      card:
+        type: custom:button-card
+        entity: '[[[ return variables.循环扇 ?? ""]]]'
+        tap_action:
+          action: toggle
+        show_name: false
+        show_icon: true
+        icon: |
+          [[[
+              var state = states[variables.循环扇]?.state;
+              return state =='on' ? "mdi:toggle-switch" : "mdi:toggle-switch-off";
+          ]]]
+        styles:
+          card:
+            - margin-top: 8.25vw
+            - cursor: none
+            - --mdc-ripple-press-opacity: 0.2
+            - padding: 0
+            - border-radius: 2vw
+            - border-width: 0
+            - width: 8vw
+            - height: 8vw
+            - background: rgb(0,0,0,0)
+          icon:
+            - width: 8vw
+            - height: 8vw
+            - color: |
+                [[[
+                    var state = states[variables.循环扇]?.state;
+                    if( state =='on')  return 循环扇开启颜色;
+                    return variables.主题 == "on" ? "rgb(50,50,50)" : "rgb(255,255,255)";
+                ]]]
+    图标:
+      card:
+        type: custom:button-card
+        show_icon: true
+        icon: |
+          [[[ 
+              var state = states[variables.循环扇]?.state;
+              return state =='on' ? "mdi:fan" : "mdi:fan-off";
+          ]]] 
+        styles:
+          card:
+            - margin-top: 40vw
+            - padding: 0
+            - border-radius: 0
+            - border-width: 0
+            - width: 20vw
+            - height: 20vw
+            - margin-left: '-2vw'
+            - background: rgb(0,0,0,0)
+          icon:
+            - color: |
+                [[[
+                    var state = states[variables.循环扇]?.state;
+                    if( state =='on')     return 循环扇开启颜色;
+                    return variables.主题 == "on" ? "rgb(50,50,50)" : "rgb(255,255,255)";
+                ]]]
+            - animation: |
+                [[[ 
+                    var state = states[variables.循环扇]?.state;
+                    return state =='on' ? "rotating 1.5s linear infinite"  : "";    
+                ]]]
+    模式区域:
+      card:
+        type: custom:button-card
+        tap_action:
+          action: none
+        hold_action:
+          action: none
+        styles:
+          grid:
+            - grid-template-areas: |
+                "mode1 mode2 mode3 mode4"
+            - grid-template-rows: 100%
+            - grid-auto-columns: minmax(0, 1fr)
+            - grid-auto-flow: column
+          card:
+            - margin-top: 25vw
+            - cursor: none
+            - width: 58vw
+            - padding: 0 
+            - border-radius: 0
+            - border-width: 0
+            - background: rgb(0,0,0,0)
+        custom_fields: 
+          mode1:
+            card:
+              type: custom:button-card
+              icon: mdi:weather-windy
+              template: 循环扇模式按钮样式
+              variables:
+                循环扇: '[[[ return variables.循环扇 ?? ""]]]'
+                主题: '[[[ return variables.主题 ?? ""]]]'
+                模式: 直吹风
+          mode2: 
+            card:
+              type: custom:button-card
+              icon: mdi:leaf
+              template: 循环扇模式按钮样式
+              variables:
+                循环扇: '[[[ return variables.循环扇 ?? ""]]]'
+                主题: '[[[ return variables.主题 ?? ""]]]'
+                模式: 自然风
+          mode3: 
+            card:
+              type: custom:button-card
+              icon: mdi:fan-auto
+              template: 循环扇模式按钮样式
+              variables:
+                循环扇: '[[[ return variables.循环扇 ?? ""]]]'
+                主题: '[[[ return variables.主题 ?? ""]]]'
+                模式: 智能风
+          mode4:
+            card:
+              type: custom:button-card
+              icon: mdi:weather-night
+              template: 循环扇模式按钮样式
+              variables:
+                循环扇: '[[[ return variables.循环扇 ?? ""]]]'
+                主题: '[[[ return variables.主题 ?? ""]]]'
+                模式: 睡眠风
+    风速区域:
+      card:
+        type: custom:button-card
+        tap_action:
+          action: none
+        hold_action:
+          action: none
+        styles:
+          grid:
+            - grid-template-areas: |
+                [[[
+                    var mode = states[variables.循环扇]?.attributes?.preset_mode;
+                    if(mode =="自然风") return `"mode1 mode2 mode3 mode4"`;
+                    if(mode =="直吹风") return `"mode8 mode9"`;
+                    if(mode =="智能风") return `"mode8 mode9"`;
+                    if(mode =="睡眠风") return `"mode8 mode9"`;
+                    return `"mode1 mode2 mode3 mode4"`;
+                ]]]
+            - grid-template-rows: 100%
+            - grid-auto-columns: minmax(auto, auto)
+            - grid-auto-flow: column
+          card:
+            - margin-top: 40vw
+            - cursor: none
+            - width: 58vw
+            - padding: 0 
+            - border-radius: 0
+            - border-width: 0
+            - background: rgb(0,0,0,0)
+        custom_fields: 
+          mode8:
+            card:
+              type: custom:button-card
+              icon: mdi:speedometer
+              template: 风速数值样式
+              variables:
+                循环扇: '[[[ return variables.循环扇 ?? ""]]]'
+                风速档位: '[[[ return variables.风速档位 ?? ""]]]'
+                主题: '[[[ return variables.主题 ?? ""]]]'
+          mode9:
+            card:
+              type: custom:button-card
+              styles:
+                grid:
+                  - grid-template-areas: |
+                      "mode9"
+                  - grid-template-columns: 100%
+                  - grid-template-rows: 6vw
+                card:
+                  - padding: 0
+                  - border-width: 0
+                  - background: rgb(0,0,0,0)
+                  - width: 46.2vw
+                  - margin-left: -2.3vw
+              custom_fields:
+                mode9:
+                  card:
+                    type: custom:mushroom-number-card
+                    entity: '[[[ return variables.风速档位 ?? ""]]]'
+                    primary_info: none
+                    secondary_info: none
+                    icon_type: none
+                    card_mod:
+                      style: |
+                        ha-card { 
+                          --rgb-state-number: 0,245,255;
+                          --control-border-radius: 1vw;
+                          --control-spacing: 3vw;
+                          --icon-size: 6vw;
+                        }
+          mode1:
+            card:
+              type: custom:button-card
+              icon: mdi:fan-speed-1
+              template: 风速档位样式
+              variables:
+                循环扇: '[[[ return variables.循环扇 ?? ""]]]'
+                风速档位: '[[[ return variables.风速档位 ?? ""]]]'
+                主题: '[[[ return variables.主题 ?? ""]]]'
+                档位: 1档
+          mode2: 
+            card:
+              type: custom:button-card
+              icon: mdi:fan-speed-2
+              template: 风速档位样式
+              variables:
+                循环扇: '[[[ return variables.循环扇 ?? ""]]]'
+                风速档位: '[[[ return variables.风速档位 ?? ""]]]'
+                主题: '[[[ return variables.主题 ?? ""]]]'
+                档位: 2档
+          mode3: 
+            card:
+              type: custom:button-card
+              icon: mdi:fan-speed-3
+              template: 风速档位样式
+              variables:
+                循环扇: '[[[ return variables.循环扇 ?? ""]]]'
+                风速档位: '[[[ return variables.风速档位 ?? ""]]]'
+                主题: '[[[ return variables.主题 ?? ""]]]'
+                档位: 3档
+          mode4:
+            card:
+              type: custom:button-card
+              icon: mdi:fan-alert
+              template: 风速档位样式
+              variables:
+                循环扇: '[[[ return variables.循环扇 ?? ""]]]'
+                风速档位: '[[[ return variables.风速档位 ?? ""]]]'
+                主题: '[[[ return variables.主题 ?? ""]]]'
+                档位: 4档
+    左右摆风区域:
+      card:
+        type: custom:button-card
+        tap_action:
+          action: none
+        hold_action:
+          action: none
+        styles:
+          grid:
+            - grid-template-areas: |
+                "mode1 mode2 mode3 mode4 mode5 mode6"
+            - grid-template-rows: 100%
+            - grid-template-columns: repeat(6, auto)
+            - justify-content: start
+          card:
+            - margin-top: 70vw
+            - cursor: none  
+            - width: 58vw
+            - padding: 0
+            - border-radius: 0
+            - background: rgb(0,0,0,0)
+            - border-width: 0
+        custom_fields:
+          mode1: 
+            card:
+              type: custom:button-card
+              name: 左右摆风
+              icon: mdi:arrow-oscillating
+              template: 循环扇左右摆风开关
+              variables: 
+                循环扇: '[[[ return variables.循环扇 ?? ""]]]'
+                主题: '[[[ return variables.主题 ?? ""]]]'
+          mode2:
+            card:
+              type: custom:button-card
+              template: 循环扇左右摆风角度
+              variables:
+                循环扇: '[[[ return variables.循环扇 ?? ""]]]'
+                左右摆风角度:  '[[[ return variables.左右摆风角度 ?? ""]]]'
+                主题: '[[[ return variables.主题 ?? ""]]]'
+                角度: 30
+          mode3:
+            card:
+              type: custom:button-card
+              template: 循环扇左右摆风角度
+              variables:
+                循环扇: '[[[ return variables.循环扇 ?? ""]]]'
+                左右摆风角度:  '[[[ return variables.左右摆风角度 ?? ""]]]'
+                主题: '[[[ return variables.主题 ?? ""]]]'
+                角度: 60
+          mode4:
+            card:  
+              type: custom:button-card
+              template: 循环扇左右摆风角度
+              variables:
+                循环扇: '[[[ return variables.循环扇 ?? ""]]]'
+                左右摆风角度:  '[[[ return variables.左右摆风角度 ?? ""]]]'
+                主题: '[[[ return variables.主题 ?? ""]]]'
+                角度: 90
+          mode5:
+            card:  
+              type: custom:button-card
+              template: 循环扇左右摆风角度
+              variables:
+                循环扇: '[[[ return variables.循环扇 ?? ""]]]'
+                左右摆风角度:  '[[[ return variables.左右摆风角度 ?? ""]]]'
+                主题: '[[[ return variables.主题 ?? ""]]]'
+                角度: 120
+          mode6:
+            card:  
+              type: custom:button-card
+              template: 循环扇左右摆风角度
+              variables:
+                循环扇: '[[[ return variables.循环扇 ?? ""]]]'
+                左右摆风角度:  '[[[ return variables.左右摆风角度 ?? ""]]]'
+                主题: '[[[ return variables.主题 ?? ""]]]'
+                角度: 150
+    上下摆风区域:
+      card:
+        type: custom:button-card
+        tap_action:
+          action: none
+        hold_action:
+          action: none
+        styles:
+          grid:
+            - grid-template-areas: |
+                "mode1 mode2 mode3 mode4 mode5"
+            - grid-template-rows: 100%
+            - grid-template-columns: repeat(6, auto)
+            - justify-content: start
+          card:
+            - margin-top: 55vw
+            - cursor: none  
+            - width: 58vw
+            - padding: 0
+            - border-radius: 0
+            - background: rgb(0,0,0,0)
+            - border-width: 0
+        custom_fields:
+          mode1: 
+            card:
+              type: custom:button-card
+              name: 上下摆风
+              icon: mdi:arrow-up-down
+              template: 循环扇上下摆风开关
+              variables: 
+                循环扇: '[[[ return variables.循环扇 ?? ""]]]'
+                上下摆风:  '[[[ return variables.上下摆风 ?? ""]]]'
+                主题: '[[[ return variables.主题 ?? ""]]]'
+          mode2:
+            card:
+              type: custom:button-card
+              template: 循环扇上下摆风角度
+              variables:
+                循环扇: '[[[ return variables.循环扇 ?? ""]]]'
+                上下摆风角度:  '[[[ return variables.上下摆风角度 ?? ""]]]'
+                主题: '[[[ return variables.主题 ?? ""]]]'
+                角度: 30
+          mode3:
+            card:
+              type: custom:button-card
+              template: 循环扇上下摆风角度
+              variables:
+                循环扇: '[[[ return variables.循环扇 ?? ""]]]'
+                上下摆风角度:  '[[[ return variables.上下摆风角度 ?? ""]]]'
+                主题: '[[[ return variables.主题 ?? ""]]]'
+                角度: 60
+          mode4:
+            card:  
+              type: custom:button-card
+              template: 循环扇上下摆风角度
+              variables:
+                循环扇: '[[[ return variables.循环扇 ?? ""]]]'
+                上下摆风角度:  '[[[ return variables.上下摆风角度 ?? ""]]]'
+                主题: '[[[ return variables.主题 ?? ""]]]'
+                角度: 90
+          mode5:
+            card:  
+              type: custom:button-card
+              name: 循环摆风
+              icon: mdi:arrow-all
+              template: 循环扇循环摆风开关
+              variables: 
+                循环扇: '[[[ return variables.循环扇 ?? ""]]]'
+                循环摆风:  '[[[ return variables.循环摆风 ?? ""]]]'
+                主题: '[[[ return variables.主题 ?? ""]]]'  
+    定时关机区域:
+      card:
+        type: custom:button-card
+        tap_action:
+          action: none
+        hold_action:
+          action: none
+        styles:
+          grid:
+            - grid-template-areas: |
+                "mode1 mode2 mode3 mode4 mode5 mode6"
+            - grid-template-rows: 100%
+            - grid-template-columns: repeat(6, auto)
+            - justify-content: start
+          card:
+            - margin-top: 85vw
+            - cursor: none  
+            - width: 58vw
+            - padding: 0
+            - border-radius: 0
+            - background: rgb(0,0,0,0)
+            - border-width: 0
+        custom_fields:
+          mode1: 
+            card:
+              type: custom:button-card
+              name: 取消定时
+              icon: mdi:timer-off-outline
+              template: 循环扇定时开关
+              variables: 
+                循环扇: '[[[ return variables.循环扇 ?? ""]]]'
+                定时关机:  '[[[ return variables.定时关机 ?? ""]]]'
+                主题: '[[[ return variables.主题 ?? ""]]]'
+          mode2:
+            card:
+              type: custom:button-card
+              template: 循环扇定时时间
+              variables:
+                循环扇: '[[[ return variables.循环扇 ?? ""]]]'
+                定时关机:  '[[[ return variables.定时关机 ?? ""]]]'
+                主题: '[[[ return variables.主题 ?? ""]]]'
+                时间: 30
+                显示时间: 30分
+          mode3:
+            card:
+              type: custom:button-card
+              template: 循环扇定时时间
+              variables:
+                循环扇: '[[[ return variables.循环扇 ?? ""]]]'
+                定时关机:  '[[[ return variables.定时关机 ?? ""]]]'
+                主题: '[[[ return variables.主题 ?? ""]]]'
+                时间: 60
+                显示时间: 1小时
+          mode4:
+            card:  
+              type: custom:button-card
+              template: 循环扇定时时间
+              variables:
+                循环扇: '[[[ return variables.循环扇 ?? ""]]]'
+                定时关机:  '[[[ return variables.定时关机 ?? ""]]]'
+                主题: '[[[ return variables.主题 ?? ""]]]'
+                时间: 180
+                显示时间: 3小时
+          mode5:
+            card:  
+              type: custom:button-card
+              template: 循环扇定时时间
+              variables:
+                循环扇: '[[[ return variables.循环扇 ?? ""]]]'
+                定时关机:  '[[[ return variables.定时关机 ?? ""]]]'
+                主题: '[[[ return variables.主题 ?? ""]]]'
+                时间: 360
+                显示时间: 6小时
+          mode6:
+            card:  
+              type: custom:button-card
+              template: 循环扇定时时间
+              variables:
+                循环扇: '[[[ return variables.循环扇 ?? ""]]]'
+                定时关机:  '[[[ return variables.定时关机 ?? ""]]]'
+                主题: '[[[ return variables.主题 ?? ""]]]'
+                时间: 540
+                显示时间: 9小时
+    副按钮区域:
+      card:
+        type: custom:button-card
+        tap_action:
+          action: none
+        hold_action:
+          action: none
+        styles:
+          grid:
+            - grid-template-areas: |
+                "info1 info2 info3 info4"
+            - grid-template-rows: 100%
+            - grid-auto-columns: minmax(0, 1fr)
+            - grid-auto-flow: column
+          card:
+            - margin-top: 97.5vw
+            - cursor: none  
+            - width: 53vw
+            - padding: 0
+            - border-radius: 0
+            - border-width: 0
+            - background: rgb(0,0,0,0)
+        custom_fields:
+          info1: 
+            card:
+              type: custom:button-card
+              template: 循环扇副按钮样式
+              variables:
+                空调: '[[[ return variables.循环扇 ?? ""]]]'
+                主题: '[[[ return variables.主题 ?? ""]]]'
+                info: '[[[ return variables.指示灯 ?? ""]]]'
+          info2:
+            card:
+              type: custom:button-card
+              template: 循环扇副按钮样式
+              variables:
+                空调: '[[[ return variables.循环扇 ?? ""]]]'
+                主题: '[[[ return variables.主题 ?? ""]]]'
+                info: '[[[ return variables.提示音 ?? ""]]]'
+          info3:
+            card:
+              type: custom:button-card
+              template: 循环扇副按钮样式
+              variables:
+                空调: '[[[ return variables.循环扇 ?? ""]]]'
+                主题: '[[[ return variables.主题 ?? ""]]]'
+                info: '[[[ return variables.按键锁 ?? ""]]]'
+          info4:
+            card:  
+              type: custom:button-card
+              template: 循环扇副按钮样式
+              variables:
+                空调: '[[[ return variables.循环扇 ?? ""]]]'
+                主题: '[[[ return variables.主题 ?? ""]]]'
+                info: '[[[ return variables.关机回正 ?? ""]]]'
+    副按钮文字:
+      card:
+        type: custom:button-card
+        tap_action:
+          action: none
+        hold_action:
+          action: none
+        styles:
+          grid:
+            - grid-template-areas: |
+                "info1 info2 info3 info4"
+            - grid-template-rows: 100%
+            - grid-auto-columns: minmax(0, 1fr)
+            - grid-auto-flow: column
+          card:
+            - margin-top: 105vw
+            - cursor: none  
+            - width: 53vw
+            - padding: 0
+            - border-radius: 0
+            - border-width: 0
+            - font-size: 1.1vh
+            - color: '[[[ return variables.主题 == "on" ? "rgb(50,50,50)" : "rgb(255,255,255)"; ]]]'
+            - background: rgb(0,0,0,0)
+        custom_fields:
+          info1: |
+            [[[
+                var heater = states[variables.指示灯]?.state;
+                if( heater =='on' || heater =='off')  return "指示灯";
+                else return "";
+            ]]]
+          info2: |
+            [[[
+                var dryer = states[variables.提示音]?.state;
+                if( dryer =='on' || dryer =='off')  return "提示音";
+                else return "";
+            ]]]
+          info3: |
+            [[[
+                var eco = states[variables.按键锁]?.state;
+                if( eco =='on' || eco =='off')  return "按键锁";
+                else return "";
+            ]]]
+          info4: |
+            [[[
+                var sleep = states[variables.关机回正]?.state;
+                if( sleep =='on' || sleep =='off')  return "关机回正";
+                else return "";
+            ]]]
+    方向盘:
+      card:
+        type: custom:button-card   
+        styles:
+          function: |
+            [[[
+                window.r = 60;                  //半径
+                window.d = r * Math.SQRT2 / 2;  //直角边
+            ]]]
+          grid:
+            - grid-template-areas: |
+                ". . . . ."
+                ". . 上 . ."
+                ". 左 确认 右 ."
+                ". . 下 . ."
+                ". . . . ."
+            - grid-template-columns: 1fr 1fr 1fr 1fr 1fr
+            - grid-template-rows: 1fr 1fr 1fr 1fr 1fr
+            - justify-items: center
+            - align-items: center
+          card:
+            - padding: 0
+            - cursor: none
+            - --mdc-ripple-press-opacity: 0.3
+            - margin-left: '[[[return r/6+"px" ]]]'
+            - margin-top: 55vw
+            - width: '[[[return 2*r+"px" ]]]'
+            - height: '[[[return 2*r+"px" ]]]' 
+            - border-width: 0
+            - border-radius: 50%
+            - background: rgb(0,0,0,0)
+            - position: relative
+        custom_fields:
+          上: 
+            card:
+              type: custom:button-card   
+              show_icon: true  
+              icon: |
+                [[[
+                    var state = states[variables.持续向上转]?.state;
+                    return state == "on" ? "mdi:chevron-double-up" : "mdi:chevron-up";
+                ]]]
+              styles:
+                icon: 
+                  - color: rgb(255,255,255)
+                  - width: '[[[return 0.3*r+"px" ]]]'
+                  - height: '[[[return 0.3*r+"px" ]]]'
+                  - position: absolute
+                  - top: 15%
+                  - left: 50%
+                  - transform: translate(-50%, -50%)
+                card:  
+                  - padding: 0
+                  - position: absolute
+                  - margin-top: '[[[return 0.4*r+"px" ]]]'
+                  - width: '[[[return 2*r+"px" ]]]'  
+                  - height: '[[[return 2*r+"px" ]]]'
+                  - clip-path: |
+                      [[[
+                          return `path('M ${r},${r}  L ${r+d},${r-d}  A ${r},${r}  90 0, 0  ${r-d},${r-d} Z')`
+                      ]]]
+                  - background: |
+                      [[[ 
+                          var state = states[variables.持续向上转]?.state;
+                          if (state == "on")  return 循环扇开启颜色;
+                          return variables.主题 =="on" ? "rgb(50,50,50)" : "rgb(120,120,120)";
+                      ]]]
+                  - transform: translate(-50%, -50%)
+              tap_action:
+                action: call-service
+                service: select.select_option
+                data:
+                  option: "UP"
+                target:
+                  entity_id: '[[[ return variables.上下手动摇头 ]]]'
+              double_tap_action:
+                action: call-service
+                service: switch.toggle
+                data: {}
+                target:
+                  entity_id: '[[[ return variables.持续向上转 ]]]'
+          下: 
+            card:
+              type: custom:button-card   
+              show_icon: true  
+              icon: |
+                [[[
+                    var state = states[variables.持续向下转]?.state;
+                    return state == "on" ? "mdi:chevron-double-down" : "mdi:chevron-down";
+                ]]]
+              styles:
+                icon:
+                  - color: rgb(255,255,255)
+                  - width: '[[[return 0.3*r+"px" ]]]'
+                  - height: '[[[return 0.3*r+"px" ]]]'
+                  - position: absolute
+                  - top: 85%
+                  - left: 50%
+                  - transform: translate(-50%, -50%)
+                card: 
+                  - position: absolute
+                  - margin-top: '[[[return "-"+0.4*r+"px" ]]]'
+                  - top: 50%
+                  - left: 50%
+                  - width: '[[[return 2*r+"px" ]]]'
+                  - height: '[[[return 2*r+"px" ]]]'
+                  - clip-path: |
+                      [[[
+                          return `path('M ${r},${r}  L ${r-d},${r+d}  A ${r},${r}  90 0, 0  ${r+d},${r+d} Z')`
+                      ]]]
+                  - background: |
+                      [[[ 
+                          var state = states[variables.持续向下转]?.state;
+                          if (state == "on")  return 循环扇开启颜色;
+                          return variables.主题 =="on" ? "rgb(50,50,50)" : "rgb(120,120,120)";
+                      ]]]
+                  - transform: translate(-50%, -50%)
+              tap_action:
+                action: call-service
+                service: select.select_option
+                data:
+                  option: "DOWN"
+                target:
+                  entity_id: '[[[ return variables.上下手动摇头 ]]]'
+              double_tap_action:
+                action: call-service
+                service: switch.toggle
+                data: {}
+                target:
+                  entity_id: '[[[ return variables.持续向下转 ]]]'
+          左: 
+            card:
+              type: custom:button-card   
+              show_icon: true  
+              icon: |
+                [[[
+                    var state = states[variables.持续向左转]?.state;
+                    return state == "on" ? "mdi:chevron-double-left" : "mdi:chevron-left";
+                ]]]
+              styles:
+                icon:
+                  - color: rgb(255,255,255)
+                  - width: '[[[return 0.3*r+"px" ]]]'
+                  - height: '[[[return 0.3*r+"px" ]]]'
+                  - position: absolute
+                  - top: 50%
+                  - left: 15%
+                  - transform: translate(-50%, -50%)
+                card: 
+                  - position: absolute
+                  - margin-left: '[[[return 0.4*r+"px" ]]]'
+                  - top: 50%
+                  - left: 50%
+                  - width: '[[[return 2*r+"px" ]]]'
+                  - height: '[[[return 2*r+"px" ]]]'
+                  - clip-path: |
+                      [[[
+                          return `path('M ${r},${r}  L ${r-d},${r-d}  A ${r},${r}  90 0, 0  ${r-d},${r+d} Z')`
+                      ]]]
+                  - background: |
+                      [[[ 
+                          var state = states[variables.持续向左转]?.state;
+                          if (state == "on")  return 循环扇开启颜色;
+                          return variables.主题 =="on" ? "rgb(50,50,50)" : "rgb(120,120,120)";
+                      ]]]
+                  - transform: translate(-50%, -50%)
+              tap_action:
+                action: call-service
+                service: select.select_option
+                data:
+                  option: "LEFT" 
+                target:
+                  entity_id: '[[[ return variables.左右手动摇头 ]]]'
+              double_tap_action:
+                action: call-service
+                service: switch.toggle
+                data: {}
+                target:
+                  entity_id: '[[[ return variables.持续向左转 ]]]'
+          右: 
+            card:
+              type: custom:button-card    
+              show_icon: true  
+              icon:  |
+                [[[
+                    var state = states[variables.持续向右转]?.state;
+                    return state == "on" ? "mdi:chevron-double-right" : "mdi:chevron-right";
+                ]]]
+              styles:
+                icon:
+                  - color: rgb(255,255,255)
+                  - width: '[[[return 0.3*r+"px" ]]]'
+                  - height: '[[[return 0.3*r+"px" ]]]'
+                  - position: absolute
+                  - top: 50%
+                  - left: 85%
+                  - transform: translate(-50%, -50%)
+                card: 
+                  - position: absolute
+                  - margin-left: '[[[return "-"+0.4*r+"px" ]]]'
+                  - top: 50%
+                  - left: 50%
+                  - width: '[[[return 2*r+"px" ]]]'
+                  - height: '[[[return 2*r+"px" ]]]'
+                  - clip-path: |
+                      [[[
+                          return `path('M ${r},${r}  L ${r+d},${r+d}  A ${r},${r}  90 0, 0  ${r+d},${r-d} Z')`
+                      ]]]
+                  - background: |
+                      [[[ 
+                          var state = states[variables.持续向右转]?.state;
+                          if (state == "on")  return 循环扇开启颜色;
+                          return variables.主题 =="on" ? "rgb(50,50,50)" : "rgb(120,120,120)";
+                      ]]]
+                  - transform: translate(-50%, -50%)
+              tap_action:
+                action: call-service
+                service: select.select_option
+                data:
+                  option: "RIGHT" 
+                target:
+                  entity_id: '[[[ return variables.左右手动摇头 ]]]'
+              double_tap_action:
+                action: call-service
+                service: switch.toggle
+                data: {}
+                target:
+                  entity_id: '[[[ return variables.持续向右转 ]]]'
+          确认: 
+            card:
+              type: custom:button-card   
+              show_label: true
+              styles:
+                label: 
+                  - font-size: 13px
+                  - color: '[[[ return variables.主题 =="on" ? "rgb(255,255,255)" : "rgb(0,0,0)" ]]]'
+                card: 
+                  - position: absolute
+                  - top: 50%
+                  - left: 50%
+                  - width: '[[[return 0.75*r+"px" ]]]'
+                  - height: '[[[return 0.75*r+"px" ]]]'
+                  - border-radius: 50%
+                  - transform: translate(-50%, -50%)
+                  - background: '[[[ return variables.主题 =="on" ? "rgb(80,80,80)" : "rgb(150,150,150)" ]]]'
+              tap_action:
+                action: call-service
+                service: switch.toggle
+                data: {}
+                target:
+                  entity_id: '[[[ return variables.一键回正 ]]]'
+
+循环扇模式按钮样式:
+  triggers_update:
+    - '[[[ return variables.循环扇 ?? ""]]]'
+  layout: icon_name
+  show_name: true
+  show_icon: true
+  name: '[[[ return variables.模式 ]]]'
+  styles:
+    card:
+      - cursor: none
+      - --mdc-ripple-press-opacity: 0.2
+      - width: 12.6vw
+      - height: 6vw 
+      - border-radius: 1.5vw
+      - background: '[[[ return variables.主题 == "on" ? "rgb(50,50,50)" : "rgb(120,120,120)"; ]]]'
+    icon:  
+      - width: 3vw
+      - height: 3vw 
+      - color: |
+          [[[
+              var mode = states[variables.循环扇]?.attributes?.preset_mode;
+              return mode ==variables.模式 ? 循环扇开启颜色 : "rgb(255,255,255)";
+          ]]] 
+    name:    
+      - font-size: 1.1vh
+      - font-weight: bold
+      - margin-left: -1vw 
+      - color: |
+          [[[
+              var mode = states[variables.循环扇]?.attributes?.preset_mode;
+              return mode ==variables.模式 ? 循环扇开启颜色 : "rgb(255,255,255)";
+          ]]] 
+  tap_action:
+    action: call-service
+    service: fan.set_preset_mode
+    data:
+      preset_mode: '[[[ return variables.模式 ]]]'
+    target: 
+      entity_id: '[[[ return  variables.循环扇 ?? ""]]]'
+风速档位样式:
+  triggers_update:
+    - '[[[ return variables.循环扇 ?? ""]]]'
+    - '[[[ return variables.风速档位 ?? ""]]]'
+  layout: icon_name
+  show_name: true
+  show_icon: true
+  name: '[[[ return variables.档位 ]]]'
+  styles:
+    card:
+      - cursor: none
+      - --mdc-ripple-press-opacity: 0.2
+      - width: 12.6vw
+      - height: 6vw 
+      - border-radius: 1.5vw
+      - margin-right: 1.9vw
+      - background: '[[[ return variables.主题 == "on" ? "rgb(50,50,50)" : "rgb(120,120,120)"; ]]]'
+    icon:  
+      - width: 3vw
+      - height: 3vw 
+      - color: |
+          [[[
+              var mode = states[variables.风速档位]?.state;
+              if ( mode >=1  && mode < 35 && variables.档位=="1档") return 循环扇开启颜色;
+              if ( mode >=35 && mode < 70 && variables.档位=="2档") return 循环扇开启颜色;
+              if ( mode >=70 && mode < 100 && variables.档位=="3档") return 循环扇开启颜色;
+              if ( mode ==100 && variables.档位=="4档") return 循环扇开启颜色;
+              return "rgb(255,255,255)";
+          ]]] 
+    name:    
+      - font-size: 1.1vh
+      - font-weight: bold
+      - margin-left: -2vw 
+      - color: |
+          [[[
+              var mode = states[variables.风速档位]?.state;
+              if ( mode >=1  && mode < 35 && variables.档位=="1档") return 循环扇开启颜色;
+              if ( mode >=35 && mode < 70 && variables.档位=="2档") return 循环扇开启颜色;
+              if ( mode >=70 && mode < 100 && variables.档位=="3档") return 循环扇开启颜色;
+              if ( mode ==100 && variables.档位=="4档") return 循环扇开启颜色;
+              return "rgb(255,255,255)";
+          ]]] 
+  tap_action:
+    action: call-service
+    service: number.set_value
+    data:
+      value: |
+        [[[ 
+           if(variables.档位 =="1档") return "1";
+           if(variables.档位 =="2档") return "35";
+           if(variables.档位 =="3档") return "70";
+           if(variables.档位 =="4档") return "100";
+        ]]]
+    target: 
+      entity_id: '[[[ return  variables.风速档位 ?? ""]]]'
+风速数值样式:
+  triggers_update:
+    - '[[[ return variables.循环扇 ?? ""]]]'
+    - '[[[ return variables.风速档位 ?? ""]]]'
+  layout: icon_name
+  show_name: true
+  show_icon: true
+  name: '[[[ return states[variables.风速档位]?.state + "%"]]]'
+  styles:
+    card:
+      - cursor: none
+      - --mdc-ripple-press-opacity: 0.2
+      - width: 12.6vw
+      - height: 6vw 
+      - border-radius: 1.5vw
+      - margin-right: 1.9vw
+      - background: '[[[ return 循环扇开启颜色 ]]]'
+    icon:  
+      - width: 3vw
+      - height: 3vw 
+      - color: rgb(255,255,255)
+    name:    
+      - font-size: 1.1vh
+      - font-weight: bold
+      - margin-left: -2vw 
+      - color: rgb(255,255,255)
+  tap_action:
+    action: none
+循环扇左右摆风开关:
+  triggers_update:
+    - '[[[ return variables.循环扇 ?? ""]]]'
+  layout: icon_name
+  show_name: true
+  show_icon: true
+  styles:
+    card:
+      - cursor: none 
+      - --mdc-ripple-press-opacity: 0.2
+      - width: 12.6vw
+      - height: 6vw
+      - border-radius: 1.5vw
+      - margin-right: 1.9vw
+      - background: '[[[ return variables.主题 == "on" ? "rgb(50,50,50)" : "rgb(120,120,120)"; ]]]'
+    icon:  
+      - width: 3vw
+      - height: 3vw 
+      - color: |
+          [[[
+              var oscillating = states[variables.循环扇]?.attributes?.oscillating;
+              return oscillating ==true ? 循环扇开启颜色 : "rgb(255,255,255)";
+          ]]] 
+    name:    
+      - font-size: 0.9vh
+      - font-weight: bold
+      - margin-left: -1vw 
+      - overflow: visible
+      - color: |
+          [[[
+              var oscillating = states[variables.循环扇]?.attributes?.oscillating;
+              return oscillating ==true ? 循环扇开启颜色 : "rgb(255,255,255)";
+          ]]] 
+  tap_action:
+    action: call-service
+    service: fan.oscillate
+    data:
+      oscillating: |
+        [[[
+            var oscillating = states[variables.循环扇]?.attributes?.oscillating;
+            return oscillating ==true ? "false" : "true";
+        ]]]
+    target:
+      entity_id: '[[[ return variables.循环扇 ?? ""]]]'
+循环扇左右摆风角度:
+  triggers_update:
+    - '[[[ return variables.循环扇 ?? ""]]]'
+    - '[[[ return variables.左右摆风角度 ?? ""]]]'
+  show_label: true
+  label: '[[[ return  variables.角度 + "°"]]]'
+  styles:
+    card:
+      - cursor: none 
+      - --mdc-ripple-press-opacity: 0.2
+      - width: 6.8vw
+      - height: 6vw
+      - border-radius: 1.5vw
+      - margin-right: 1.9vw
+      - background: '[[[ return variables.主题 == "on" ? "rgb(50,50,50)" : "rgb(120,120,120)"; ]]]'
+    label:    
+      - font-size: 1vh
+      - font-weight: bold
+      - color: |
+          [[[
+              var included = states[variables.左右摆风角度]?.state;
+              return included ==variables.角度 ? 循环扇开启颜色 : "rgb(255,255,255)";
+          ]]] 
+  tap_action:
+    action: call-service
+    service: select.select_option
+    data:
+      option: '[[[ return variables.角度 ]]]'
+    target:
+      entity_id: '[[[ return variables.左右摆风角度 ?? ""]]]'
+循环扇上下摆风开关:
+  triggers_update:
+    - '[[[ return variables.循环扇 ?? ""]]]'
+    - '[[[ return variables.上下摆风 ?? ""]]]'
+  layout: icon_name
+  show_name: true
+  show_icon: true
+  styles:
+    card:
+      - cursor: none 
+      - --mdc-ripple-press-opacity: 0.2
+      - width: 12.6vw
+      - height: 6vw
+      - border-radius: 1.5vw
+      - margin-right: 1.9vw
+      - background: '[[[ return variables.主题 == "on" ? "rgb(50,50,50)" : "rgb(120,120,120)"; ]]]'
+    icon:  
+      - width: 3vw
+      - height: 3vw 
+      - color: |
+          [[[
+              var vertical = states[variables.上下摆风]?.state;
+              return vertical =="on" ? 循环扇开启颜色 : "rgb(255,255,255)";
+          ]]] 
+    name:    
+      - font-size: 0.9vh
+      - font-weight: bold
+      - margin-left: -1vw 
+      - overflow: visible
+      - color: |
+          [[[
+              var vertical = states[variables.上下摆风]?.state;
+              return vertical =="on" ? 循环扇开启颜色 : "rgb(255,255,255)";
+          ]]] 
+  tap_action:
+    action: call-service
+    service: switch.toggle
+    data: {}
+    target:
+      entity_id: '[[[ return variables.上下摆风 ?? ""]]]'
+循环扇上下摆风角度:
+  triggers_update:
+    - '[[[ return variables.循环扇 ?? ""]]]'
+    - '[[[ return variables.上下摆风角度 ?? ""]]]'
+  show_label: true
+  label: '[[[ return  variables.角度 + "°"]]]'
+  styles:
+    card:
+      - cursor: none 
+      - --mdc-ripple-press-opacity: 0.2
+      - width: 6.8vw
+      - height: 6vw
+      - border-radius: 1.5vw
+      - margin-right: 1.9vw
+      - background: '[[[ return variables.主题 == "on" ? "rgb(50,50,50)" : "rgb(120,120,120)"; ]]]'
+    label:    
+      - font-size: 1vh
+      - font-weight: bold
+      - color: |
+          [[[
+              var included = states[variables.上下摆风角度]?.state;
+              return included ==variables.角度 ? 循环扇开启颜色 : "rgb(255,255,255)";
+          ]]] 
+  tap_action:
+    action: call-service
+    service: select.select_option
+    data:
+      option: '[[[ return variables.角度 ]]]'
+    target:
+      entity_id: '[[[ return variables.上下摆风角度 ?? ""]]]'
+循环扇循环摆风开关:
+  triggers_update:
+    - '[[[ return variables.循环扇 ?? ""]]]'
+    - '[[[ return variables.循环摆风 ?? ""]]]'
+  layout: icon_name
+  show_name: true
+  show_icon: true
+  styles: 
+    card:
+      - cursor: none 
+      - --mdc-ripple-press-opacity: 0.2
+      - width: 12.6vw
+      - height: 6vw
+      - border-radius: 1.5vw
+      - margin-left: 2.8vw
+      - margin-right: 1.9vw
+      - background: '[[[ return variables.主题 == "on" ? "rgb(50,50,50)" : "rgb(120,120,120)"; ]]]'
+    icon:  
+      - width: 3vw
+      - height: 3vw 
+      - color: |
+          [[[
+              var vertical = states[variables.循环摆风]?.state;
+              return vertical =="on" ? 循环扇开启颜色 : "rgb(255,255,255)";
+          ]]] 
+    name:    
+      - font-size: 0.9vh
+      - font-weight: bold
+      - margin-left: -1vw 
+      - overflow: visible
+      - color: |
+          [[[
+              var vertical = states[variables.循环摆风]?.state;
+              return vertical =="on" ? 循环扇开启颜色 : "rgb(255,255,255)";
+          ]]] 
+  tap_action:
+    action: call-service
+    service: switch.toggle
+    data: {}
+    target:
+      entity_id: '[[[ return variables.循环摆风 ?? ""]]]'
+循环扇副按钮样式:
+  triggers_update:
+    - '[[[ return variables.循环扇 ?? ""]]]'
+    - '[[[ return variables.关机回正 ?? ""]]]'
+    - '[[[ return variables.按键锁 ?? ""]]]'
+    - '[[[ return variables.指示灯 ?? ""]]]'
+    - '[[[ return variables.提示音 ?? ""]]]'
+  tap_action:
+    action: toggle
+  entity: '[[[ return  variables.info ?? ""]]]'
+  show_icon: true
+  show_name: false
+  icon: |
+    [[[
+        var info = states[variables.info]?.state;
+        if( info =='on')  return "mdi:toggle-switch";
+        if( info =='off') return "mdi:toggle-switch-off";
+        return "mdi:toggle-switch-off";
+    ]]]
+  styles:
+    card:  
+      - cursor: none 
+      - --mdc-ripple-press-opacity: 0.2
+      - width: 7vw
+      - height: 7vw
+      - margin-left: 3.3vw
+      - margin-top: 0.5vw
+      - border-radius: 3vw
+      - border-width: 0
+      - background: rgb(0,0,0,0)
+    icon:   
+      - width: 7vw
+      - height: 7vw
+      - color: | 
+          [[[ 
+              var info  = states[variables.info]?.state;      
+              if( info =="on")  return 循环扇开启颜色;    
+              return variables.主题 == "on" ? "rgb(50,50,50)" : "rgb(255,255,255)";
+          ]]]   
+循环扇定时开关:
+  triggers_update:
+    - '[[[ return variables.循环扇 ?? ""]]]'
+    - '[[[ return variables.定时关机 ?? ""]]]'
+  layout: icon_name
+  show_name: true
+  show_icon: true
+  styles:
+    card:
+      - cursor: none 
+      - --mdc-ripple-press-opacity: 0.2
+      - width: 12.6vw
+      - height: 6vw
+      - border-radius: 1.5vw
+      - margin-right: 1.9vw
+      - background: '[[[ return variables.主题 == "on" ? "rgb(50,50,50)" : "rgb(120,120,120)"; ]]]'
+    icon:  
+      - width: 3vw
+      - height: 3vw 
+      - color: |
+          [[[
+              var time = states[variables.定时关机]?.state;
+              return time != "0" ? 循环扇开启颜色 : "rgb(255,255,255)";
+          ]]] 
+    name:    
+      - font-size: 0.9vh
+      - font-weight: bold
+      - margin-left: -1vw 
+      - overflow: visible
+      - color: |
+          [[[
+              var time = states[variables.定时关机]?.state;
+              return time != "0" ? 循环扇开启颜色 : "rgb(255,255,255)";
+          ]]] 
+  tap_action:
+    action: call-service
+    service: number.set_value
+    data:
+      value: "0"
+    target:
+      entity_id: '[[[ return variables.定时关机 ?? ""]]]'
+循环扇定时时间:
+  triggers_update:
+    - '[[[ return variables.循环扇 ?? ""]]]'
+    - '[[[ return variables.定时关机 ?? ""]]]'
+  show_label: true
+  label: '[[[ return  variables.显示时间 ]]]'
+  styles:
+    card:
+      - cursor: none 
+      - --mdc-ripple-press-opacity: 0.2
+      - width: 6.8vw
+      - height: 6vw
+      - border-radius: 1.5vw
+      - margin-right: 1.9vw
+      - background: '[[[ return variables.主题 == "on" ? "rgb(50,50,50)" : "rgb(120,120,120)"; ]]]'
+    label:    
+      - font-size: 1vh
+      - font-weight: bold
+      - color: |
+          [[[
+              var time = states[variables.定时关机]?.state;
+              return time ==variables.时间 ? 循环扇开启颜色 : "rgb(255,255,255)";
+          ]]] 
+  tap_action:
+    action: call-service
+    service: number.set_value
+    data:
+      value: '[[[ return variables.时间 ]]]'
+    target:
+      entity_id: '[[[ return variables.定时关机 ?? ""]]]'

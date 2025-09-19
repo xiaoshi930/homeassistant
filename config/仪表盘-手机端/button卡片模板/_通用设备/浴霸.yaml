@@ -1,0 +1,407 @@
+浴霸卡片:
+  triggers_update:
+    - '[[[ return variables.浴霸总开关 ?? "" ]]]'
+    - '[[[ return variables.吹风 ?? "" ]]]'
+    - '[[[ return variables.换气 ?? "" ]]]'
+    - '[[[ return variables.取暖 ?? "" ]]]'
+    - '[[[ return variables.温度 ?? "" ]]]'
+  styles:
+    grid:
+      - grid-template-areas: >
+          [[[
+              window.浴霸取暖颜色 = "rgb(254,111,33)";  
+              window.浴霸吹风颜色 = "rgb(33,150,243)";
+              window.浴霸换气颜色 = "rgb(0,188,213)";
+              if(variables.浴霸总开关 !="none"){
+                  return `"背景 背景 背景 背景"
+                          "名称 名称 状态 开关"
+                          "图标 空白区域 主按钮区域 主按钮区域"
+                          "空白行 空白行 空白行 空白行"
+                          "曲线图 曲线图 曲线图 曲线图"`
+              } 
+               if(variables.浴霸总开关 =="none"){
+                  return `` 
+              }  
+          ]]]  
+      - grid-template-columns: 15% 26% 47% 12%
+      - grid-template-rows: 0 0 0 12.5vw 12.5vw
+    card:
+      - padding: 0
+      - cursor: none
+      - --mdc-ripple-press-opacity: 0
+      - height: |
+          [[[ 
+              if( variables.浴霸总开关 !="none") {
+                return "calc(25vw + 8px);"
+              } 
+              else return "0";
+          ]]]
+      - display: |
+          [[[
+              if (variables.浴霸总开关 == "none") {
+                  return "none";
+              }
+          ]]]
+  custom_fields:
+    背景:
+      card:
+        type: custom:button-card
+        styles:
+          card:
+            - margin-top: 25vw
+            - padding: 0
+            - border-width: 0
+            - cursor: none
+            - --mdc-ripple-press-opacity: 0
+            - border-radius: 3vw
+            - height: 25vw
+            - background: | 
+                [[[
+                    var blow = states[variables.吹风]?.state;
+                    var vent = states[variables.换气]?.state;
+                    var heat = states[variables.取暖]?.state;
+                    if(variables.主题=='on'){
+                        if ( heat == "on"  && vent == "off" && blow == "off") return "linear-gradient(135deg, "+浴霸取暖颜色+" -50%, rgb(255,255,255)  50%)";
+                        if ( heat == "on"  && vent == "off" && blow == "on" ) return "linear-gradient(135deg, "+浴霸取暖颜色+" -50%, rgb(255,255,255)  50%)";
+                        if ( heat == "on"  && vent == "on"  && blow == "on" ) return "linear-gradient(135deg, "+浴霸取暖颜色+" -50%, rgb(255,255,255)  50%)";
+                        if ( heat == "on"  && vent == "on"  && blow == "off") return "linear-gradient(135deg, "+浴霸取暖颜色+" -50%, rgb(255,255,255)  50%)";
+                        if ( heat == "off" && vent == "off" && blow == "on" ) return "linear-gradient(135deg, "+浴霸吹风颜色+" -50%, rgb(255,255,255)  50%)";
+                        if ( heat == "off" && vent == "on"  && blow == "off") return "linear-gradient(135deg, "+浴霸换气颜色+" -50%, rgb(255,255,255)  50%)";
+                        if ( heat == "off" && vent == "on"  && blow == "on" ) return "linear-gradient(135deg, "+浴霸吹风颜色+" -50%, rgb(255,255,255)  50%)";
+                        if ( heat == "off" && vent == "off" && blow == "off") return "rgb(255,255,255)"; 
+                    }
+                    if(variables.主题=='off'){                        
+                        if ( heat == "on"  && vent == "off" && blow == "off") return "linear-gradient(135deg, "+浴霸取暖颜色+" -50%, rgb(50,50,50)  50%)";
+                        if ( heat == "on"  && vent == "off" && blow == "on" ) return "linear-gradient(135deg, "+浴霸取暖颜色+" -50%, rgb(50,50,50)  50%)";
+                        if ( heat == "on"  && vent == "on"  && blow == "on" ) return "linear-gradient(135deg, "+浴霸取暖颜色+" -50%, rgb(50,50,50)  50%)";
+                        if ( heat == "on"  && vent == "on"  && blow == "off") return "linear-gradient(135deg, "+浴霸取暖颜色+" -50%, rgb(50,50,50)  50%)";
+                        if ( heat == "off" && vent == "off" && blow == "on" ) return "linear-gradient(135deg, "+浴霸吹风颜色+" -50%, rgb(50,50,50)  50%)";
+                        if ( heat == "off" && vent == "on"  && blow == "off") return "linear-gradient(135deg, "+浴霸换气颜色+" -50%, rgb(50,50,50)  50%)";
+                        if ( heat == "off" && vent == "on"  && blow == "on" ) return "linear-gradient(135deg, "+浴霸吹风颜色+" -50%, rgb(50,50,50)  50%)";
+                        if ( heat == "off" && vent == "off" && blow == "off") return "rgb(50,50,50)"; 
+                    }
+                    return variables.主题 == 'on' ? "rgb(255,255,255)" : "rgb(50,50,50)";
+                ]]]
+    曲线图:
+      card:
+        type: custom:mini-graph-card
+        tap_action:
+          action: none
+        hold_action:
+          action: none
+        line_width: 1
+        hours_to_show: 24
+        smoothing: true
+        height: 50
+        show:
+          name: false 
+          icon: false
+          state: false
+          legend: false
+          loading_indicator: false
+        cache: true
+        entities:
+          - entity: '[[[ return variables.温度 ?? "" ]]]'
+            color: '[[[ return 浴霸取暖颜色 ]]]'    
+    名称:
+      card:
+        type: custom:button-card
+        show_label: true
+        label: '[[[ return states[variables.浴霸总开关]?.attributes?.friendly_name ?? "名称"]]]'
+        styles:
+          card:
+            - margin-top: 8.25vw
+            - padding: 0
+            - border-radius: 0
+            - width: 50vw
+            - margin-left: 2.5vw
+            - border-width: 0
+            - background: rgb(0,0,0,0)
+          label:
+            - justify-self: start
+            - font-size: 4vw
+            - font-weight: bold
+            - color: '[[[ return variables.主题 == "on" ? "rgb(50,50,50)" : "rgb(255,255,255)"; ]]]'
+    状态:
+      card:
+        type: custom:button-card
+        label: |
+          [[[ 
+              var label1="",label2="",label3="";
+              var heat = states[variables.取暖]?.state;
+              var vent = states[variables.换气]?.state;
+              var blow = states[variables.吹风]?.state;
+              var temp = states[variables.temp]?.state ?? "-";
+              if (blow=='on')  label1=" 吹风 ";   
+              if (vent=='on')  label2=" 换气 "; 
+              if (heat=='on')  label3=" 取暖 "; 
+              if( blow=='on' || vent=='on' || heat=='on' )   
+                return "开启: "+ label3 + label1 + label2 +" "+temp+"<font size='1px'><b> °C</b></font>";
+              if( blow=='off' && vent=='off' && heat=='off' )   
+                return "关闭: "+temp+"<font size='1px'><b> °C</b></font>";
+              return "离线";
+          ]]]
+        show_label: true
+        styles: 
+          card:
+            - margin-top: 8.25vw
+            - padding: 0
+            - border-radius: 0
+            - border-width: 0
+            - background: rgb(0,0,0,0)
+          label:
+            - justify-self: start
+            - font-size: 3vw
+            - font-weight: bold
+            - margin-top: 0.5vw
+            - margin-left: 0vw
+            - color: '[[[ return variables.主题 == "on" ? "rgb(50,50,50)" : "rgb(255,255,255)"; ]]]'
+    开关:
+      card:
+        type: custom:button-card
+        entity: '[[[ return  variables.浴霸总开关 ?? ""]]]'
+        show_name: false
+        show_icon: true
+        icon: |
+          [[[ 
+              var blow = states[variables.吹风]?.state;
+              var vent = states[variables.换气]?.state;
+              var heat = states[variables.取暖]?.state; 
+              if( blow == "on" || vent == "on" || heat == "on") return "mdi:toggle-switch";   
+              if( blow == "off" && vent == "off" && heat == "off") return "mdi:toggle-switch-off"; 
+              return "mdi:toggle-switch-off";  
+          ]]]
+        tap_action:
+          action: call-service
+          service: switch.turn_off
+          data: {}
+          target:
+            entity_id: 
+              - '[[[ return  variables.取暖 ?? ""]]]'
+              - '[[[ return  variables.换气 ?? ""]]]'
+              - '[[[ return  variables.换气 ?? ""]]]'
+        styles:
+          card:
+            - margin-top: 8.25vw
+            - cursor: none
+            - --mdc-ripple-press-opacity: 0.2
+            - padding: 0
+            - border-radius: 2vw
+            - width: 8vw
+            - height: 8vw
+            - border-width: 0
+            - background: rgb(0,0,0,0)
+          icon:
+            - width: 8vw
+            - height: 8vw
+            - color: |
+                [[[
+                    var heat = states[variables.取暖]?.state;
+                    var vent = states[variables.换气]?.state;
+                    var blow = states[variables.吹风]?.state;
+                    if( variables.主题=="on" ){
+                        if ( heat == "on"  && vent == "off" && blow == "off") return 浴霸取暖颜色;  //取暖
+                        if ( heat == "on"  && vent == "off" && blow == "on" ) return 浴霸取暖颜色;  //取暖+吹风
+                        if ( heat == "on"  && vent == "on"  && blow == "off") return 浴霸取暖颜色;  //取暖+换气
+                        if ( heat == "on"  && vent == "on"  && blow == "on" ) return 浴霸取暖颜色;  //取暖+换气+吹风
+                        if ( heat == "off" && vent == "on"  && blow == "on" ) return 浴霸吹风颜色;  //换气+吹风
+                        if ( heat == "off" && vent == "on"  && blow == "off") return 浴霸换气颜色;  //换气
+                        if ( heat == "off" && vent == "off" && blow == "on" ) return 浴霸吹风颜色;  //吹风
+                        if ( heat == "off" && vent == "off" && blow == "off") return "rgb(50,50,50)";  //关
+                    } 
+                    if( variables.主题=="off" ){
+                        if ( heat == "on"  && vent == "off" && blow == "off") return 浴霸取暖颜色;  //取暖
+                        if ( heat == "on"  && vent == "off" && blow == "on" ) return 浴霸取暖颜色;  //取暖+吹风
+                        if ( heat == "on"  && vent == "on"  && blow == "off") return 浴霸取暖颜色;  //取暖+换气
+                        if ( heat == "on"  && vent == "on"  && blow == "on" ) return 浴霸取暖颜色;  //取暖+换气+吹风
+                        if ( heat == "off" && vent == "on"  && blow == "on" ) return 浴霸吹风颜色;  //换气+吹风
+                        if ( heat == "off" && vent == "on"  && blow == "off") return 浴霸换气颜色;  //换气
+                        if ( heat == "off" && vent == "off" && blow == "on" ) return 浴霸吹风颜色;  //吹风
+                        if ( heat == "off" && vent == "off" && blow == "off") return "rgb(255,255,255)";  //关
+                    }   
+                    return variables.主题 == "on" ? "rgb(50,50,50)" : "rgb(255,255,255)";            
+                ]]]
+    图标:
+      card:  
+        type: custom:button-card
+        show_icon: true
+        icon: |
+          [[[ 
+              var blow = states[variables.吹风]?.state;
+              var vent = states[variables.换气]?.state;
+              var heat = states[variables.取暖]?.state;
+              if( blow == "on" || vent == "on" || heat == "on") return "mdi:fan";   
+              if( blow == "off" && vent == "off" && heat == "off") return "mdi:fan-off";  
+              return "mdi:fan-off";
+          ]]] 
+        styles:
+          card:
+            - margin-top: 30vw
+            - padding: 0
+            - border-radius: 0
+            - width: 20vw 
+            - height: 20vw
+            - margin-left: '-2vw'
+            - border-width: 0
+            - background: rgb(0,0,0,0)
+          icon: 
+            - color: |
+                [[[
+                    var heat = states[variables.取暖]?.state;
+                    var vent = states[variables.换气]?.state;
+                    var blow = states[variables.吹风]?.state;
+                    if( variables.主题=="on" ){
+                        if ( heat == "on"  && vent == "off" && blow == "off") return 浴霸取暖颜色;  //取暖
+                        if ( heat == "on"  && vent == "off" && blow == "on" ) return 浴霸取暖颜色;  //取暖+吹风
+                        if ( heat == "on"  && vent == "on"  && blow == "off") return 浴霸取暖颜色;  //取暖+换气
+                        if ( heat == "on"  && vent == "on"  && blow == "on" ) return 浴霸取暖颜色;  //取暖+换气+吹风
+                        if ( heat == "off" && vent == "on"  && blow == "on" ) return 浴霸吹风颜色;  //换气+吹风
+                        if ( heat == "off" && vent == "on"  && blow == "off") return 浴霸换气颜色;  //换气
+                        if ( heat == "off" && vent == "off" && blow == "on" ) return 浴霸吹风颜色;  //吹风
+                        if ( heat == "off" && vent == "off" && blow == "off") return "rgb(50,50,50)";  //关
+                    } 
+                    if( variables.主题=="off" ){
+                        if ( heat == "on"  && vent == "off" && blow == "off") return 浴霸取暖颜色;  //取暖
+                        if ( heat == "on"  && vent == "off" && blow == "on" ) return 浴霸取暖颜色;  //取暖+吹风
+                        if ( heat == "on"  && vent == "on"  && blow == "off") return 浴霸取暖颜色;  //取暖+换气
+                        if ( heat == "on"  && vent == "on"  && blow == "on" ) return 浴霸取暖颜色;  //取暖+换气+吹风
+                        if ( heat == "off" && vent == "on"  && blow == "on" ) return 浴霸吹风颜色;  //换气+吹风
+                        if ( heat == "off" && vent == "on"  && blow == "off") return 浴霸换气颜色;  //换气
+                        if ( heat == "off" && vent == "off" && blow == "on" ) return 浴霸吹风颜色;  //吹风
+                        if ( heat == "off" && vent == "off" && blow == "off") return "rgb(255,255,255)";  //关
+                    }             
+                    return variables.主题 == "on" ? "rgb(50,50,50)" : "rgb(255,255,255)";   
+                ]]]
+            - animation: |
+                [[[ 
+                    var blow = states[variables.吹风]?.state;
+                    var vent = states[variables.换气]?.state;
+                    var heat = states[variables.取暖]?.state;
+                    if( blow == "on" || vent == "on" || heat == "on") return "rotating 1.5s linear infinite";   
+                    if( blow == "off" && vent == "off" && heat == "off") return "";  
+                    return "";          
+                ]]]
+    主按钮区域:
+      card:
+        type: custom:button-card
+        tap_action:
+          action: none
+        hold_action:
+          action: none
+        styles:
+          grid:
+            - grid-template-areas: |
+                "yuba1 yuba2 yuba3"
+            - grid-template-columns: 33% 33% 33%
+            - grid-template-rows: 100%
+          card:
+            - margin-top: 30vw
+            - cursor: none
+            - width: 55vw
+            - padding: 0
+            - border-radius: 0
+            - border-width: 0
+            - background: rgb(0,0,0,0)
+        custom_fields:
+          yuba1:
+            card:
+              type: custom:button-card
+              layout: icon_name
+              entity: '[[[ return variables.取暖 ?? "" ]]]'
+              show_name: true
+              show_icon: true
+              icon: mdi:weather-sunny
+              name: 取暖
+              tap_action:
+                action: toggle
+              styles: 
+                card:
+                  - cursor: none
+                  - --mdc-ripple-press-opacity: 0.2
+                  - width: 14.6vw
+                  - height: 6vw
+                  - border-radius: 1.5vw 
+                  - background: '[[[ return variables.主题 == "on" ? "rgb(50,50,50)" : "rgb(120,120,120)"; ]]]'
+                name:
+                  - color: rgb(255,255,255)
+                  - font-size: 1.1vh
+                  - margin-left: -2vw
+                  - font-weight: bold
+                icon:
+                  - width: 4vw
+                  - height: 4vw
+                  - margin-left: 1vw
+                  - color: |
+                      [[[
+                          var heat = states[variables.取暖]?.state;
+                          if ( heat =="on") return 浴霸取暖颜色;
+                          return "rgb(255,255,255)"; 
+                      ]]] 
+          yuba2:
+            card:
+              type: custom:button-card
+              layout: icon_name
+              entity: '[[[ return variables.吹风 ?? "" ]]]'
+              show_name: true
+              show_icon: true
+              icon: mdi:hvac
+              name: 吹风
+              tap_action:
+                action: toggle  
+              styles: 
+                card:
+                  - cursor: none
+                  - --mdc-ripple-press-opacity: 0.2
+                  - width: 14.6vw
+                  - height: 6vw
+                  - border-radius: 1.5vw 
+                  - background: '[[[ return variables.主题 == "on" ? "rgb(50,50,50)" : "rgb(120,120,120)"; ]]]'
+                name:
+                  - color: rgb(255,255,255)
+                  - font-size: 1.1vh
+                  - margin-left: -2vw
+                  - font-weight: bold
+                icon:
+                  - width: 4vw
+                  - height: 4vw
+                  - margin-left: 1vw
+                  - color: |
+                      [[[
+                          var blow = states[variables.吹风]?.state;
+                          if ( blow =="on") return 浴霸吹风颜色;
+                          return "rgb(255,255,255)";               
+                      ]]] 
+          yuba3:
+            card:
+              type: custom:button-card
+              layout: icon_name
+              entity: '[[[ return variables.换气 ?? "" ]]]'
+              show_name: true
+              show_icon: true
+              icon: mdi:blur
+              name: 换气
+              tap_action:
+                action: toggle
+              styles: 
+                card:
+                  - cursor: none
+                  - --mdc-ripple-press-opacity: 0.2
+                  - width: 14.6vw
+                  - height: 6vw
+                  - border-radius: 1.5vw 
+                  - background: '[[[ return variables.主题 == "on" ? "rgb(50,50,50)" : "rgb(120,120,120)"; ]]]'
+                name:
+                  - color: rgb(255,255,255)
+                  - font-size: 1.1vh
+                  - margin-left: -2vw
+                  - font-weight: bold
+                icon:
+                  - width: 4vw
+                  - height: 4vw
+                  - margin-left: 1vw
+                  - color: |
+                      [[[
+                          var vent = states[variables.换气]?.state;
+                          if ( vent =="on") return 浴霸换气颜色;
+                          return "rgb(255,255,255)"; 
+                      ]]] 

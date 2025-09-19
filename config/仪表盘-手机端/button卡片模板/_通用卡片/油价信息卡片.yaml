@@ -1,0 +1,260 @@
+油价信息卡片:         
+  triggers_update:
+    - '[[[ return variables.油价 ?? ""]]]'
+  styles:
+    grid:   
+      - grid-template-areas: >
+          "名称 名称 名称 名称"
+          "省份 省份 省份 省份"
+          "信息1 信息1 信息1 信息1"
+          "信息2 信息2 信息2 信息2"
+          "信息3 信息3 信息3 信息3"
+          "92号 95号 98号 柴油"
+      - grid-template-columns: 25% 25% 25% 25%
+      - grid-template-rows: 0 0 0 0 0 0 0 0 0 
+    card: 
+      - padding: 0 
+      - cursor: none
+      - --mdc-ripple-press-opacity: 0
+      - border-width: 0
+      - border-radius: 3vw
+      - background: '[[[ return variables.主题 == "on" ? "rgb(255,255,255)" : "rgb(50,50,50)"; ]]]' 
+      - height: 45vw
+  custom_fields:
+    名称:
+      card: 
+        type: custom:button-card 
+        label: 油价信息
+        show_label: true
+        styles:
+          card: 
+            - margin-top: 10vw
+            - padding: 0
+            - border-width: 0
+            - cursor: none
+            - --mdc-ripple-press-opacity: 0
+            - border-radius: 3vw
+            - height: 10vw
+            - background: '[[[ return variables.主题 == "on" ? "rgb(255,255,255)" : "rgb(50,50,50)"; ]]]' 
+          label:
+            - font-size: 2vh
+            - font-weight: bold
+            - color: '[[[ return variables.主题 == "on" ? "rgb(0,0,0)" : "rgb(255,255,255)"; ]]]' 
+    省份:
+      card: 
+        type: custom:button-card 
+        label: |
+          [[[
+              return states[variables.油价]?.attributes.省份;
+          ]]]
+        show_label: true
+        styles:
+          card: 
+            - margin-top: 30vw
+            - padding: 0
+            - border-width: 0
+            - cursor: none
+            - --mdc-ripple-press-opacity: 0
+            - border-radius: 3vw
+            - height: 10vw
+            - background: rgb(0,0,0,0)
+          label:
+            - width: 100vw
+            - font-size: 1.5vh
+            - text-align: left !important
+            - justify-content: flex-start
+            - padding: 0 0 0 5vw  
+            - color: '[[[ return variables.主题 == "on" ? "rgb(0,0,0)" : "rgb(255,255,255)"; ]]]' 
+    信息1: 
+      card: 
+        type: custom:button-card
+        show_label: true
+        label : |
+          [[[
+            return  "下次调整时间：" + states[variables.油价]?.attributes.下次调整时间
+          ]]]
+        styles:
+          card: 
+            - margin-top: 40vw
+            - padding: 0
+            - border-width: 0
+            - cursor: none
+            - --mdc-ripple-press-opacity: 0
+            - border-radius: 3vw
+            - height: 10vw
+            - background: rgb(0,0,0,0)
+          label:
+            - width: 100vw
+            - font-size: 1.5vh
+            - text-align: left !important
+            - justify-content: flex-start
+            - padding: 0 0 0 5vw  
+            - color: '[[[ return variables.主题 == "on" ? "rgb(0,0,0)" : "rgb(255,255,255)"; ]]]' 
+    信息2: 
+      card: 
+        type: custom:button-card
+        show_label: true
+        label :  |
+          [[[
+            return  "下次调整价格：" + states[variables.油价]?.attributes.下次调整价格
+          ]]]
+        styles:
+          card: 
+            - margin-top: 50vw
+            - padding: 0
+            - border-width: 0
+            - cursor: none
+            - --mdc-ripple-press-opacity: 0
+            - border-radius: 3vw
+            - height: 10vw
+            - background: rgb(0,0,0,0)
+          label:
+            - width: 100vw
+            - font-size: 1.5vh
+            - text-align: left !important
+            - justify-content: flex-start
+            - padding: 0 0 0 5vw  
+            - color: '[[[ return variables.主题 == "on" ? "rgb(0,0,0)" : "rgb(255,255,255)"; ]]]' 
+    信息3: 
+      card: 
+        type: custom:button-card
+        show_label: true
+        label :  |
+          [[[
+            return  "油价趋势：" + states[variables.油价]?.attributes.油价趋势
+          ]]]
+        styles:
+          card: 
+            - margin-top: 60vw
+            - padding: 0
+            - border-width: 0
+            - cursor: none
+            - --mdc-ripple-press-opacity: 0
+            - border-radius: 3vw
+            - height: 10vw
+            - background: rgb(0,0,0,0)
+          label:
+            - width: 100vw
+            - font-size: 1.5vh
+            - text-align: left !important
+            - justify-content: flex-start
+            - padding: 0 0 0 5vw  
+            - color: '[[[ return variables.主题 == "on" ? "rgb(0,0,0)" : "rgb(255,255,255)"; ]]]' 
+            - white-space: normal !important  # 关键：允许换行
+    92号: 
+      card: 
+        type: custom:button-card 
+        layout: icon_name_state
+        icon: mdi:gas-station
+        name: "92# "
+        show_state: true
+        state_display : '[[[return states[variables.油价]?.attributes["92#汽油"]]]]'
+        styles:
+          card: 
+            - margin-left: 2vw
+            - margin-top: 75vw
+            - padding: 0
+            - border-width: 0
+            - cursor: none
+            - --mdc-ripple-press-opacity: 0
+            - border-radius: 3vw
+            - height: 10vw
+            - background: rgb(0,0,0,0)
+          icon:
+            - color: '[[[ return variables.主题 == "on" ? "rgb(0,0,0)" : "rgb(255,255,255)"; ]]]' 
+          name:
+            - margin-left: -10vw
+            - width: 25vw
+            - font-size: 1.5vh
+            - text-align: left !important
+            - justify-content: flex-start
+            - padding: 0 0 0 5vw  
+            - color: '[[[ return variables.主题 == "on" ? "rgb(0,0,0)" : "rgb(255,255,255)"; ]]]' 
+    95号: 
+      card: 
+        type: custom:button-card 
+        layout: icon_name_state
+        icon: mdi:gas-station
+        name: "95# "
+        show_state: true
+        state_display : '[[[return states[variables.油价]?.attributes["95#汽油"]]]]'
+        styles:
+          card: 
+            - margin-left: 1vw
+            - margin-top: 75vw
+            - padding: 0
+            - border-width: 0
+            - cursor: none
+            - --mdc-ripple-press-opacity: 0
+            - border-radius: 3vw
+            - height: 10vw
+            - background: rgb(0,0,0,0)
+          icon:
+            - color: '[[[ return variables.主题 == "on" ? "rgb(0,0,0)" : "rgb(255,255,255)"; ]]]' 
+          name:
+            - margin-left: -10vw
+            - width: 25vw
+            - font-size: 1.5vh
+            - text-align: left !important
+            - justify-content: flex-start
+            - padding: 0 0 0 5vw  
+            - color: '[[[ return variables.主题 == "on" ? "rgb(0,0,0)" : "rgb(255,255,255)"; ]]]' 
+    98号: 
+      card: 
+        type: custom:button-card 
+        layout: icon_name_state
+        icon: mdi:gas-station
+        name: "98# "
+        show_state: true
+        state_display : '[[[return states[variables.油价]?.attributes["98#汽油"] ]]]'
+        styles:
+          card: 
+            - margin-left: -1vw
+            - margin-top: 75vw
+            - padding: 0
+            - border-width: 0
+            - cursor: none
+            - --mdc-ripple-press-opacity: 0
+            - border-radius: 3vw
+            - height: 10vw
+            - background: rgb(0,0,0,0)
+          icon:
+            - color: '[[[ return variables.主题 == "on" ? "rgb(0,0,0)" : "rgb(255,255,255)"; ]]]' 
+          name:
+            - margin-left: -10vw
+            - width: 25vw
+            - font-size: 1.5vh
+            - text-align: left !important
+            - justify-content: flex-start
+            - padding: 0 0 0 5vw  
+            - color: '[[[ return variables.主题 == "on" ? "rgb(0,0,0)" : "rgb(255,255,255)"; ]]]' 
+    柴油: 
+      card: 
+        type: custom:button-card 
+        layout: icon_name_state
+        icon: mdi:gas-station
+        name: "柴油 "
+        show_state: true
+        state_display : '[[[return states[variables.油价]?.attributes.柴油]]]'
+        styles:
+          card: 
+            - margin-left: -2vw
+            - margin-top: 75vw
+            - padding: 0
+            - border-width: 0
+            - cursor: none
+            - --mdc-ripple-press-opacity: 0
+            - border-radius: 3vw
+            - height: 10vw
+            - background: rgb(0,0,0,0)
+          icon:
+            - color: '[[[ return variables.主题 == "on" ? "rgb(0,0,0)" : "rgb(255,255,255)"; ]]]' 
+          name:
+            - margin-left: -10vw
+            - width: 25vw
+            - font-size: 1.5vh
+            - text-align: left !important
+            - justify-content: flex-start
+            - padding: 0 0 0 5vw  
+            - color: '[[[ return variables.主题 == "on" ? "rgb(0,0,0)" : "rgb(255,255,255)"; ]]]' 
+ 

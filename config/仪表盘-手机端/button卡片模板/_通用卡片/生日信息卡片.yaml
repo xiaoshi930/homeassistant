@@ -1,0 +1,248 @@
+生日信息卡片:         
+  triggers_update:
+    - '[[[ return variables.万年历 ?? ""]]]'
+  styles:
+    grid:   
+      - grid-template-areas: >
+          "名称"
+          "项目1"
+          "项目2"
+          "项目3"
+          "项目4"
+          "项目5"
+          "项目6"
+          "项目7"
+          "项目8"
+      - grid-template-columns: 100%
+      - grid-template-rows: 0 0 0 0 0 0 0 0 0 
+    card: 
+      - padding: 0
+      - cursor: none
+      - --mdc-ripple-press-opacity: 0
+      - border-width: 0
+      - border-radius: 3vw
+      - background: '[[[ return variables.主题 == "on" ? "rgb(255,255,255)" : "rgb(50,50,50)"; ]]]' 
+      - height: |
+          [[[
+              var num = states[variables.万年历]?.attributes?.生日?.length ?? "0";
+              return (num * 10 + 15) + 'vw';
+          ]]]
+  custom_fields:
+    名称:
+      card: 
+        type: custom:button-card 
+        label: 生日信息
+        show_label: true
+        styles:
+          card: 
+            - margin-top: 10vw
+            - padding: 0
+            - border-width: 0
+            - cursor: none
+            - --mdc-ripple-press-opacity: 0
+            - border-radius: 3vw
+            - height: 10vw
+            - background: rgb(0,0,0,0)
+          label:
+            - font-size: 2vh
+            - font-weight: bold
+            - color: '[[[ return variables.主题 == "on" ? "rgb(0,0,0)" : "rgb(255,255,255)"; ]]]' 
+    项目1:
+      card: 
+        type: custom:button-card 
+        template: 生日信息样式模板
+        variables:
+          万年历: '[[[ return variables.万年历 ]]]' 
+          主题: '[[[ return variables.主题 ]]]'
+          id: 0
+          top: 30vw
+    项目2:
+      card: 
+        type: custom:button-card 
+        template: 生日信息样式模板
+        variables:
+          万年历: '[[[ return variables.万年历 ]]]' 
+          主题: '[[[ return variables.主题 ]]]'
+          id: 1
+          top: 50vw
+    项目3:
+      card: 
+        type: custom:button-card 
+        template: 生日信息样式模板
+        variables:
+          万年历: '[[[ return variables.万年历 ]]]' 
+          主题: '[[[ return variables.主题 ]]]'
+          id: 2
+          top: 70vw
+    项目4:
+      card: 
+        type: custom:button-card 
+        template: 生日信息样式模板
+        variables:
+          万年历: '[[[ return variables.万年历 ]]]' 
+          主题: '[[[ return variables.主题 ]]]'
+          id: 3
+          top: 90vw
+    项目5:
+      card: 
+        type: custom:button-card 
+        template: 生日信息样式模板
+        variables:
+          万年历: '[[[ return variables.万年历 ]]]' 
+          主题: '[[[ return variables.主题 ]]]'
+          id: 4
+          top: 110vw
+    项目6:
+      card: 
+        type: custom:button-card 
+        template: 生日信息样式模板
+        variables:
+          万年历: '[[[ return variables.万年历 ]]]' 
+          主题: '[[[ return variables.主题 ]]]'
+          id: 5
+          top: 130vw
+    项目7:
+      card: 
+        type: custom:button-card 
+        template: 生日信息样式模板
+        variables:
+          万年历: '[[[ return variables.万年历 ]]]' 
+          主题: '[[[ return variables.主题 ]]]'
+          id: 6
+          top: 150vw
+    项目8:
+      card: 
+        type: custom:button-card 
+        template: 生日信息样式模板
+        variables:
+          万年历: '[[[ return variables.万年历 ]]]' 
+          主题: '[[[ return variables.主题 ]]]'
+          id: 7
+          top: 170vw
+
+
+生日信息样式模板:
+  layout: icon_name
+  icon: |
+    [[[
+        if(states[variables.万年历]?.attributes?.生日?.length > variables.id){
+          return "mdi:calendar-range";
+        }
+    ]]]
+  show_icon: true
+  show_label: true
+  show_state: true
+  name: |
+    [[[
+        if(states[variables.万年历]?.attributes?.生日?.length > variables.id){
+          return states[variables.万年历]?.attributes.生日[variables.id].名称;
+        }
+    ]]]
+  state_display: |
+    [[[
+        if(states[variables.万年历]?.attributes?.生日?.length > variables.id){
+          var birthday = states[variables.万年历]?.attributes?.生日?.[variables.id];
+          var num1 = birthday?.阳历天数 ?? "";
+          var num2 = birthday?.农历天数 ?? "";
+          var validDays = [];
+          if (num1 !== "" &&  num1 >= 0) validDays.push(num1);
+          if (num2 !== "" &&  num2 >= 0) validDays.push(num2);
+          if (validDays.length > 0) {
+              return Math.min(...validDays) + "天";
+          } else {
+              return "";
+          }
+        }
+    ]]]
+  styles: 
+    card: 
+      - margin-top: '[[[ return variables.top ]]]'
+      - margin-left: 5vw
+      - padding: 0
+      - cursor: none
+      - --mdc-ripple-press-opacity: 0
+      - border-width: 0
+      - border-radius: 0
+      - background: rgb(0,0,0,0)
+      - height: 10vw
+      - width: 86vw
+      - display: |
+          [[[
+              if(states[variables.万年历]?.attributes?.生日?.length <= variables.id) {
+                  return "none";
+              }
+          ]]]
+    icon:
+      - z-index: 2
+      - margin-left: -28vw
+      - width: 3vh
+      - color: '[[[ return variables.主题 == "on" ? "rgb(0,0,0)" : "rgb(255,255,255)"; ]]]' 
+    name:
+      - z-index: 2
+      - margin-left: -50vw
+      - font-size: 1.5vh
+      - font-weight: bold
+      - text-align: left
+      - width: 50vw
+      - color: '[[[ return variables.主题 == "on" ? "rgb(0,0,0)" : "rgb(255,255,255)"; ]]]' 
+    state:
+      - z-index: 2
+      - margin-top: -10vw
+      - margin-left: 56vw
+      - font-size: 1.5vh
+      - font-weight: bold
+      - text-align: right
+      - width: 30vw
+      - color: |
+          [[[
+              if(states[variables.万年历]?.attributes?.生日?.length>variables.id){
+                var birthday = states[variables.万年历]?.attributes?.生日?.[variables.id];
+                var num1 = birthday?.阳历天数 ?? -1;
+                var num2 = birthday?.农历天数 ?? -1;
+                if (num1+num2<=20 && num1+num2>0) return "rgb(255,20,0)"
+                else return variables.主题 == "on" ? "rgb(0,0,0)" : "rgb(255,255,255)";
+              }
+          ]]]
+  custom_fields:
+    back: >
+      [[[
+          if(states[variables.万年历]?.attributes?.生日?.length>variables.id){
+            var color = variables.主题 == "on" ? "rgb(55,55,55,0.5)" : "rgb(200,200,200,0.5)";
+            return `
+              <div style="
+                position: absolute;
+                top: 93%;
+                left: 0;
+                height: 7%;
+                width: 100%;
+                background: ${color};
+              "></div>
+            `;
+          }
+      ]]]
+    progress: >
+      [[[
+          if(states[variables.万年历]?.attributes?.生日?.length>variables.id){
+              var maxValue = 365; //最大值
+              var birthday = states[variables.万年历]?.attributes?.生日?.[variables.id];
+              var num1 = birthday?.阳历天数 ?? -1;
+              var num2 = birthday?.农历天数 ?? -1;
+              if(num1 > 0) var num = num1;
+              if(num2 > 0) var num = num2;
+              var percent = (maxValue-num)*100/maxValue;
+              if (percent<5) percent=5;
+              var hue = percent/100 * 100;
+              var color = `hsl(${hue}, 100%, 50%)`;
+              return `
+                <div style="
+                  position: absolute;
+                  top: 93%;
+                  left: 0;
+                  height: 7%;
+                  width: ${percent}%;
+                  background: linear-gradient(90deg, ${color} 0%, ${color} 100%);
+                  transition: width 0.5s ease;
+                "></div>
+              `;
+          }
+      ]]]

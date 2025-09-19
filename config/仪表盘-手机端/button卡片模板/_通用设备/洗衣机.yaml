@@ -1,0 +1,311 @@
+洗衣机卡片:
+  triggers_update:
+    - '[[[ return variables.洗衣机 ?? "" ]]]'
+    - '[[[ return variables.洗衣程序 ?? "" ]]]'
+    - '[[[ return variables.洗涤程序 ?? "" ]]]'
+    - '[[[ return variables.累计用水量 ?? "" ]]]'
+    - '[[[ return variables.累计用电量 ?? "" ]]]'
+  styles:
+    grid:
+      - grid-template-areas: >
+          [[[
+              window.洗衣机颜色 = "rgb(0,188,213)";  
+              if(variables.洗衣机 !="none"){
+                  return `"背景 背景 背景 背景"
+                          "名称 名称 状态 开关"
+                          "图标 空白区域 主按钮区域 主按钮区域"
+                          "空白行 空白行 空白行 空白行"
+                          "曲线图 曲线图 曲线图 曲线图"`
+              } 
+               if(variables.洗衣机 =="none"){
+                  return `` 
+              }
+          ]]] 
+      - grid-template-columns: 13% 14% 61% 12%
+      - grid-template-rows: 0 0 0 12.5vw 12.5vw
+    card:
+      - padding: 0
+      - cursor: none
+      - --mdc-ripple-press-opacity: 0
+      - height: |
+          [[[ 
+              if( variables.洗衣机 !="none") {
+                return "calc(25vw + 8px);"
+              } 
+              else return "0";
+          ]]]
+      - display: |
+          [[[
+              if (variables.洗衣机 == "none") {
+                  return "none";
+              }
+          ]]]
+  custom_fields:
+    背景:
+      card:
+        type: custom:button-card
+        styles:
+          card:
+            - margin-top: 25vw
+            - padding: 0
+            - border-width: 0
+            - border-radius: 0
+            - cursor: none
+            - --mdc-ripple-press-opacity: 0
+            - border-radius: 3vw
+            - height: 25vw
+            - background: | 
+                [[[
+                    var state = states[variables.洗衣机]?.state;
+                    if( variables.主题=='off' && state =='启动')  return "linear-gradient(135deg, "+洗衣机颜色+" -50%, rgb(50,50,50)    50%)";
+                    if( variables.主题=='on'  && state =='启动')  return "linear-gradient(135deg, "+洗衣机颜色+" -50%, rgb(255,255,255) 50%)";
+                    return variables.主题 == 'on' ? "rgb(255,255,255)" : "rgb(50,50,50)";
+                ]]] 
+    曲线图:
+      card:
+        type: custom:mini-graph-card
+        tap_action:
+          action: none
+        hold_action:
+          action: none
+        line_width: 1
+        hours_to_show: 24
+        smoothing: true
+        height: 50
+        show:
+          name: false
+          icon: false
+          state: false
+          legend: false
+          loading_indicator: false
+        cache: true
+        entities:
+          - entity: '[[[ return variables.累计用水量 ?? "" ]]]'
+            color: '[[[ return 洗衣机颜色 ]]]'
+          - entity: '[[[ return variables.累计用电量 ?? "" ]]]'
+            color: '[[[ return 洗衣机颜色 ]]]'
+    名称:
+      card:
+        type: custom:button-card
+        show_label: true
+        label: '[[[ return states[variables.洗衣机]?.attributes.friendly_name  ?? "名称" ]]]'
+        styles:
+          card:
+            - margin-top: 8.25vw
+            - padding: 0
+            - border-radius: 0
+            - width: 50vw
+            - margin-left: 2.5vw  
+            - border-width: 0
+            - background: rgb(0,0,0,0)
+          label:
+            - justify-self: start
+            - font-size: 4vw
+            - font-weight: bold
+            - color: '[[[ return variables.主题 == "on" ? "rgb(50,50,50)" : "rgb(255,255,255)"; ]]]'
+    状态:
+      card:
+        type: custom:button-card
+        label: |
+          [[[ 
+              var mode1 = states[variables.洗衣程序]?.state  ?? "" ;
+              var mode2 = states[variables.洗涤程序]?.state  ?? "" ;
+              var mode = states[variables.洗衣机]?.state;
+              if(mode=='暂停') return "关闭: "+mode2;
+              if(mode=='启动') return "开启: "+mode1+"-"+mode2;
+              return "离线";
+          ]]]
+        show_label: true
+        styles: 
+          card:
+            - margin-top: 8.25vw
+            - padding: 0
+            - border-radius: 0
+            - border-width: 0
+            - background: rgb(0,0,0,0)
+          label:
+            - justify-self: start
+            - font-size: 3vw
+            - font-weight: bold
+            - margin-top: 0.5vw
+            - margin-left: 0vw
+            - color: '[[[ return variables.主题 == "on" ? "rgb(50,50,50)" : "rgb(255,255,255)"; ]]]'
+    开关:
+      card:
+        type: custom:button-card
+        show_name: false
+        show_icon: true
+        icon: |
+          [[[ 
+              var state = states[variables.洗衣机]?.state;      
+              if( state =='启动')  return "mdi:toggle-switch";
+              return "mdi:toggle-switch-off";
+          ]]]
+        styles:
+          card:
+            - margin-top: 8.25vw
+            - cursor: none
+            - --mdc-ripple-press-opacity: 0.2
+            - padding: 0
+            - border-radius: 2vw
+            - width: 8vw
+            - height: 8vw
+            - border-width: 0
+            - background: rgb(0,0,0,0)
+          icon:
+            - width: 8vw
+            - height: 8vw
+            - color: |
+                [[[
+                    var state = states[variables.洗衣机]?.state;
+                    if( state =='启动') return 洗衣机颜色;
+                    return variables.主题 == "on" ? "rgb(50,50,50)" : "rgb(255,255,255)";
+                ]]]
+    图标:
+      card:
+        type: custom:button-card
+        show_icon: true
+        icon: |
+          [[[ 
+              var state = states[variables.洗衣机]?.state;  
+              if( state =='启动')  return "mdi:fan";    
+              return "mdi:fan-off";    
+          ]]] 
+        styles:
+          card:
+            - margin-top: 30vw
+            - padding: 0
+            - border-radius: 0
+            - width: 20vw 
+            - height: 20vw
+            - margin-left: '-2vw'
+            - border-width: 0
+            - background: rgb(0,0,0,0)
+          icon: 
+            - color: |
+                [[[
+                    var state = states[variables.洗衣机]?.state;
+                    if( state =='启动') return 洗衣机颜色;
+                    return variables.主题 == "on" ? "rgb(50,50,50)" : "rgb(255,255,255)";
+                ]]]
+            - animation: |
+                [[[ 
+                    var state = states[variables.洗衣机]?.state;   
+                    if( state =='启动')  return "rotating 1.5s linear infinite";
+                    return "";
+                ]]]
+    主按钮区域:
+      card:
+        type: custom:button-card
+        tap_action:
+          action: none
+        hold_action:
+          action: none
+        styles:
+          grid:
+            - grid-template-areas: |
+                'b1 b2 b3 b4 b5' 
+            - grid-template-rows: 100%
+            - grid-auto-columns: minmax(0, 1fr)
+            - grid-auto-flow: column
+          card:
+            - margin-top: 30vw
+            - cursor: none
+            - width: 66vw
+            - padding: 0
+            - border-radius: 0
+            - border-width: 0
+            - background: rgb(0,0,0,0)
+        custom_fields:
+          b1:
+            card:
+              type: custom:button-card
+              template: 洗衣机模式按钮样式
+              icon: mdi:washing-machine
+              name: 混合
+              variables:
+                主题: '[[[ return variables.主题 ?? ""]]]'
+                mode: 混合
+          b2:
+            card:
+              type: custom:button-card
+              template: 洗衣机模式按钮样式
+              icon: mdi:washing-machine
+              name: 快速洗
+              variables:
+                主题: '[[[ return variables.主题 ?? ""]]]'
+                mode: 快速洗
+          b3:
+            card:
+              type: custom:button-card
+              template: 洗衣机模式按钮样式
+              icon:  mdi:washing-machine
+              name: 筒自洁
+              variables:
+                主题: '[[[ return variables.主题 ?? ""]]]'
+                mode: 筒自洁
+          b4:
+            card:
+              type: custom:button-card
+              template: 洗衣机模式按钮样式
+              icon:  mdi:washing-machine
+              name: 空气洗
+              variables:
+                主题: '[[[ return variables.主题 ?? ""]]]'
+                mode: 空气洗
+          b5:
+            card:
+              type: custom:button-card
+              template: 洗衣机模式按钮样式
+              icon:  mdi:washing-machine
+              name: 消毒洗
+              variables:
+                主题: '[[[ return variables.主题 ?? ""]]]'
+                mode: 消毒洗
+  
+洗衣机模式按钮样式:
+  triggers_update:
+    - '[[[ return variables.洗衣机 ?? "" ]]]'
+    - '[[[ return variables.洗衣程序 ?? "" ]]]'
+    - '[[[ return variables.洗涤程序 ?? "" ]]]'
+    - '[[[ return variables.累计用水量 ?? "" ]]]'
+    - '[[[ return variables.累计用电量 ?? "" ]]]'
+  layout: icon_name
+  show_icon: true 
+  show_name: true 
+  styles: 
+    card:
+      - cursor: none
+      - --mdc-ripple-press-opacity: 0.2
+      - width: 12.2vw
+      - height: 6vw
+      - border-radius: 1.5vw 
+      - background: '[[[ return variables.主题 == "on" ? "rgb(50,50,50)" : "rgb(120,120,120)"; ]]]'
+    name:
+      - font-size: 0.9vh
+      - margin-left: -2vw
+      - font-weight: bold
+      - color: |
+          [[[
+              var state = states[variables.洗衣程序]?.state;  
+              if( state ==variables.mode)  return 洗衣机颜色;    
+              return "rgb(255,255,255)";           
+          ]]]   
+    icon:
+      - width: 3vw
+      - height: 3vw
+      - margin-left: 0vw
+      - color: |
+          [[[
+              var state = states[variables.洗衣程序]?.state;  
+              if( state ==variables.mode)  return 洗衣机颜色;    
+              return "rgb(255,255,255)";           
+          ]]]   
+
+  tap_action:
+    action: call-service
+    service: select.select_option
+    data:
+      option: '[[[ return  variables.mode ]]]'
+    target:
+      entity_id: '[[[ return  variables.洗衣程序 ]]]'

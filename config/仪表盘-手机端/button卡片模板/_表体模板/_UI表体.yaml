@@ -1,0 +1,827 @@
+UI表体:
+  triggers_update:
+    - '[[[ return number1 ?? ""]]]'  
+    - '[[[ return number2 ?? ""]]]'
+    - '[[[ return switch1 ?? ""]]]'  
+    - '[[[ return switch2 ?? ""]]]'       
+  styles:
+    grid:
+      - grid-template-areas: |  
+          [[[
+              const a = variables.灯光 !== undefined ? 1 : 0;
+              const b = variables.设备 !== undefined ? 1 : 0;
+              const c = variables.媒体 !== undefined ? 1 : 0;
+              const key = `${a}${b}${c}`;
+              const deviceMap1 = {
+                "111": "灯光 设备 设备 媒体",
+                "110": "灯光 设备 设备 .",
+                "101": "灯光 媒体 媒体 .",
+                "100": "灯光 . . .",
+                "011": "设备 媒体 媒体 .",
+                "010": "设备 . . .",
+                "001": "媒体 . . .",
+                "000": ". . . ."
+              };
+              const deviceMap2 = {
+                "111": "灯光角标 设备角标 设备角标 媒体角标",
+                "110": "灯光角标 设备角标 设备角标 .",
+                "101": "灯光角标 媒体角标 媒体角标 .",
+                "100": "灯光角标 . . .",
+                "011": "设备角标 媒体角标 媒体角标 .",
+                "010": "设备角标 . . .",
+                "001": "媒体角标 . . .",
+                "000": ". . . ."
+              };
+              return `
+                "环境1内容 环境1内容 房间名 房间名"
+                "环境1内容 环境1内容 房间名 房间名"
+                "环境2内容 环境2内容 房间图标 房间图标"
+                "环境2内容 环境2内容 房间图标 房间图标"
+                "环境3内容 环境3内容 . ."
+                "环境3内容 环境3内容 . ."
+                "人在传感器 . . ."
+                "${deviceMap1[key]}"
+                "${deviceMap2[key]}"
+              `
+          ]]]
+      - grid-template-columns: 33.33% 19.67% 13.67% 33.33%
+      - grid-template-rows: 8.5% 8.5% 8.5% 8.5% 8% 8% 14% 36%
+    card:
+      - cursor: none
+      - --mdc-ripple-press-opacity: 0
+      - padding: 2vw 1vw 2vw 2.5vw
+      - height: 18.5vh
+      - width: 41vw
+      - border-radius: 2vh
+      - border: '[[[ return theme_border(0,255,0.15) ]]]'
+      - background: '[[[ return theme_color(255,50,0.5) ]]]' 
+  custom_fields:
+    环境1内容:
+      card:
+        type: custom:button-card
+        template: 环境样式模板
+        entity: '[[[ return variables.温度 ?? ""]]]'
+        styles:
+          card:
+            - display: |
+                [[[ if (!variables.温度) return "none";]]]
+            - background: |
+                [[[ return theme_opacity(温度颜色.slice(4,-1),'0.6') ]]]
+        tap_action:
+          action: fire-dom-event
+          browser_mod:
+            service: browser_mod.popup
+            data:
+              style: '[[[ return theme_none() ]]]'
+              content:
+                type: custom:button-card 
+                triggers_update: all   
+                styles:
+                  grid:
+                    - grid-template-areas: |
+                        [[[
+                            const a = variables.温度 !== undefined ? 1 : 0;
+                            const b = variables.湿度 !== undefined ? 1 : 0;
+                            const c = variables.pm25 !== undefined ? 1 : 0;
+                            const deviceMap = {
+                              "111": '"device1" "device2" "device3" "device4" "device5"',
+                              "110": '"device1" "device2" "device3"',
+                              "101": '"device1" "device2" "device5"',
+                              "100": '"device1"',
+                              "011": '"device3" "device4" "device5"',
+                              "010": '"device3"',
+                              "001": '"device5"',
+                              "000": ''
+                            };
+                            return deviceMap[`${a}${b}${c}`] ?? '';
+                        ]]]
+                    - grid-template-columns: 100%
+                    - grid-auto-rows: minmax(auto, auto) 
+                    - grid-auto-flow: row
+                  card: 
+                    - cursor: none
+                    - --mdc-ripple-press-opacity: 0 
+                    - padding: 0
+                custom_fields:
+                  device1:
+                    card:
+                      type: custom:button-card 
+                      styles:
+                        card:
+                          - padding: 0
+                          - display: |
+                              [[[ if (!variables.温度) return "none";]]]
+                        grid:
+                          - grid-template-areas: |
+                              "apexcharts"
+                      custom_fields:
+                        apexcharts:
+                          card:
+                            type: custom:apexcharts-card
+                            card_mod:
+                              style: '[[[ return theme_apexcharts(); ]]]'
+                            config_templates: 环境曲线模板
+                            series:
+                              - entity: '[[[ return variables.温度 ?? ""  ]]]'
+                                name: '[[[ return (variables.名称 ?? "") + "温度" ]]]'
+                                color: '[[[ return 温度颜色 ]]]'
+                  device2:
+                    card:
+                      type: custom:button-card
+                      styles:
+                        card:
+                          - background: rgb(0,0,0,0)
+                          - height: 8px
+                          - padding: 0
+                  device3:
+                    card:
+                      type: custom:button-card 
+                      styles:
+                        card:
+                          - padding: 0
+                          - display: |
+                              [[[ if (!variables.湿度) return "none";]]]
+                        grid:
+                          - grid-template-areas: |
+                              "apexcharts"
+                      custom_fields:
+                        apexcharts:
+                          card:
+                            type: custom:apexcharts-card
+                            card_mod:
+                              style: '[[[ return theme_apexcharts() ]]]'
+                            config_templates: 环境曲线模板
+                            series:
+                              - entity: '[[[ return variables.湿度 ?? ""  ]]]'
+                                name: '[[[ return (variables.名称 ?? "") + "湿度" ]]]'
+                                color: '[[[ return 湿度颜色 ]]]'
+                  device4:
+                    card:
+                      type: custom:button-card
+                      styles:
+                        card:
+                          - background: rgb(0,0,0,0)
+                          - height: 8px
+                          - padding: 0
+                  device5:
+                    card:
+                      type: custom:button-card 
+                      styles:
+                        card:
+                          - padding: 0
+                          - display: |
+                              [[[ if (!variables.pm25) return "none";]]]
+                        grid:
+                          - grid-template-areas: |
+                              "apexcharts"
+                      custom_fields:
+                        apexcharts:
+                          card:
+                            type: custom:apexcharts-card
+                            card_mod:
+                              style: '[[[ return theme_apexcharts(); ]]]'
+                            config_templates: 环境曲线模板pm25
+                            series:
+                              - entity: '[[[ return variables.pm25 ?? "" ]]]'
+                                name: '[[[ return (variables.名称 ?? "") + "pm25" ]]]'
+                                color: '[[[ return PM25颜色 ]]]'
+    环境2内容:
+      card:
+        type: custom:button-card
+        template: 环境样式模板
+        entity: '[[[ return variables.湿度 ]]]'
+        styles:
+          card:
+            - display: |
+                [[[ if (!variables.湿度) return "none";]]]
+            - background: |
+                [[[ return theme_opacity(湿度颜色.slice(4, -1),'0.6') ]]]
+        tap_action:
+          action: fire-dom-event
+          browser_mod:
+            service: browser_mod.popup
+            data:
+              style: '[[[ return theme_none(); ]]]'
+              content:
+                type: custom:button-card 
+                triggers_update: all   
+                styles:
+                  grid:
+                    - grid-template-areas: |
+                        [[[
+                            const a = variables.温度 !== undefined ? 1 : 0;
+                            const b = variables.湿度 !== undefined ? 1 : 0;
+                            const c = variables.pm25 !== undefined ? 1 : 0;
+                            const deviceMap = {
+                              "111": '"device1" "device2" "device3" "device4" "device5"',
+                              "110": '"device1" "device2" "device3"',
+                              "101": '"device1" "device2" "device5"',
+                              "100": '"device1"',
+                              "011": '"device3" "device4" "device5"',
+                              "010": '"device3"',
+                              "001": '"device5"',
+                              "000": ''
+                            };
+                            return deviceMap[`${a}${b}${c}`] ?? '';
+                        ]]]
+                    - grid-template-columns: 100%
+                    - grid-auto-rows: minmax(auto, auto) 
+                    - grid-auto-flow: row
+                  card: 
+                    - cursor: none
+                    - --mdc-ripple-press-opacity: 0 
+                    - padding: 0
+                custom_fields:
+                  device1:
+                    card:
+                      type: custom:button-card 
+                      styles:
+                        card:
+                          - padding: 0
+                          - display: |
+                              [[[ if (!variables.温度) return "none";]]]
+                        grid:
+                          - grid-template-areas: |
+                              "apexcharts"
+                      custom_fields:
+                        apexcharts:
+                          card:
+                            type: custom:apexcharts-card
+                            card_mod:
+                              style: '[[[ return theme_apexcharts(); ]]]'
+                            config_templates: 环境曲线模板
+                            series:
+                              - entity: '[[[ return variables.温度 ?? ""  ]]]'
+                                name: '[[[ return (variables.名称 ?? "") + "温度" ]]]'
+                                color: '[[[ return 温度颜色 ]]]'
+                  device2:
+                    card:
+                      type: custom:button-card
+                      styles:
+                        card:
+                          - background: rgb(0,0,0,0)
+                          - height: 8px
+                          - padding: 0
+                  device3:
+                    card:
+                      type: custom:button-card 
+                      styles:
+                        card:
+                          - padding: 0
+                          - display: |
+                              [[[ if (!variables.湿度) return "none";]]]
+                        grid:
+                          - grid-template-areas: |
+                              "apexcharts"
+                      custom_fields:
+                        apexcharts:
+                          card:
+                            type: custom:apexcharts-card
+                            card_mod:
+                              style: '[[[ return theme_apexcharts(); ]]]'
+                            config_templates: 环境曲线模板
+                            series:
+                              - entity: '[[[ return variables.湿度 ?? ""  ]]]'
+                                name: '[[[ return (variables.名称 ?? "") + "湿度" ]]]'
+                                color: '[[[ return 湿度颜色 ]]]'
+                  device4:
+                    card:
+                      type: custom:button-card
+                      styles:
+                        card:
+                          - background: rgb(0,0,0,0)
+                          - height: 8px
+                          - padding: 0
+                  device5:
+                    card:
+                      type: custom:button-card 
+                      styles:
+                        card:
+                          - padding: 0
+                          - display: |
+                              [[[ if (!variables.pm25) return "none";]]]
+                        grid:
+                          - grid-template-areas: |
+                              "apexcharts"
+                      custom_fields:
+                        apexcharts:
+                          card:
+                            type: custom:apexcharts-card
+                            card_mod:
+                              style: '[[[ return theme_apexcharts() ]]]'
+                            config_templates: 环境曲线模板pm25
+                            series:
+                              - entity: '[[[ return variables.pm25 ?? "" ]]]'
+                                name: '[[[ return (variables.名称 ?? "") + "pm25" ]]]'
+                                color: '[[[ return PM25颜色 ]]]'
+    环境3内容:
+      card:
+        type: custom:button-card
+        template: 环境样式模板
+        entity: '[[[ return variables.pm25 ]]]'
+        units: µg
+        styles:
+          card:
+            - display: |
+                [[[ if (!variables.pm25) return "none";]]]
+            - background: |
+                [[[ return theme_opacity(PM25颜色.slice(4, -1),'0.6') ]]]
+        tap_action:
+          action: fire-dom-event
+          browser_mod:
+            service: browser_mod.popup
+            data:
+              style: '[[[ return theme_none(); ]]]'
+              content:
+                type: custom:button-card 
+                triggers_update: all   
+                styles:
+                  grid:
+                    - grid-template-areas: |
+                        [[[
+                            const a = variables.温度 !== undefined ? 1 : 0;
+                            const b = variables.湿度 !== undefined ? 1 : 0;
+                            const c = variables.pm25 !== undefined ? 1 : 0;
+                            const deviceMap = {
+                              "111": '"device1" "device2" "device3" "device4" "device5"',
+                              "110": '"device1" "device2" "device3"',
+                              "101": '"device1" "device2" "device5"',
+                              "100": '"device1"',
+                              "011": '"device3" "device4" "device5"',
+                              "010": '"device3"',
+                              "001": '"device5"',
+                              "000": ''
+                            };
+                            return deviceMap[`${a}${b}${c}`] ?? '';
+                        ]]]
+                    - grid-template-columns: 100%
+                    - grid-auto-rows: minmax(auto, auto) 
+                    - grid-auto-flow: row
+                  card: 
+                    - cursor: none
+                    - --mdc-ripple-press-opacity: 0 
+                    - padding: 0
+                custom_fields:
+                  device1:
+                    card:
+                      type: custom:button-card 
+                      styles:
+                        card:
+                          - padding: 0
+                          - display: |
+                              [[[ if (!variables.温度) return "none";]]]
+                        grid:
+                          - grid-template-areas: |
+                              "apexcharts"
+                      custom_fields:
+                        apexcharts:
+                          card:
+                            type: custom:apexcharts-card
+                            card_mod:
+                              style: '[[[ return theme_apexcharts(); ]]]'
+                            config_templates: 环境曲线模板
+                            series:
+                              - entity: '[[[ return variables.温度 ?? ""  ]]]'
+                                name: '[[[ return (variables.名称 ?? "") + "温度" ]]]'
+                                color: '[[[ return 温度颜色 ]]]'
+                  device2:
+                    card:
+                      type: custom:button-card
+                      styles:
+                        card:
+                          - background: rgb(0,0,0,0)
+                          - height: 8px
+                          - padding: 0
+                  device3:
+                    card:
+                      type: custom:button-card 
+                      styles:
+                        card:
+                          - padding: 0
+                          - display: |
+                              [[[ if (!variables.湿度) return "none";]]]
+                        grid:
+                          - grid-template-areas: |
+                              "apexcharts"
+                      custom_fields:
+                        apexcharts:
+                          card:
+                            type: custom:apexcharts-card
+                            card_mod:
+                              style: '[[[ return theme_apexcharts() ]]]'
+                            config_templates: 环境曲线模板
+                            series:
+                              - entity: '[[[ return variables.湿度 ?? ""  ]]]'
+                                name: '[[[ return (variables.名称 ?? "") + "湿度" ]]]'
+                                color: '[[[ return 湿度颜色 ]]]'
+                  device4:
+                    card:
+                      type: custom:button-card
+                      styles:
+                        card:
+                          - background: rgb(0,0,0,0)
+                          - height: 8px
+                          - padding: 0
+                  device5:
+                    card:
+                      type: custom:button-card 
+                      styles:
+                        card:  
+                          - padding: 0
+                          - display: |
+                              [[[ if (!variables.pm25) return "none";]]]
+                        grid:
+                          - grid-template-areas: |
+                              "apexcharts"
+                      custom_fields:
+                        apexcharts:
+                          card:
+                            type: custom:apexcharts-card
+                            card_mod:
+                              style: '[[[ return theme_apexcharts() ]]]'
+                            config_templates: 环境曲线模板pm25
+                            series:
+                              - entity: '[[[ return variables.pm25 ?? "" ]]]'
+                                name: '[[[ return (variables.名称 ?? "") + "pm25" ]]]'
+                                color: '[[[ return PM25颜色 ]]]'
+    房间名:
+      card: 
+        type: custom:button-card
+        show_label: true
+        label: '[[[ return variables.名称 ?? "房间名"]]]'
+        styles:
+          label:
+            - font-size: 1.8vh
+            - height: 3vh
+            - color: '[[[ return theme_color(20,255,0.7) ]]]' 
+          card:
+            - border-width: 0
+            - border-radius: 0
+            - background: rgb(0,0,0,0)
+            - width: 20.5vw
+    房间图标:
+      card:
+        type: custom:button-card
+        show_icon: true
+        icon: '[[[ return variables.图标 ?? ""]]]'
+        styles:
+          icon: 
+            - cursor: none
+            - width: 9vw
+            - height: 3vh 
+            - color: '[[[ return theme_color(20,255,0.5) ]]]' 
+          card: 
+            - border-width: 0
+            - border-radius: 0
+            - background: rgb(0,0,0,0)
+            - width: 20.5vw
+    人在传感器:
+      card:
+        type: custom:button-card
+        show_icon: true
+        show_name: false
+        icon: |
+          [[[
+              if (variables.人在 !== undefined ){
+                  var state = states[variables.人在]?.state;
+                  if( state =="无人") return "mdi:motion-sensor-off";                         
+                  if( state =="有人") return "mdi:motion-sensor";
+                  if( state =="off") return "mdi:motion-sensor-off";                         
+                  if( state =="on") return "mdi:motion-sensor";
+                  return "mdi:motion-sensor-off";  
+              }
+              if (variables.人体 !== undefined ){
+                  var state = states[variables.人体]?.state;
+                  if( state =="5分钟以上无人移动") return "mdi:motion-sensor-off";  
+                  if( state =="2～5分钟无人移动") return "mdi:motion-sensor-off";                         
+                  return "mdi:motion-sensor";
+              }     
+          ]]]
+        styles:
+          icon:
+            - width: 6vw
+            - height: 2vh
+            - color: |
+                [[[      
+                    if (variables.人在){
+                        var state = states[variables.人在]?.state;
+                        if( state =="无人") return "rgb(150,150,150)";                         
+                        if( state =="有人") return "rgb(255,100,0)";
+                        if( state =="off") return "rgb(150,150,150)";                         
+                        if( state =="on") return "rgb(255,100,0)";
+                        return "rgb(150,150,150)";
+                    }
+                          
+                    if (variables.人体){
+                        var state = states[variables.人体]?.state;
+                        if( state =="5分钟以上无人移动") return "rgb(150,150,150)";    
+                        if( state =="2～5分钟无人移动") return "rgb(150,150,150)";                        
+                        return "rgb(255,100,0)";
+                    }
+                ]]]        
+            - animation: |
+                [[[
+                    if (variables.人在){
+                         var state = states[variables.人在]?.state;
+                        if( state =="无人") return "";                         
+                        if( state =="有人") return "blink 1s ease infinite";
+                        if( state =="off")  return "";                         
+                        if( state =="on")   return "blink 1s ease infinite";
+                        else  return ""; 
+                    }
+                    if (variables.人体){
+                        var state = states[variables.人体]?.state;
+                        if( state =="5分钟以上无人移动") return "";     
+                        if( state =="2～5分钟无人移动") return "";                           
+                        else return "blink 1s ease infinite";
+                    }
+                ]]] 
+          card:
+            - padding: 0
+            - border-width: 0
+            - border-radius: 0
+            - background: rgb(0,0,0,0)
+            - width: 6vw       
+            - height: 2vh      
+            - margin-top: '3vw'   
+            - display: |
+                [[[
+                    if (!variables.人在 && !variables.人体) {
+                        return "none";
+                    }
+                ]]]
+    灯光:
+      card:
+        type: custom:button-card
+        template: 按钮动画模板
+        icon: mdi:lightbulb-group
+        variables:
+          sum: |
+            [[[
+                var sum = 0;
+                if (variables.灯光){
+                  for (var i=0; i< variables.灯光?.length; i++){
+                      if (states[variables.灯光?.[i]]?.state=="on"){
+                        sum++;
+                      }
+                  }
+                }
+                window.灯光 =sum;
+            ]]]
+        styles: 
+          card:
+            - display: '[[[ if (!variables.灯光) return "none" ]]]'
+            - animation: |
+                [[[
+                    if( 灯光 > 0 ) {
+                      if (theme()=="on"  ) return "huxi_on 1s ease-in-out infinite";
+                      if (theme()=="off" ) return "huxi_off 1s ease-in-out infinite";
+                    }
+                ]]]  
+          icon:
+            - color: '[[[ return 灯光 > 0 ? 灯光按钮开启颜色 : 按钮关闭颜色; ]]]'
+            - animation: '[[[ return 灯光 > 0 ? "shake 8s infinite ease-in-out" : "" ]]]'
+        tap_action:
+          action: fire-dom-event
+          browser_mod:
+            service: browser_mod.popup
+            data:
+              style: '[[[ return theme_none(); ]]]'
+              content:
+                type: custom:xiaoshi-light-card
+                entities: '[[[ return variables.灯光]]]'
+                width: 87vw
+                height: 20vw
+                rgb: true
+                theme: '[[[ return theme()]]]'
+    设备:
+      card:
+        type: custom:button-card
+        template: 按钮动画模板
+        icon: mdi:devices
+        variables:
+          sum: |
+            [[[
+                var sum =0;
+                if (variables.设备){
+                  for (var i=0; i<variables.设备?.length; i++){
+                    var entityConfig = variables.设备?.[i];  
+                    var statesum = variables.设备?.[i]?.states;
+                    if (Array.isArray(entityConfig.entity)) { 
+                      var activeCount =0;
+                      for (var j=0; j < entityConfig.entity.length; j++){
+                          var singleEntity  = entityConfig.entity[j];
+                          var currentState = states[singleEntity].state;
+                          var isMatch = statesum.some(function(condition) {
+                              if (condition.startsWith(">") && !isNaN(condition.substring(1))) {
+                                  var threshold = parseFloat(condition.substring(1));
+                                  return !isNaN(currentState) && parseFloat(currentState) > threshold;
+                              }
+                              else {
+                                  return currentState === condition;
+                              }
+                          });
+                          if (isMatch) {
+                              activeCount++;
+                          }
+                      }
+                      if (activeCount >0) sum++;
+                    } else {
+                      var currentState = states[entityConfig.entity].state;
+                      var isMatch = statesum.some(function(condition) {
+                          if (condition.startsWith(">") && !isNaN(condition.substring(1))) {
+                              var threshold = parseFloat(condition.substring(1));
+                              return !isNaN(currentState) && parseFloat(currentState) > threshold;
+                          }
+                          else {
+                              return currentState === condition;
+                          }
+                      });
+                      
+                      if (isMatch) {
+                          sum++;
+                      }
+                    }
+                  }
+                }
+                window.设备 =sum;
+            ]]]
+        styles:
+          card:
+            - display: '[[[ if (!variables.设备) return "none" ]]]'
+            - animation: |
+                [[[
+                    if( 设备 > 0 ) {
+                      if (theme()=="on"  ) return "huxi_on 1s ease-in-out infinite";
+                      if (theme()=="off" ) return "huxi_off 1s ease-in-out infinite";
+                    }
+                ]]] 
+          icon:
+            - color: '[[[ return 设备 > 0 ? 设备按钮开启颜色 : 按钮关闭颜色; ]]]'
+            - animation: '[[[ return 设备 > 0 ? "shake 8s infinite ease-in-out" : "" ]]]'
+    媒体: 
+      card: 
+        type: custom:button-card
+        template: 按钮动画模板
+        icon: mdi:multimedia
+        variables:
+          sum: |
+            [[[
+                var sum =0;
+                if (variables.媒体){
+                  for (var i=0; i<variables.媒体?.length; i++){
+                    var entityConfig = variables.媒体?.[i];  
+                    var statesum = variables.媒体?.[i]?.states;
+                    if (Array.isArray(entityConfig.entity)) { 
+                      var activeCount =0;
+                      for (var j=0; j < entityConfig.entity.length; j++){
+                          var singleEntity  = entityConfig.entity[j];
+                          var currentState = states[singleEntity].state;
+                          if (statesum.includes(currentState)) {
+                            activeCount ++;
+                          }
+                      }
+                      if (activeCount >0) sum++;
+                    } else {
+                      var currentState = states[entityConfig.entity].state;
+                      if (statesum.includes(currentState)){
+                            sum++;
+                      }
+                    }
+                  }
+                }
+                window.媒体 =sum;
+            ]]]
+        styles:
+          card:
+            - display: '[[[ if (!variables.媒体) return "none" ]]]'
+            - animation: |
+                [[[
+                    if( 媒体 > 0 ) {
+                      if (theme()=="on"  ) return "huxi_on 1s ease-in-out infinite";
+                      if (theme()=="off" ) return "huxi_off 1s ease-in-out infinite";
+                    }
+                ]]] 
+          icon:
+            - color: '[[[ return 媒体 > 0 ? 媒体按钮开启颜色 : 按钮关闭颜色; ]]]'
+            - animation: '[[[ return 媒体 > 0 ? "shake 8s infinite ease-in-out" : "" ]]]'
+    灯光角标:
+      card:
+        type: custom:button-card
+        show_label: true
+        label: '[[[ return 灯光 > 0? 灯光:""; ]]]'
+        styles: 
+          label:
+            - label: '[[[ return 灯光 > 0? 灯光:""; ]]]'
+            - color: rgb(250,250,250)
+            - font-size: 1.2vh
+            - font-weight: bold
+          card:
+            - padding: 0
+            - background: '[[[ return 灯光 > 0? 灯光按钮开启颜色:"rgb(0,0,0,0)"; ]]]'
+            - clip-path: circle(0.75vh)
+            - border-width: 0
+            - width: 10vw
+            - height: 1.5vh
+            - margin-left: 5.2vw
+            - margin-top: -5.7vh
+
+    设备角标:
+      card:
+        type: custom:button-card 
+        show_label: true
+        label: '[[[ return 设备 > 0? 设备:""; ]]]'
+        styles: 
+          label:
+            - label: '[[[ return 设备 > 0? 设备:""; ]]]'
+            - color: rgb(250,250,250)
+            - font-size: 1.2vh
+            - font-weight: bold
+          card:
+            - padding: 0
+            - background: '[[[ return 设备 > 0? 设备按钮开启颜色:"rgb(0,0,0,0)"; ]]]'
+            - clip-path: circle(0.75vh)
+            - border-width: 0
+            - width: 10vw
+            - height: 1.5vh
+            - margin-left: 5.2vw
+            - margin-top: -5.7vh
+    媒体角标:
+      card:
+        type: custom:button-card
+        show_label: true
+        label: '[[[ return 媒体 > 0? 媒体:""; ]]]'
+        styles: 
+          label:
+            - label: '[[[ return 媒体 > 0? 媒体:""; ]]]'
+            - color: rgb(250,250,250)
+            - font-size: 1.2vh
+            - font-weight: bold
+          card:
+            - padding: 0
+            - background: '[[[ return 媒体 > 0? 媒体按钮开启颜色:"rgb(0,0,0,0)"; ]]]'
+            - clip-path: circle(0.75vh)
+            - border-width: 0
+            - width: 10vw
+            - height: 1.5vh
+            - margin-left: 5.2vw
+            - margin-top: -5.7vh
+
+按钮动画模板:                                                         
+  triggers_update: all 
+  extra_styles: |
+      @keyframes shake{
+          0%  {transform: translate(0, 0) rotate(0deg); }
+          5%  {transform: translate(-4px, -3px) rotate(-15deg); }
+          10% {transform: translate(4px, -3px) rotate(15deg); }
+          15% {transform: translate(0, 2px) rotate(0deg);  }
+          20% {transform: translate(0, -1px) rotate(5deg); }
+          25% {transform: translate(0, 0) rotate(0deg); }
+      }      
+      @keyframes huxi_on {
+        0%,100% { box-shadow: 0 0 0.5vw 0.1vw  rgb(0,0,0,0.1); }
+        50%     { box-shadow: 0 0 0.5vw 0.3vw  rgb(0,0,0,0.3); }
+      }     
+      @keyframes huxi_off {
+        0%,100% { box-shadow: 0 0 0.5vw 0.1vw  rgb(200,200,200,0.1); }
+        50%     { box-shadow: 0 0 0.5vw 0.3vw  rgb(200,200,200,0.5); }
+      } 
+  styles: 
+    icon:
+      - width: 6vw
+      - height: 3vh
+      - animation-delay: 3s
+    card:
+      - cursor: none
+      - --mdc-ripple-press-opacity: 0.2
+      - padding: 0
+      - border: '[[[ return theme_border(0,255,0.15) ]]]'
+      - border-radius: 1.2vh
+      - width: 10vw
+      - height: 4.5vh
+      - margin-top: 2vw
+      - background: '[[[ return theme_color(230,80,0.5) ]]]'
+
+环境样式模板: 
+  layout: icon_state
+  show_state: true
+  show_name: false
+  styles:
+    icon:
+      - width: 3.8vw 
+      - height: 1.2vh
+      - margin-left: '-1vw'
+      - color: rgb(250,250,250)
+    state:
+      - font-size: 1.2vh
+      - margin-left: '-1vw'
+      - justify-self: start
+      - color: rgb(250,250,250)
+    card:
+      - cursor: none
+      - --mdc-ripple-press-opacity: 0.2
+      - padding: 0
+      - border-width: 0
+      - border-radius: 4vw
+      - width: 17vw
+      - height: 2.3vh

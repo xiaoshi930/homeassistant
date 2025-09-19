@@ -1,0 +1,61 @@
+UI表头_话费:     
+  triggers_update: all
+  layout: icon_state
+  show_state: true
+  show_name: false
+  icon: mdi:cellphone 
+  state_display: |
+    [[[
+        var minValue = Infinity;
+        for (var i = 0; i < variables.电话费?.length; i++) {
+          var currentValue = parseFloat(states[variables.电话费?.[i]]?.state) || 0;
+          if (currentValue < minValue) {
+            minValue = currentValue;
+          } 
+        }
+        minValue = Math.round(minValue*10)/10;
+        if (minValue<=30)  return '<font color="#FF2000"><b>'+minValue+' 元</b></font>';
+        if (minValue>30)   return minValue+" 元"
+    ]]]
+  styles:
+    icon:
+      - width: 3.8vw
+      - height: 2vh
+      - margin-left: 1vw
+      - color: '[[[ return theme_color(0,255,0.9) ]]]' 
+    state:
+      - font-size: 1.25vh
+      - width: 10vw
+      - margin-left: -1.5vw
+      - text-align: center
+      - overflow: visible
+      - color: '[[[ return theme_color(0,255,0.9) ]]]' 
+    card:
+      - cursor: none
+      - --mdc-ripple-press-opacity: 0.2  
+      - padding: 0
+      - background: '[[[ return theme_color(255,50,0.5) ]]]' 
+      - border: '[[[ return theme_border(0,255,0.15) ]]]'
+      - border-radius: 4vw
+      - width: 16vw
+      - height: 2.8vh
+  tap_action: 
+    action: fire-dom-event
+    browser_mod:
+      service: browser_mod.popup
+      data:
+        style: '[[[ return theme_none(); ]]]'
+        content:
+          type: vertical-stack
+          cards:
+            - type: custom:button-card
+              template: 话费信息卡片    
+              variables:
+                主题: '[[[ return theme() ]]]'
+                电话费: '[[[return variables.电话费]]]'
+            - type: custom:button-card    
+              template: 油价信息卡片    
+              variables:
+                主题: '[[[ return theme() ]]]'
+                油价: '[[[return variables.油价]]]'
+                   

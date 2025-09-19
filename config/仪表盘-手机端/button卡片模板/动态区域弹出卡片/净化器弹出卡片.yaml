@@ -1,0 +1,36 @@
+action: fire-dom-event
+browser_mod:
+  service: browser_mod.popup
+  data:
+    style:  '[[[ return theme_none_pupup() ]]]'  ## 引用全局函数【theme_none_pupup()】style样式
+    content:
+      type: vertical-stack
+      cards:    
+        - type: custom:button-card
+          template: 净化器fan卡片 
+          variables: 
+            净化器: fan.jinghuaqi_zhuwo
+            风速: number.jinghuaqi_zhuwo
+            温度: sensor.jinghuaqi_zhuwo_wendu
+            湿度: sensor.jinghuaqi_zhuwo_shidu
+            pm25: sensor.jinghuaqi_zhuwo_pm25
+            指示灯: light.jinghuaqi_light_zhuwo
+            提示音: switch.jinghuaqi_alarm_zhuwo
+            按键锁: switch.jinghuaqi_locked_zhuwo
+            滤芯: sensor.haocai_jinghuaqi_lvxin_zhuwo
+            主题: '[[[ return theme() ]]]'  ## 主题颜色[on]或[off]或[函数返回值]
+        - type: custom:button-card
+          template: 净化器switch卡片
+          variables:
+            净化器: switch.jinghuaqi_keting
+            风速: number.jinghuaqi_keting
+            模式: select.jinghuaqi_keting
+            温度: sensor.jinghuaqi_keting_wendu
+            湿度: sensor.jinghuaqi_keting_shidu
+            pm25: sensor.jinghuaqi_keting_pm25
+            指示灯: select.jinghuaqi_light_keting
+            提示音: switch.jinghuaqi_alarm_keting
+            按键锁: switch.jinghuaqi_locked_keting
+            滤芯: sensor.haocai_jinghuaqi_lvxin_keting
+            主题: '[[[ return theme() ]]]'  ## 主题颜色[on]或[off]或[函数返回值]
+      

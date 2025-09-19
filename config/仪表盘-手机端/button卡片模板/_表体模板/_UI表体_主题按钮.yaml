@@ -1,0 +1,164 @@
+UI表体_主题按钮:     
+  triggers_update:       
+    - '[[[ return number1 ?? ""]]]'  
+    - '[[[ return number2 ?? ""]]]'
+    - '[[[ return switch1 ?? ""]]]'     
+    - '[[[ return switch2 ?? ""]]]'     
+  show_name: false
+  show_label: true 
+  label: |
+    [[[ 
+        return theme() == 'on' ? "夜间" : "日间";
+    ]]] 
+  icon: |
+    [[[
+        if (hass.user.name == name1){
+          if (states[switch1]?.state=='on' )                     return "mdi:theme-light-dark";
+          if (states[switch1]?.state=='off' && theme() == 'on')  return "mdi:weather-night";
+          if (states[switch1]?.state=='off' && theme() == 'off') return "mdi:weather-sunny";
+        }
+        if (hass.user.name == name2){
+          if (states[switch2]?.state=='on' )                     return "mdi:theme-light-dark";
+          if (states[switch2]?.state=='off' && theme() == 'on')  return "mdi:weather-night";
+          if (states[switch2]?.state=='off' && theme() == 'off') return "mdi:weather-sunny";
+        }
+        return "mdi:theme-light-dark";
+    ]]]
+  styles: 
+    label:
+      - height: 1.5vh
+      - font-size: 1.2vh
+      - font-weight: bold
+      - color: |
+          [[[
+              if (hass.user.name == name1){
+                if (states[switch1]?.state =='on'  && theme() == 'on' ) return "rgb(254,109,7)";
+                if (states[switch1]?.state =='on'  && theme() == 'off') return "rgb(220,97,9)";
+                if (states[switch1]?.state =='off' && theme() == 'on' ) return "rgb(0,0,0)";
+                if (states[switch1]?.state =='off' && theme() == 'off') return "rgb(250,250,250)";
+              }
+              if (hass.user.name == name2){
+                if (states[switch2]?.state =='on'  && theme() == 'on' ) return "rgb(254,109,7)";
+                if (states[switch2]?.state =='on'  && theme() == 'off') return "rgb(220,97,9)";
+                if (states[switch2]?.state =='off' && theme() == 'on' ) return "rgb(0,0,0)";
+                if (states[switch2]?.state =='off' && theme() == 'off') return "rgb(250,250,250)";
+              }
+              return theme() == 'on' ? "rgb(0,0,0)" : "rgb(250,250,250)";
+          ]]]
+    icon:
+      - height: 3vh
+      - width: 5vw
+      - border-radius: 100%
+      - color: |
+          [[[ 
+              if (hass.user.name == name1){
+                if (states[switch1]?.state =='on'  && theme() == 'on' ) return "rgb(254,109,7)";
+                if (states[switch1]?.state =='on'  && theme() == 'off') return "rgb(220,97,9)";
+                if (states[switch1]?.state =='off' && theme() == 'on' ) return "rgb(0,0,0)";
+                if (states[switch1]?.state =='off' && theme() == 'off') return "rgb(250,250,250)";
+              }
+              if (hass.user.name == name2){
+                if (states[switch2]?.state =='on'  && theme() == 'on' ) return "rgb(254,109,7)";
+                if (states[switch2]?.state =='on'  && theme() == 'off') return "rgb(220,97,9)";
+                if (states[switch2]?.state =='off' && theme() == 'on' ) return "rgb(0,0,0)";
+                if (states[switch2]?.state =='off' && theme() == 'off') return "rgb(250,250,250)";
+              }
+              return theme() == 'on' ? "rgb(0,0,0)" : "rgb(250,250,250)";
+          ]]]
+    card: 
+      - cursor: none
+      - --mdc-ripple-press-opacity: 0.2
+      - border-width: 0
+      - border-radius: 0
+      - width: 9vw  
+      - height: 4vh
+      - background: |
+          [[[ 
+              if (hass.user.name == name1){
+                if (states[number1]?.state <= 2 ) return "rgb(0,0,0,0)"
+                else  return "radial-gradient(" +theme_color(255,0,0.3)+ " 0, rgb(0,0,0,0) 50%)" 
+              }
+              if (hass.user.name == name2){
+                if (states[number2]?.state <= 2 ) return "rgb(0,0,0,0)"
+                else  return "radial-gradient(" +theme_color(255,0,0.3)+ " 0, rgb(0,0,0,0) 50%)" 
+              }
+              return "rgb(0,0,0,0)";
+          ]]]
+      - border-radius: 2vw  
+      - margin-top: 5.5vh 
+
+  ##点击操作，切换黑白颜色
+  tap_action: 
+    action: call-service
+    service: number.set_value
+    data: 
+      value: |
+        [[[
+            if (hass.user.name == name1){
+                if (states[number1]?.state == 1) return 2;
+                if (states[number1]?.state == 2) return 1;
+                if (states[number1]?.state == 3) return 4;
+                if (states[number1]?.state == 4) return 3;
+                if (states[number1]?.state == 5) return 6;
+                if (states[number1]?.state == 6) return 5;
+                if (states[number1]?.state == 7) return 8;
+                if (states[number1]?.state == 8) return 7;
+            }
+            if (hass.user.name == name2){
+                if (states[number2]?.state == 1) return 2;
+                if (states[number2]?.state == 2) return 1;
+                if (states[number2]?.state == 3) return 4;
+                if (states[number2]?.state == 4) return 3;    
+                //这里屏蔽了5/6/7/8
+            }
+        ]]]
+    target:
+      entity_id:  |
+        [[[
+           if (hass.user.name == name1) return number1 ? number1 : "";
+           if (hass.user.name == name2) return number2 ? number2 : "";
+        ]]]
+
+  ##双击操作，切换主界面、背景图、视频
+  double_tap_action:
+    action: call-service
+    service: number.set_value
+    data: 
+      value: |
+        [[[
+            if (hass.user.name == name1){
+                if (states[number1]?.state == 1) return 3;
+                if (states[number1]?.state == 2) return 4;
+                if (states[number1]?.state == 3) return 5;
+                if (states[number1]?.state == 4) return 6;
+                if (states[number1]?.state == 5) return 7;
+                if (states[number1]?.state == 6) return 8;
+                if (states[number1]?.state == 7) return 1;
+                if (states[number1]?.state == 8) return 2;
+            }  
+            if (hass.user.name == name2){
+                if (states[number2]?.state == 1) return 3;
+                if (states[number2]?.state == 2) return 4;
+                if (states[number2]?.state == 3) return 1;
+                if (states[number2]?.state == 4) return 2;  
+                //这里屏蔽了5/6/7/8
+            }
+        ]]]
+    target:
+      entity_id: |
+        [[[
+           if (hass.user.name == name1) return number1 ? number1 : "";
+           if (hass.user.name == name2) return number2 ? number2 : "";
+        ]]]
+
+  ##长按操作，切换黑白颜色是否自动切换
+  hold_action:
+    action: call-service
+    service: switch.toggle
+    data: {}
+    target:
+      entity_id: |
+        [[[
+           if (hass.user.name == name1) return switch1 ? switch1 : "";
+           if (hass.user.name == name2) return switch2 ? switch2 : "";
+        ]]]

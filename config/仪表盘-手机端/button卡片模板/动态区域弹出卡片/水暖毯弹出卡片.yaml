@@ -1,0 +1,21 @@
+action: fire-dom-event
+browser_mod:
+  service: browser_mod.popup
+  data:
+    style:  '[[[ return theme_none_pupup() ]]]'  ## 引用全局函数【theme_none_pupup()】style样式
+    content:
+      type: vertical-stack
+      cards:    
+        - type: custom:button-card
+          template: 水暖毯卡片
+          variables:
+            水暖毯: climate.shuinuantan
+            防冻: switch.shuinuantan_antifreeze
+            防烫伤: switch.shuinuantan_antiscald
+            睡眠: switch.shuinuantan_sleep
+            指示灯: light.shuinuantan_light_keting
+            提示音: switch.shuinuantan_alarm_keting
+            按键锁: switch.shuinuantan_locked_keting
+            水位: sensor.shuinuantan_water_keting
+            主题: '[[[ return theme() ]]]'  ## 主题颜色[on]或[off]或[函数返回值]
+      

@@ -1,0 +1,246 @@
+action: fire-dom-event
+browser_mod:
+  service: browser_mod.popup
+  data:
+    style:  '[[[ return theme_bubble() ]]]'  ## 引用全局函数【theme_bubble()】style样式
+    content:
+      type: vertical-stack
+      cards: 
+        - type: custom:bubble-card
+          card_type: button
+          button_type: name
+          name: "客厅房间"
+          icon: "mdi:sofa"
+          card_layout: large
+          sub_button:
+            - entity: "sensor.wendu_keting"
+              show_state: true
+              show_background: false
+              show_icon: true
+            - entity: "sensor.shidu_keting"
+              show_state: true
+              state_background: false
+              show_background: false
+            - entity: "sensor.jinghuaqi_keting_pm25"
+              show_state: true
+              state_background: false
+              show_background: false
+        - type: custom:bubble-card
+          card_type: separator
+        - type: horizontal-stack
+          cards:
+            - type: custom:bubble-card
+              card_type: button
+              button_type: state
+              entity: "light.ketingdeng"
+              tap_action:
+                action: "toggle"
+              button_action:
+                tap_action:
+                  action: "toggle"
+              card_layout: "large-2-rows"
+              name: ""
+              styles: ".bubble-button-background {\nbackground-color: ${state === 'on' ? 'rgb(250,105,50)' : ''} ;\n}\n.bubble-icon {\ncolor: ${state === 'on' ? 'rgb(250,105,50)' : ''} !important;\n}"
+            - type: custom:bubble-card
+              card_type: button
+              button_type: state
+              entity: "light.ketingdengdai"
+              tap_action:
+                action: "toggle"
+              button_action:
+                tap_action:
+                  action: "toggle"
+              card_layout: "large-2-rows"
+              styles: ".bubble-button-background {\nbackground-color: ${state === 'on' ? 'rgb(250,105,50)' : ''} ;\n}\n.bubble-icon {\ncolor: ${state === 'on' ? 'rgb(250,105,50)' : ''} !important;\n}"
+        - type: horizontal-stack
+          cards:
+            - type: custom:bubble-card
+              card_type: button
+              button_type: state
+              entity: "light.ketingtongdeng"
+              tap_action:
+                action: "toggle"
+              button_action:
+                tap_action:
+                  action: "toggle"
+              card_layout: "large-2-rows"
+              name: ""
+              styles: ".bubble-button-background {\nbackground-color: ${state === 'on' ? 'rgb(250,105,50)' : ''} ;\n}\n.bubble-icon {\ncolor: ${state === 'on' ? 'rgb(250,105,50)' : ''} !important;\n}"
+            - type: custom:bubble-card
+              card_type: button
+              button_type: state
+              entity: "light.wangguandeng"
+              tap_action:
+                action: "toggle"
+              button_action:
+                tap_action:
+                  action: "toggle"
+              card_layout: "large-2-rows"
+              styles: ".bubble-button-background {\nbackground-color: ${state === 'on' ? 'rgb(250,105,50)' : ''} ;\n}\n.bubble-icon {\ncolor: ${state === 'on' ? 'rgb(250,105,50)' : ''} !important;\n}"
+        - type: horizontal-stack
+          cards:
+            - type: custom:bubble-card
+              card_type: button
+              button_type: state
+              entity: "light.ketingzoulangdeng"
+              tap_action:
+                action: "toggle"
+              button_action:
+                tap_action:
+                  action: "toggle"
+              card_layout: "large-2-rows"
+              name: ""
+              styles: ".bubble-button-background {\nbackground-color: ${state === 'on' ? 'rgb(250,105,50)' : ''} ;\n}\n.bubble-icon {\ncolor: ${state === 'on' ? 'rgb(250,105,50)' : ''} !important;\n}"
+            - type: custom:bubble-card
+              card_type: button
+              button_type: state
+              entity: "light.xuanguandeng"
+              tap_action:
+                action: "toggle"
+              button_action:
+                tap_action:
+                  action: "toggle"
+              card_layout: "large-2-rows"
+              styles: ".bubble-button-background {\nbackground-color: ${state === 'on' ? 'rgb(250,105,50)' : ''} ;\n}\n.bubble-icon {\ncolor: ${state === 'on' ? 'rgb(250,105,50)' : ''} !important;\n}"
+        - type: custom:bubble-card
+          card_type: separator
+        - type: custom:bubble-card
+          card_type: button
+          entity: "switch.diannao"
+          show_state: true
+          show_attribute: false
+          attribute: "supported_features"
+          tap_action:
+            action: "toggle"
+          button_action:
+            tap_action:
+              action: "toggle"
+          sub_button:
+            - entity: "sensor.pc_cpu_usage"
+              show_state: true
+              state_background: false
+              show_background: false
+              show_icon: false
+              show_name: true
+              name: "cpu"
+            - entity: "sensor.pc_memory_usage"
+              show_state: true
+              show_name: true
+              show_icon: false
+              state_background: true
+              name: "内存"
+              show_background: false
+            - entity: "sensor.pc_storage_c_usage"
+              show_last_changed: false
+              show_state: true
+              show_icon: false
+              state_background: false
+              show_name: true
+              show_background: false
+              name: "C盘"
+            - entity: "sensor.pc_storage_d_usage"
+              show_name: true
+              show_icon: false
+              show_background: false
+              show_state: true
+              name: "D盘"
+            - entity: "sensor.pc_storage_e_usage"
+              name: "E盘"
+              show_name: true
+              show_state: true
+              state_background: false
+              show_background: false
+              show_icon: false
+            - entity: "sensor.pc_storage_f_usage"
+              name: "F盘"
+              show_state: true
+              show_name: true
+              show_background: false
+              show_icon: false
+          card_layout: "large-2-rows"
+          styles: "ha-card {\n  --bubble-select-list-item-accent-color: ${state === 'on' ? 'rgb(33,150,243)' : ''} ;\n}\n.bubble-button-background {\n   background-color: ${state === 'on' ? 'rgb(33,150,243)' : ''} ;\n}\n.bubble-icon {\n   color: ${state === 'on' ? 'rgb(33,150,243)' : ''} !important;\n}"
+          icon: "mdi:laptop"
+          name: ""
+          force_icon: false
+        - type: custom:bubble-card
+          card_type: climate
+          entity: "climate.kongtiao_keting"
+          sub_button:
+            - entity: "climate.kongtiao_keting"
+              select_attribute: "hvac_modes"
+              show_arrow: false
+          card_layout: large
+          scrolling_effect: true
+          show_icon: true
+          force_icon: false
+          show_state: true
+          show_last_changed: false
+          show_attribute: false
+          state_color: true
+        - type: custom:bubble-card
+          card_type: button
+          entity: "humidifier.jiashiqi_keting"
+          card_layout: large
+          tap_action:
+            action: "toggle"
+          button_action:
+            tap_action:
+              action: "toggle"
+          sub_button:
+            - entity: "humidifier.jiashiqi_keting"
+              show_attribute: true
+              attribute: "current_humidity"
+              show_background: false
+              show_icon: false
+            - entity: "select.jiashiqi_keting"
+              show_state: true
+              state_background: true
+              show_arrow: true
+          show_state: true
+          show_attribute: false
+          icon: "mdi:air-humidifier"
+          styles: "ha-card {\n  --bubble-select-list-item-accent-color: ${state === 'on' ? 'rgb(30,144,255)' : ''} ;\n}\n.bubble-button-background {\n   background-color: ${state === 'on' ? 'rgb(30,144,255)' : ''} ;\n}\n.bubble-icon {\n   color: ${state === 'on' ? 'rgb(30,144,255)' : ''} !important;\n}"
+        - type: custom:bubble-card
+          card_type: button
+          entity: "fan.jinghuaqi_keting"
+          show_state: true
+          show_attribute: false
+          attribute: "supported_features"
+          tap_action:
+            action: "toggle"
+          button_action:
+            tap_action:
+              action: "toggle"
+          sub_button:
+            - entity: "sensor.jinghuaqi_keting_pm25"
+              show_icon: false
+              show_background: false
+              show_state: true
+            - entity: "select.jinghuaqi_keting"
+              show_icon: false
+              show_background: true
+              show_state: true
+          card_layout: large
+          styles: "ha-card {\n  --bubble-select-list-item-accent-color: ${state === 'on' ? 'rgb(50,205,50)' : ''} ;\n}\n.bubble-button-background {\n   background-color: ${state === 'on' ? 'rgb(50,205,50)' : ''} ;\n}\n.bubble-icon {\n   color: ${state === 'on' ? 'rgb(50,205,50)' : ''} !important;\n}"
+          icon: ""
+          name: ""
+          force_icon: false
+        - type: custom:bubble-card
+          card_type: separator
+        - type: custom:bubble-card
+          card_type: media-player
+          entity: "media_player.xiaomidianshi"
+          card_layout: large
+          show_state: true
+          cover_background: true
+        - type: custom:bubble-card
+          card_type: media-player
+          entity: "media_player.redmiyinxiang"
+          card_layout: large
+          show_state: true
+          cover_background: true
+        - type: custom:bubble-card
+          card_type: separator
+          
+
+

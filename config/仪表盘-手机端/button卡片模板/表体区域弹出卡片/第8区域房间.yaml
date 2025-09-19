@@ -1,0 +1,116 @@
+action: fire-dom-event
+browser_mod:
+  service: browser_mod.popup
+  data:
+    style:  '[[[ return theme_bubble() ]]]'  ## 引用全局函数【theme_bubble()】style样式
+    content:
+      type: vertical-stack
+      cards: 
+        - type: custom:bubble-card
+          card_type: button
+          button_type: name
+          name: 公卫房间
+          icon: mdi:bathtub
+          card_layout: large
+          sub_button:
+            - entity: sensor.wendu_gongwei
+              show_state: true
+              show_background: false
+              show_icon: true
+            - entity: sensor.shidu_gongwei
+              show_state: true
+              state_background: false
+              show_background: false
+        - type: custom:bubble-card
+          card_type: separator
+        - type: horizontal-stack
+          cards:
+            - type: custom:bubble-card
+              card_type: button
+              button_type: state
+              entity: light.yuba_gongwei_deng
+              tap_action:
+                action: toggle
+              button_action:
+                tap_action:
+                  action: toggle
+              card_layout: large-2-rows
+              name: ""
+              styles: ".bubble-button-background {\nbackground-color: ${state === 'on' ? 'rgb(250,105,50)' : ''} ;\n}\n.bubble-icon {\ncolor: ${state === 'on' ? 'rgb(250,105,50)' : ''} !important;\n}"
+            - type: custom:bubble-card
+              card_type: button
+              button_type: state
+              entity: light.gongweijingqiandeng
+              tap_action:
+                action: toggle
+              button_action:
+                tap_action:
+                  action: toggle
+              card_layout: large-2-rows
+              name: ""
+              styles: ".bubble-button-background {\nbackground-color: ${state === 'on' ? 'rgb(250,105,50)' : ''} ;\n}\n.bubble-icon {\ncolor: ${state === 'on' ? 'rgb(250,105,50)' : ''} !important;\n}"
+        - type: custom:bubble-card
+          card_type: separator
+        - type: custom:bubble-card
+          card_type: button
+          entity: select.xiyiji
+          show_state: true
+          show_attribute: true
+          attribute: options
+          tap_action:
+            action: toggle
+          button_action:
+            tap_action:
+              action: toggle
+          sub_button: []
+          card_layout: large
+          icon: mdi:washing-machine
+          name: ""
+          force_icon: false
+        - type: custom:bubble-card
+          card_type: button
+          entity: switch.yuba_gongwei
+          show_state: true
+          show_attribute: false
+          attribute: supported_features
+          tap_action:
+            action: toggle
+          button_action:
+            tap_action:
+              action: toggle
+          sub_button:
+            - entity: switch.yuba_gongwei_blow
+              show_state: true
+              state_background: false
+              show_background: true
+              show_icon: false
+              show_name: true
+              name: 吹风
+              tap_action:
+                action: toggle
+            - entity: switch.yuba_gongwei_vent
+              show_state: true
+              show_name: true
+              show_icon: false
+              state_background: true
+              name: 换气
+              show_background: true
+              tap_action:
+                action: toggle
+            - entity: switch.yuba_gongwei_heat1
+              icon: ""
+              show_background: true
+              name: 取暖
+              state_background: false
+              show_name: true
+              show_state: true
+              show_icon: false
+          card_layout: large
+          icon: mdi:hvac
+          name: ""
+          force_icon: false
+        - type: custom:bubble-card
+          card_type: separator
+          
+
+

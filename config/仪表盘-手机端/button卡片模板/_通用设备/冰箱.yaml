@@ -1,0 +1,216 @@
+冰箱卡片:
+  triggers_update:
+    - '[[[ return variables.右侧门 ?? ""]]]'
+    - '[[[ return variables.右侧设定温度 ?? ""]]]'
+    - '[[[ return variables.右侧实际温度 ?? ""]]]'
+    - '[[[ return variables.左侧门 ?? ""]]]' 
+    - '[[[ return variables.左侧设定温度 ?? ""]]]'
+    - '[[[ return variables.左侧实际温度 ?? ""]]]' 
+  styles:
+    grid:
+      - grid-template-areas: >
+          [[[
+              window.冰箱颜色 = "rgb(0,188,213)";  
+              return `"背景 背景 背景 背景"
+                      "名称 名称 状态 开关"
+                      "图标 空白区域 主按钮区域 主按钮区域"
+                      "空白行 空白行 空白行 空白行"
+                      "曲线图 曲线图 曲线图 曲线图"`
+          ]]] 
+      - grid-template-columns: 13% 14% 61% 12%
+      - grid-template-rows: 0 0 0 12.5vw 12.5vw 
+    card:
+      - padding: 0
+      - cursor: none
+      - --mdc-ripple-press-opacity: 0
+      - height: calc(25vw + 8px)
+  custom_fields:
+    背景:
+      card:
+        type: custom:button-card
+        styles:
+          card:
+            - margin-top: 25vw
+            - padding: 0
+            - border-width: 0
+            - border-radius: 0
+            - cursor: none
+            - --mdc-ripple-press-opacity: 
+            - border-radius: 3vw
+            - height: 25vw
+            - background: | 
+                [[[
+                    if( variables.主题=='off')  return "linear-gradient(90deg, "+冰箱颜色+" -50%, rgb(50,50,50) 50%)";
+                    if( variables.主题=='on' )  return "linear-gradient(90deg, "+冰箱颜色+" -50%, rgb(255,255,255) 50%)";
+                ]]] 
+    曲线图:
+      card:
+        type: custom:mini-graph-card
+        tap_action:
+          action: none
+        hold_action:
+          action: none
+        line_width: 1
+        hours_to_show: 24
+        smoothing: true
+        height: 50
+        show:
+          name: false
+          icon: false
+          state: false
+          legend: false
+          loading_indicator: false
+        cache: true
+        entities:
+          - entity: '[[[ return variables.右侧实际温度 ?? "" ]]]'
+            color: '[[[ return 冰箱颜色 ]]]'
+    名称:
+      card:
+        type: custom:button-card
+        show_label: true
+        label: 冰箱
+        styles:
+          card:
+            - margin-top: 8.25vw
+            - padding: 0
+            - border-radius: 0
+            - width: 50vw
+            - margin-left: 2.5vw  
+            - border-width: 0
+            - background: rgb(0,0,0,0)
+          label:
+            - justify-self: start
+            - font-size: 4vw
+            - font-weight: bold
+            - color: '[[[ return variables.主题 == "on" ? "rgb(50,50,50)" : "rgb(255,255,255)"; ]]]'
+    开关:
+      card:
+        type: custom:button-card
+        show_name: false
+        show_icon: true
+        icon: mdi:toggle-switch
+        styles:
+          card:
+            - margin-top: 8.25vw
+            - cursor: none
+            - --mdc-ripple-press-opacity: 0.2
+            - padding: 0
+            - border-radius: 2vw
+            - width: 8vw
+            - height: 8vw
+            - border-width: 0
+            - background: rgb(0,0,0,0)
+          icon:
+            - width: 8vw
+            - height: 8vw
+            - color: rgb(0,188,213)
+    图标:
+      card:
+        type: custom:button-card
+        show_icon: true
+        icon: mdi:fan
+        styles:
+          card:
+            - margin-top: 30vw
+            - padding: 0
+            - border-radius: 0
+            - width: 20vw 
+            - height: 20vw
+            - margin-left: '-2vw'
+            - border-width: 0
+            - background: rgb(0,0,0,0)
+          icon: 
+            - color: rgb(0,188,213)
+            - animation: rotating 1.5s linear infinite
+    主按钮区域:
+      card:
+        type: custom:button-card
+        tap_action:
+          action: none
+        hold_action:
+          action: none
+        styles:
+          grid:
+            - grid-template-areas: |
+                'b1 b2 b3 b4 b5 b6' 
+            - grid-template-columns: 16.67% 16.67% 16.67% 16.67% 16.67% 16.67% 
+            - grid-template-rows: 100%
+          card:
+            - margin-top: 30vw
+            - cursor: none
+            - width: 66vw
+            - padding: 0
+            - border-radius: 0
+            - border-width: 0
+            - background: rgb(0,0,0,0)
+        custom_fields:
+          b1: 
+            card:
+              type: custom:button-card
+              template: 冰箱主按钮样式模板
+              label: |
+                [[[ 
+                    var door = states[variables.右侧门]?.state;
+                    if(door=="on")  return '<font color="red">已打开<br></font>冷藏室门';
+                    if(door=="off") return '已关闭<br>冷藏室门';
+                    return '已关闭<br>冷藏室门';
+                ]]]  
+              variables:
+                主题: '[[[ return variables.主题 ?? ""]]]'
+          b2:
+            card:
+              type: custom:button-card
+              template: 冰箱主按钮样式模板
+              label: '[[[ return states[variables.右侧设定温度]?.state+ "°<br>冷藏设定"]]]' 
+              variables:
+                主题: '[[[ return variables.主题 ?? ""]]]'
+          b3:
+            card:
+              type: custom:button-card
+              template: 冰箱主按钮样式模板
+              label: '[[[ return states[variables.右侧实际温度]?.state+ "°<br>冷藏温度"]]]' 
+              variables:
+                主题: '[[[ return variables.主题 ?? ""]]]'
+          b4:
+            card:
+              type: custom:button-card
+              template: 冰箱主按钮样式模板
+              label: |
+                [[[ 
+                    var door = states[variables.右侧门]?.state;
+                    if(door=="on")  return '<font color="red">已打开<br></font>冷冻室门';
+                    if(door=="off") return '已关闭<br>冷冻室门';
+                    return '已关闭<br>冷冻室门';
+                ]]]  
+              variables:
+                主题: '[[[ return variables.主题 ?? ""]]]'
+          b5:
+            card:
+              type: custom:button-card
+              template: 冰箱主按钮样式模板
+              label: '[[[ return states[variables.左侧设定温度]?.state+ "°<br>冷冻设定"]]]' 
+              variables:
+                主题: '[[[ return variables.主题 ?? ""]]]'
+          b6:
+            card:
+              type: custom:button-card
+              template: 冰箱主按钮样式模板
+              label: '[[[ return states[variables.左侧实际温度]?.state+ "°<br>冷冻温度"]]]' 
+              variables:
+                主题: '[[[ return variables.主题 ?? ""]]]'
+
+冰箱主按钮样式模板:
+  show_label: true 
+  styles: 
+    card:
+      - cursor: none
+      - --mdc-ripple-press-opacity: 0.2
+      - width: 9.5vw
+      - height: 6vw
+      - border-radius: 1.5vw 
+      - background: '[[[ return variables.主题 == "on" ? "rgb(50,50,50)" : "rgb(120,120,120)"; ]]]'
+    label:
+      - color: rgb(255,255,255)
+      - font-size: 0.9vh
+      - margin-left: 0vw
+      - font-weight: bold

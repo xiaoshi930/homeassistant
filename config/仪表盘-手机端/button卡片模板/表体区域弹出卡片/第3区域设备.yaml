@@ -1,0 +1,34 @@
+action: fire-dom-event
+browser_mod:
+  service: browser_mod.popup
+  data:
+    style:  '[[[ return theme_none_pupup() ]]]'  ## 引用全局函数【theme_none_pupup()】style样式
+    content:
+      type: vertical-stack
+      cards: 
+        - type: custom:button-card
+          template: 循环扇
+          variables:  
+            循环扇: fan.xunhuanshan_ertongfang
+            上下摆风角度: select.dmaker_cn_921911289_p28_vertical_swing_included_angle_p_2_8   ## 角度 30  60  90
+            左右摆风角度: select.dmaker_cn_921911289_p28_horizontal_swing_included_angle_p_2_5 ## 角度 30  60  90 120 150
+            上下摆风: switch.dmaker_cn_921911289_p28_vertical_swing_p_2_7  ## 开启/关闭 上下摆风 
+            循环摆风:  switch.dmaker_cn_921911289_p28_swing_all_p_8_8      ## 开启/关闭 循环摆风 (左右摆风走动作)
+            风速档位: number.dmaker_cn_921911289_p28_speed_level_p_8_1             ## 直吹风：1-100无极调速，自然风：1档(1-34) 2档(35-69) 3档(70-99) 4档(100)
+            持续向上转: switch.dmaker_cn_921911289_p28_start_up_p_8_6              ## 手动调风向
+            持续向下转: switch.dmaker_cn_921911289_p28_start_down_p_8_7            ## 手动调风向
+            持续向左转: switch.dmaker_cn_921911289_p28_start_left_p_8_4            ## 手动调风向
+            持续向右转: switch.dmaker_cn_921911289_p28_start_right_p_8_5           ## 手动调风向
+            上下手动摇头: select.dmaker_cn_921911289_p28_swing_updown_manual_p_8_2 ## 手动调风向  上下 NONE UP DOWN
+            左右手动摇头: select.dmaker_cn_921911289_p28_swing_lr_manual_p_8_3     ## 手动调风向  左右 NONE LEFT RIGHT
+            一键回正: switch.dmaker_cn_921911289_p28_back_to_center_p_8_9          ## 手动调风向 回正
+            温度: sensor.dmaker_cn_921911289_p28_temperature_p_9_1
+            湿度: sensor.dmaker_cn_921911289_p28_relative_humidity_p_9_2
+            提示音: switch.dmaker_cn_921911289_p28_alarm_p_5_1                     ## 附加信息
+            按键锁: switch.dmaker_cn_921911289_p28_physical_controls_locked_p_7_1  ## 附加信息
+            指示灯: light.dmaker_cn_921911289_p28_s_4_indicator_light              ## 附加信息
+            关机回正: switch.dmaker_cn_921911289_p28_off_to_center_p_8_10          ## 附加信息
+            定时关机: number.dmaker_cn_921911289_p28_off_delay_time_p_3_1
+            主题: '[[[ return theme() ]]]'
+
+     

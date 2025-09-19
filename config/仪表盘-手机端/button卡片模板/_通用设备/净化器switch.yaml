@@ -1,0 +1,614 @@
+净化器switch卡片:
+  triggers_update:
+    - '[[[ return variables.净化器 ?? "" ]]]' 
+    - '[[[ return variables.风速 ?? "" ]]]'
+    - '[[[ return variables.模式 ?? "" ]]]'
+    - '[[[ return variables.温度 ?? "" ]]]'
+    - '[[[ return variables.湿度 ?? "" ]]]'
+    - '[[[ return variables.pm25 ?? "" ]]]' 
+    - '[[[ return variables.指示灯 ?? "" ]]]' 
+    - '[[[ return variables.提示音 ?? "" ]]]' 
+    - '[[[ return variables.按键锁 ?? "" ]]]' 
+    - '[[[ return variables.滤芯 ?? "" ]]]'
+  styles:
+    grid:
+      - grid-template-areas: >
+          [[[
+              window.净化器颜色 = "rgb(50,205,50)";  
+              window.净化器警告颜色 = "rgb(255,20,0)";
+              if(variables.净化器 !="none"){
+                  return `"背景 背景 背景 背景"
+                          "名称 名称 状态 开关"
+                          "图标 加减按钮 主按钮区域 主按钮区域"
+                          "图标 加减按钮 副按钮区域 副按钮区域"
+                          "图标 加减按钮 副按钮文字 副按钮文字"
+                          "空白行 空白行 空白行 空白行"
+                          "曲线图 曲线图 曲线图 曲线图"`
+              } 
+               if(variables.净化器 =="none"){ 
+                  return `` 
+              }
+          ]]] 
+      - grid-template-columns: 15% 26% 47% 12%
+      - grid-template-rows: 0 0 0 0 0 12.5vw 12.5vw
+    card:
+      - padding: 0
+      - cursor: none
+      - --mdc-ripple-press-opacity: 
+      - height: |
+          [[[ 
+              if( variables.净化器 !="none") {
+                return "calc(25vw + 8px);"
+              } 
+              else return "0";
+          ]]]
+      - display: |
+          [[[
+              if (variables.净化器 == "none") {
+                  return "none";
+              }
+          ]]]
+  custom_fields:
+    背景:
+      card:
+        type: custom:button-card
+        styles:
+          card:
+            - margin-top: 25vw
+            - padding: 0
+            - border-width: 0
+            - border-radius: 0
+            - cursor: none
+            - --mdc-ripple-press-opacity: 0
+            - border-radius: 3vw
+            - height: 25vw
+            - background: | 
+                [[[
+                    var state = states[variables.净化器]?.state;
+                    if(variables.主题=='off' && state =='on')  return "linear-gradient(90deg, "+净化器颜色+" -50%, rgb(50,50,50) 50%)";
+                    if(variables.主题=='on'  && state =='on')  return "linear-gradient(90deg, "+净化器颜色+" -50%, rgb(255,255,255) 50%)";
+                    if(variables.主题=='off' && state =='off') return "rgb(50,50,50)";
+                    if(variables.主题=='on'  && state =='off') return "rgb(255,255,255)";
+                    return variables.主题 == 'on' ? "rgb(255,255,255)" : "rgb(50,50,50)";
+                ]]] 
+    曲线图:
+      card:
+        type: custom:mini-graph-card
+        tap_action:
+          action: none
+        hold_action:
+          action: none
+        line_width: 1
+        hours_to_show: 24
+        smoothing: true
+        height: 50
+        show:
+          name: false
+          icon: false
+          state: false
+          legend: false
+          loading_indicator: false
+        cache: true
+        entities:
+          - entity: '[[[ return variables.pm25 ?? "" ]]]'
+            color: '[[[ return 净化器颜色 ]]]'
+    名称:
+      card:
+        type: custom:button-card
+        show_label: true
+        label: '[[[ return states[variables.净化器]?.attributes.friendly_name ?? "名称"]]]'
+        styles:
+          card:
+            - margin-top: 8.25vw
+            - padding: 0
+            - border-width: 0
+            - border-radius: 0
+            - width: 50vw
+            - margin-left: 2.5vw
+            - background: rgb(0,0,0,0)
+          label:
+            - justify-self: start 
+            - font-size: 4vw
+            - font-weight: bold
+            - color: '[[[ return variables.主题 == "on" ? "rgb(50,50,50)" : "rgb(255,255,255)"; ]]]'
+    状态:
+      card:
+        type: custom:button-card
+        label: |
+          [[[ 
+              var state = states[variables.净化器]?.state;
+              var temp = states[variables.温度]?.state?? "-";
+              var humi = states[variables.湿度]?.state?? "-";
+              var pm25 = states[variables.pm25]?.state?? "-";
+              var select = states[variables.模式]?.state?? "-";
+              if( state =='on')  
+                return select+": "+ temp + "<font size='1px'><b>°C&ensp;</b></font>"
+                                  + humi + "<font size='1px'><b>%&ensp;</b></font>"
+                                  + pm25 + "<font size='1px'><b>µg/m³</b></font>";
+              if( state =='off') 
+                return "关闭: "+ temp + "<font size='1px'><b>°C&ensp;</b></font>"
+                              + humi + "<font size='1px'><b>%&ensp;</b></font>"
+                              + pm25 + "<font size='1px'><b>µg/m³</b></font>";
+              return "离线";
+          ]]]
+        show_label: true
+        styles: 
+          card:
+            - margin-top: 8.25vw
+            - padding: 0
+            - border-radius: 0
+            - border-width: 0
+            - background: rgb(0,0,0,0)
+          label:
+            - justify-self: start
+            - font-size: 3vw
+            - font-weight: bold
+            - margin-top: 0.5vw
+            - margin-left: 0vw
+            - color: '[[[ return variables.主题 == "on" ? "rgb(50,50,50)" : "rgb(255,255,255)"; ]]]'
+    开关:
+      card:
+        type: custom:button-card
+        entity: '[[[ return variables.净化器 ?? "" ]]]'
+        tap_action:
+          action: toggle
+        show_name: false
+        show_icon: true
+        icon: |
+          [[[
+              var state = states[variables.净化器]?.state;
+              if( state =='off') return "mdi:toggle-switch-off";
+              if( state =='on')  return "mdi:toggle-switch";
+              return "mdi:toggle-switch-off";
+          ]]]
+        styles:
+          card:
+            - margin-top: 8.25vw
+            - cursor: none
+            - --mdc-ripple-press-opacity: 0.2
+            - padding: 0
+            - border-radius: 2vw
+            - border-width: 0
+            - width: 8vw
+            - height: 8vw
+            - background: rgb(0,0,0,0)
+          icon:
+            - width: 8vw
+            - height: 8vw
+            - color: |
+                [[[
+                    var state = states[variables.净化器]?.state;
+                    if( state =='on') return 净化器颜色;
+                    return variables.主题 == "on" ? "rgb(50,50,50)" : "rgb(255,255,255)";
+                ]]]
+    图标:
+      card:
+        type: custom:button-card
+        show_icon: true
+        icon: |
+          [[[ 
+              var state = states[variables.净化器]?.state;
+              if( state =='off') return "mdi:fan-off";
+              if( state =='on')  return "mdi:fan";
+              return "mdi:fan-off";
+          ]]] 
+        styles:
+          card:
+            - margin-top: 25vw
+            - padding: 0
+            - border-radius: 0
+            - border-width: 0
+            - width: 20vw
+            - height: 20vw
+            - margin-left: '-2vw'
+            - background: rgb(0,0,0,0)
+          icon:
+            - color: |
+                [[[
+                    var state = states[variables.净化器]?.state;
+                    if( state=="on"  )  return 净化器颜色;
+                    return variables.主题 == "on" ? "rgb(50,50,50)" : "rgb(255,255,255)";
+                ]]]
+            - animation: |
+                [[[ 
+                    var state = states[variables.净化器]?.state;
+                    if( state =='on')  return "rotating 1.5s linear infinite";
+                    if( state =='off') return "";
+                    return "";     
+                ]]]
+    加减按钮:
+      card:
+        type: custom:button-card
+        styles:
+          card:
+            - margin-top: 25vw
+            - padding: 0 2vw 0 0
+            - cursor: none 
+            - border-width: 0
+            - border-radius: 0
+            - background: rgb(0,0,0,0)
+          grid:
+            - grid-template-areas: |
+                "减 数值 加"
+            - grid-template-rows: 100%
+            - grid-auto-columns: minmax(0, 1fr)
+            - grid-auto-flow: column
+        custom_fields:
+          数值:
+            card:
+              type: custom:button-card
+              show_label: true
+              label: '[[[ return states[variables.风速]?.state +"级" ]]]'
+              styles:
+                card:
+                  - padding: 0
+                  - border-radius: 0
+                  - border-width: 0
+                  - width: 8vw
+                  - height: 6vw
+                  - margin-left: 0vw
+                  - background: rgb(0,0,0,0)
+                label:
+                  - font-size: 3.5vw
+                  - font-weight: bold
+                  - overflow: visible
+                  - color: '[[[ return variables.主题 == "on" ? "rgb(50,50,50)" : "rgb(255,255,255)"; ]]]'
+          减:
+            card:
+              type: custom:button-card
+              show_icon: true
+              icon: mdi:minus
+              styles:
+                icon:
+                  - width: 6vw
+                  - height: 6vw
+                  - color: '[[[ return variables.主题 == "on" ? "rgb(50,50,50)" : "rgb(255,255,255)"; ]]]'
+                card:
+                  - cursor: none
+                  - --mdc-ripple-press-opacity: 0.2
+                  - padding: 0
+                  - border-radius: 2vw
+                  - border-width: 0
+                  - width: 8vw
+                  - height: 6vw
+                  - background: rgb(0,0,0,0)
+              tap_action:
+                action: call-service
+                service: number.set_value
+                data:
+                  value: ' [[[ return states[variables.风速]?.state -1 ]]]'
+                target:
+                  entity_id: '[[[ return variables.风速 ?? "" ]]]'
+          加:
+            card:
+              type: custom:button-card
+              show_icon: true
+              icon: mdi:plus
+              styles:
+                icon:
+                  - width: 6vw
+                  - height: 6vw
+                  - color: '[[[ return variables.主题 == "on" ? "rgb(50,50,50)" : "rgb(255,255,255)"; ]]]'
+                card:
+                  - cursor: none
+                  - --mdc-ripple-press-opacity: 0.2
+                  - padding: 0
+                  - border-radius: 2vw
+                  - border-width: 0
+                  - width: 8vw
+                  - height: 6vw
+                  - background: rgb(0,0,0,0)
+              tap_action:
+                action: call-service
+                service: number.set_value
+                data:
+                  value: ' [[[ return states[variables.风速]?.state-(-1) ]]]'
+                target:
+                  entity_id: '[[[ return variables.风速 ?? "" ]]]'
+    主按钮区域:
+      card:
+        type: custom:button-card
+        tap_action:
+          action: none
+        hold_action:
+          action: none
+        styles:
+          grid:
+            - grid-template-areas: |
+                "fan1 fan2 fan3"
+            - grid-template-rows: 100%
+            - grid-auto-columns: minmax(0, 1fr)
+            - grid-auto-flow: column
+          card:
+            - margin-top: 25vw
+            - cursor: none
+            - width: 55vw
+            - padding: 0
+            - border-radius: 0
+            - border-width: 0
+            - background: rgb(0,0,0,0)
+        custom_fields:
+          fan1:
+            card:
+              type: custom:button-card
+              icon: mdi:fan-auto
+              name: 自动
+              template: 净化器switch主按钮样式
+              variables:
+                净化器: '[[[ return variables.净化器 ?? "" ]]]'
+                主题: '[[[ return variables.主题 ?? ""]]]'
+                模式: '[[[ return variables.模式 ?? "" ]]]'
+                preset_mode: 自动
+          fan2:
+            card:
+              type: custom:button-card
+              icon: mdi:power-sleep
+              name: 睡眠
+              template: 净化器switch主按钮样式
+              variables:
+                净化器: '[[[ return variables.净化器 ?? "" ]]]'
+                主题: '[[[ return variables.主题 ?? ""]]]'
+                模式: '[[[ return variables.模式 ?? "" ]]]'
+                preset_mode: 睡眠
+          fan3:
+            card:
+              type: custom:button-card
+              icon: mdi:heart
+              name: 最爱
+              template: 净化器switch主按钮样式
+              variables:
+                净化器: '[[[ return variables.净化器 ?? "" ]]]'
+                主题: '[[[ return variables.主题 ?? ""]]]'
+                模式: '[[[ return variables.模式 ?? "" ]]]'
+                preset_mode: 最爱
+    副按钮区域:
+      card:
+        type: custom:button-card
+        tap_action:
+          action: none
+        hold_action:
+          action: none
+        styles:
+          grid:
+            - grid-template-areas: |
+                "info1 info2 info3 info4"
+            - grid-template-rows: 100%
+            - grid-auto-columns: minmax(0, 1fr)
+            - grid-auto-flow: column
+          card:
+            - margin-top: 37.5vw
+            - cursor: none  
+            - width: 55vw
+            - padding: 0
+            - border-radius: 0
+            - border-width: 0
+            - background: rgb(0,0,0,0)
+        custom_fields:
+          info1: 
+            card:
+              type: custom:button-card
+              entity: '[[[ return  variables.指示灯 ?? "" ]]]'
+              template: 净化器switch副按钮样式
+              tap_action:
+                action:  |
+                  [[[
+                      var light = states[variables.指示灯]?.state;
+                      if( light =='正常' || light =='微亮' || light =='息屏')  return "call-service";
+                      if( light =='on' || light =='off')  return "toggle";
+                  ]]]
+                service:  |
+                  [[[
+                      var light = states[variables.指示灯]?.state;
+                      if( light =='正常' || light =='微亮' || light =='息屏')  return "select.select_option";
+                      if( light =='on' || light =='off')  return "switch.toggle";
+                  ]]]  
+                data: 
+                  option: |
+                      [[[ 
+                          var light = states[variables.指示灯]?.state;
+                          if( light =='息屏')  return "微亮";
+                          if( light =='微亮')  return "正常";
+                          if( light =='正常')  return "息屏";
+                          if( light =='on' || light =='off')  return "";
+                      ]]]
+                target:
+                  entity_id: '[[[ return  variables.指示灯 ?? "" ]]]'
+              icon: |
+                [[[
+                    var light = states[variables.指示灯]?.state;
+                    if( light =='正常')  return "mdi:toggle-switch";
+                    if( light =='微亮')  return "mdi:toggle-switch";
+                    if( light =='on')  return "mdi:toggle-switch";
+                    if( light =='息屏') return "mdi:toggle-switch-off";
+                    if( light =='off') return "mdi:toggle-switch-off";
+                    return "mdi:toggle-switch-off";
+                ]]]
+              styles:
+                icon:    
+                  - color: | 
+                      [[[ 
+                          var light  = states[variables.指示灯]?.state;      
+                          if( light =="on" ) return  净化器颜色;     
+                          if( light =='正常' )  return 净化器颜色;
+                          if( light =='微亮' )  return 净化器颜色;
+                          if( light =="息屏" && variables.主题=="on")  return "rgb(50,50,50)";  
+                          if( light =="息屏" && variables.主题=="off") return "rgb(250,250,250)";  
+                          if( light =="off"  && variables.主题=="on")  return "rgb(50,50,50)";  
+                          if( light =="off"  && variables.主题=="off") return "rgb(250,250,250)";  
+                          return variables.主题 == "on" ? "rgb(50,50,50)" : "rgb(255,255,255)";
+                      ]]] 
+          info2:
+            card:
+              type: custom:button-card
+              template: 净化器switch副按钮样式
+              variables:
+                净化器: '[[[ return  variables.净化器 ?? "" ]]]'
+                主题: '[[[ return variables.主题 ?? ""]]]'
+                info: '[[[ return  variables.提示音 ?? "" ]]]'
+          info3:
+            card:
+              type: custom:button-card
+              template: 净化器switch副按钮样式
+              variables:
+                净化器: '[[[ return  variables.净化器 ?? "" ]]]'
+                主题: '[[[ return variables.主题 ?? ""]]]'
+                info: '[[[ return  variables.按键锁 ?? "" ]]]'    
+          info4:
+            card:
+              type: custom:button-card
+              show_label: true
+              label: |
+                [[[ 
+                    var lvxin = states[variables.滤芯]?.state;
+                    if (lvxin>=0 ) return states[variables.滤芯]?.state +"%";
+                    return "";
+                ]]]
+              styles:
+                label:
+                  - font-size: 1.5vh
+                  - font-weight: bold
+                  - color: | 
+                      [[[
+                          var lvxin = states[variables.滤芯]?.state;
+                          if (lvxin<10) return 净化器警告颜色;
+                          if( lvxin>=10 && variables.主题=='on')   return "rgb(50,50,50)";
+                          if( lvxin>=10 && variables.主题=='off')  return "rgb(255,255,255)";
+                          return variables.主题 == "on" ? "rgb(50,50,50)" : "rgb(255,255,255)";
+                      ]]]
+                card:  
+                  - cursor: none 
+                  - width: 13.75vw
+                  - margin-left: 0vw
+                  - margin-top: 0.5vw
+                  - border-width: 0
+                  - background: rgb(0,0,0,0)
+    副按钮文字:
+      card:
+        type: custom:button-card
+        tap_action:
+          action: none
+        hold_action:
+          action: none
+        styles:
+          grid:
+            - grid-template-areas: |
+                "info1 info2 info3 info4"
+            - grid-template-rows: 100%
+            - grid-auto-columns: minmax(0, 1fr)
+            - grid-auto-flow: column
+          card:
+            - margin-top: 45vw
+            - cursor: none  
+            - width: 55vw
+            - padding: 0
+            - border-radius: 0
+            - border-width: 0
+            - font-size: 1.1vh
+            - color: '[[[ return variables.主题 == "on" ? "rgb(50,50,50)" : "rgb(255,255,255)"; ]]]'
+            - background: rgb(0,0,0,0)
+        custom_fields:
+          info1: |
+            [[[
+                var light = states[variables.指示灯]?.state;
+                if( light =='微亮' || light =='息屏')  return light;
+                if( light =='正常' )  return "高亮";
+                if( light =='on' || light =='off')  return "指示灯";
+                return "";
+            ]]]
+          info2: |
+            [[[
+                var alarm = states[variables.提示音]?.state;
+                if( alarm =='on' || alarm =='off')  return "提示音";
+                return "";
+            ]]]  
+          info3: |
+            [[[
+                var locked = states[variables.按键锁]?.state;
+                if( locked =='on' || locked =='off')  return "按键锁";
+                return "";
+            ]]]  
+          info4: |
+            [[[
+                var lvxin = states[variables.滤芯]?.state;
+                if( lvxin >=0 )  return "滤芯";
+                return "";
+            ]]]  
+
+净化器switch主按钮样式:
+  triggers_update:
+    - '[[[ return variables.净化器 ?? "" ]]]'
+    - '[[[ return variables.模式 ?? "" ]]]'
+  layout: icon_name
+  show_icon: true
+  show_name: true
+  styles:
+    card:
+      - cursor: none
+      - --mdc-ripple-press-opacity: 0.2
+      - width: 14.6vw
+      - height: 6vw
+      - border-radius: 1.5vw 
+      - background: '[[[ return variables.主题 == "on" ? "rgb(50,50,50)" : "rgb(120,120,120)"; ]]]'
+    name:
+      - color: rgb(255,255,255)
+      - font-size: 1.1vh
+      - margin-left: -2vw
+      - font-weight: bold
+    icon:
+      - width: 4vw
+      - height: 4vw
+      - margin-left: 2vw
+      - color: |
+          [[[
+              var state = states[variables.净化器]?.state;
+              var select= states[variables.模式]?.state;
+              if( state =='on'&& select ==variables.preset_mode) return 净化器颜色;          
+              return "rgb(255,255,255)"; 
+          ]]]
+  tap_action:
+    action: call-service
+    service: select.select_option
+    data:
+      option: '[[[ return variables.preset_mode ]]]'
+    target:
+      entity_id: '[[[ return variables.模式 ?? "" ]]]'
+
+净化器switch副按钮样式:
+  triggers_update:
+    - '[[[ return variables.净化器 ?? "" ]]]'
+    - '[[[ return variables.指示灯 ?? "" ]]]'
+    - '[[[ return variables.提示音 ?? "" ]]]'
+    - '[[[ return variables.按键锁 ?? "" ]]]'
+    - '[[[ return variables.滤芯 ?? "" ]]]'
+  tap_action:
+    action: toggle
+  entity: '[[[ return  variables.info ?? "" ]]]'
+  show_icon: true
+  show_name: false
+  icon: |
+    [[[
+        var info = states[variables.info]?.state;
+        if( info =='on')  return "mdi:toggle-switch";
+        if( info =='off') return "mdi:toggle-switch-off";
+        return "mdi:toggle-switch-off";
+    ]]]
+  styles:
+    card:  
+      - cursor: none 
+      - --mdc-ripple-press-opacity: 0.2
+      - width: 7vw
+      - height: 7vw
+      - margin-left: 3.3vw
+      - margin-top: 0.5vw
+      - border-radius: 3vw
+      - border-width: 0
+      - background: rgb(0,0,0,0)
+    icon:   
+      - width: 7vw
+      - height: 7vw
+      - color: | 
+          [[[ 
+              var info  = states[variables.info]?.state;      
+              if( info =="on" ) return 净化器颜色;
+              return variables.主题 == "on" ? "rgb(50,50,50)" : "rgb(255,255,255)";
+          ]]] 

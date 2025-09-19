@@ -1,0 +1,559 @@
+耗材信息卡片:     
+  triggers_update:
+    - '[[[ return variables.耗材 ?? ""]]]'    
+  styles:
+    grid:
+      - grid-template-areas: >
+          "名称 名称"
+          "项目1 项目2"
+          "项目3 项目4"
+          "项目5 项目6"
+          "项目7 项目8"
+          "项目9 项目10"
+          "项目11 项目12"
+          "项目13 项目14"
+          "项目15 项目16"
+          "项目17 项目18"
+          "项目19 项目20"
+          "项目21 项目22"
+          "项目23 项目24"
+          "项目25 项目26"
+          "项目27 项目28"
+          "项目29 项目30"
+          "项目31 项目32"
+      - grid-template-columns: 48% 50%
+      - grid-template-rows: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+    card: 
+      - padding: 0
+      - cursor: none
+      - --mdc-ripple-press-opacity: 0
+      - border-width: 0
+      - border-radius: 3vw
+      - background: '[[[ return variables.主题 == "on" ? "rgb(255,255,255)" : "rgb(50,50,50)"; ]]]' 
+      - height: |
+          [[[
+              var num = variables.耗材?.length;
+              return (num * 4 + 15) + 'vw';
+          ]]]
+  custom_fields:
+    名称:
+      card: 
+        type: custom:button-card 
+        label: 耗材信息
+        show_label: true
+        styles:
+          card: 
+            - margin-top: 10vw
+            - padding: 0
+            - border-width: 0
+            - cursor: none
+            - --mdc-ripple-press-opacity: 0
+            - border-radius: 3vw
+            - height: 10vw
+            - background: rgb(0,0,0,0)
+          label:
+            - font-size: 2vh
+            - font-weight: bold
+            - color: '[[[ return variables.主题 == "on" ? "rgb(0,0,0)" : "rgb(255,255,255)"; ]]]' 
+    项目1:
+      card: 
+        type: custom:button-card 
+        template: 耗材信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+          耗材: '[[[ return variables.耗材 ]]]' 
+          id: 0
+          top: 28vw
+    项目2:
+      card: 
+        type: custom:button-card 
+        template: 耗材信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+          耗材: '[[[ return variables.耗材 ]]]' 
+          id: 1
+          top: 28vw
+    项目3:
+      card: 
+        type: custom:button-card 
+        template: 耗材信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+          耗材: '[[[ return variables.耗材 ]]]' 
+          id: 2
+          top: 44vw
+    项目4:
+      card: 
+        type: custom:button-card 
+        template: 耗材信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+          耗材: '[[[ return variables.耗材 ]]]' 
+          id: 3
+          top: 44vw
+    项目5:
+      card: 
+        type: custom:button-card 
+        template: 耗材信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+          耗材: '[[[ return variables.耗材 ]]]' 
+          id: 4
+          top: 60vw  
+    项目6:
+      card: 
+        type: custom:button-card 
+        template: 耗材信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+          耗材: '[[[ return variables.耗材 ]]]' 
+          id: 5
+          top: 60vw  
+    项目7:
+      card: 
+        type: custom:button-card 
+        template: 耗材信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+          耗材: '[[[ return variables.耗材 ]]]' 
+          id: 6
+          top: 76vw
+    项目8:
+      card: 
+        type: custom:button-card 
+        template: 耗材信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+          耗材: '[[[ return variables.耗材 ]]]' 
+          id: 7
+          top: 76vw
+    项目9:
+      card: 
+        type: custom:button-card 
+        template: 耗材信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+          耗材: '[[[ return variables.耗材 ]]]' 
+          id: 8
+          top: 92vw
+    项目10:
+      card: 
+        type: custom:button-card 
+        template: 耗材信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+          耗材: '[[[ return variables.耗材 ]]]' 
+          id: 9
+          top: 92vw
+    项目11:
+      card: 
+        type: custom:button-card 
+        template: 耗材信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+          耗材: '[[[ return variables.耗材 ]]]' 
+          id: 10
+          top: 108vw
+    项目12:
+      card: 
+        type: custom:button-card 
+        template: 耗材信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+          耗材: '[[[ return variables.耗材 ]]]' 
+          id: 11
+          top: 108vw
+    项目13:
+      card: 
+        type: custom:button-card 
+        template: 耗材信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+          耗材: '[[[ return variables.耗材 ]]]' 
+          id: 12
+          top: 124vw
+    项目14:
+      card: 
+        type: custom:button-card 
+        template: 耗材信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+          耗材: '[[[ return variables.耗材 ]]]' 
+          id: 13
+          top: 124vw
+    项目15:
+      card: 
+        type: custom:button-card 
+        template: 耗材信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+          耗材: '[[[ return variables.耗材 ]]]' 
+          id: 14
+          top: 140vw
+    项目16:
+      card: 
+        type: custom:button-card 
+        template: 耗材信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+          耗材: '[[[ return variables.耗材 ]]]' 
+          id: 15
+          top: 140vw
+    项目17:
+      card: 
+        type: custom:button-card 
+        template: 耗材信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+          耗材: '[[[ return variables.耗材 ]]]' 
+          id: 16
+          top: 156vw
+    项目18:
+      card: 
+        type: custom:button-card 
+        template: 耗材信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+          耗材: '[[[ return variables.耗材 ]]]' 
+          id: 17
+          top: 156vw
+    项目19:
+      card: 
+        type: custom:button-card 
+        template: 耗材信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+          耗材: '[[[ return variables.耗材 ]]]' 
+          id: 18
+          top: 172vw
+    项目20:
+      card: 
+        type: custom:button-card 
+        template: 耗材信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+          耗材: '[[[ return variables.耗材 ]]]' 
+          id: 19
+          top: 172vw
+    项目21:
+      card: 
+        type: custom:button-card 
+        template: 耗材信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+          耗材: '[[[ return variables.耗材 ]]]' 
+          id: 20
+          top: 188vw
+    项目22:
+      card: 
+        type: custom:button-card 
+        template: 耗材信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+          耗材: '[[[ return variables.耗材 ]]]' 
+          id: 21
+          top: 188vw
+    项目23:
+      card: 
+        type: custom:button-card 
+        template: 耗材信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+          耗材: '[[[ return variables.耗材 ]]]' 
+          id: 22
+          top: 204vw
+    项目24:
+      card: 
+        type: custom:button-card 
+        template: 耗材信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+          耗材: '[[[ return variables.耗材 ]]]' 
+          id: 23
+          top: 204vw
+    项目25:
+      card: 
+        type: custom:button-card 
+        template: 耗材信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+          耗材: '[[[ return variables.耗材 ]]]' 
+          id: 24
+          top: 220vw
+    项目26:
+      card: 
+        type: custom:button-card 
+        template: 耗材信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+          耗材: '[[[ return variables.耗材 ]]]' 
+          id: 25
+          top: 220vw
+    项目27:
+      card: 
+        type: custom:button-card 
+        template: 耗材信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+          耗材: '[[[ return variables.耗材 ]]]' 
+          id: 26
+          top: 236vw
+    项目28:
+      card: 
+        type: custom:button-card 
+        template: 耗材信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+          耗材: '[[[ return variables.耗材 ]]]' 
+          id: 27
+          top: 236vw
+    项目29:
+      card: 
+        type: custom:button-card 
+        template: 耗材信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+          耗材: '[[[ return variables.耗材 ]]]' 
+          id: 28
+          top: 252vw
+    项目30:
+      card: 
+        type: custom:button-card 
+        template: 耗材信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+          耗材: '[[[ return variables.耗材 ]]]' 
+          id: 29
+          top: 252vw
+    项目31:
+      card: 
+        type: custom:button-card 
+        template: 耗材信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+          耗材: '[[[ return variables.耗材 ]]]' 
+          id: 30
+          top: 268vw
+    项目32:
+      card: 
+        type: custom:button-card 
+        template: 耗材信息样式模板
+        variables:
+          主题: '[[[ return variables.主题 ]]]'
+          耗材: '[[[ return variables.耗材 ]]]' 
+          id: 31
+          top: 268vw
+
+耗材信息样式模板:
+  layout: icon_name
+  icon: |
+    [[[
+        if(variables.耗材?.length > variables.id)
+        return states[variables.耗材?.[variables.id]?.entity]?.attributes?.icon
+    ]]]
+  show_icon: true
+  show_label: true
+  show_state: true
+  name: |
+    [[[
+        if(variables.耗材?.length > variables.id)
+        return states[variables.耗材?.[variables.id]?.entity]?.attributes?.friendly_name;
+    ]]]
+  state_display: |
+    [[[
+        if(variables.耗材?.length > variables.id){
+            var convert = 1;
+            if (variables.耗材?.[variables.id]?.convert !== undefined){
+              convert = variables.耗材?.[variables.id]?.convert;
+            }
+            var state = states[variables.耗材?.[variables.id]?.entity]?.state;
+            var entity = variables.耗材?.[variables.id]?.entity;
+            var domain = entity.split(".")[0];
+            
+            if (domain=='sensor'){
+              return Math.round(state/convert) + "%";
+            }
+            else if (domain=='event'){
+              if(state!='unknown' && state.length>10) {
+                  var stateDate  = new Date(state);
+                  var todayDate = new Date();
+                  var dayDifference = (todayDate -stateDate) / (1000 * 60 * 60 * 24);
+                  if( dayDifference > 5 ) return "正常";
+                  return "低电量";
+                }
+              return "正常";
+            }
+            else if (domain=='binary_sensor'){
+              if(state=='off') return "正常";
+              if(state=='on')  return "短缺";
+            }
+        }
+    ]]]
+  styles: 
+    card: 
+      - margin-top: '[[[ return variables.top ]]]'
+      - margin-left: 4.5vw
+      - padding: 0
+      - cursor: none
+      - --mdc-ripple-press-opacity: 0
+      - border-width: 0
+      - border-radius: 0
+      - background: rgb(0,0,0,0)
+      - height: 8vw
+      - width: 40vw
+      - display: |
+          [[[
+              if(variables.耗材?.length <= variables.id) {
+                  return "none";
+              }
+          ]]]
+    icon:
+      - z-index: 2
+      - margin-left: -12vw
+      - margin-top: -1vw
+      - width: 20px
+      - height: 20px
+      - color: '[[[ return variables.主题 == "on" ? "rgb(0,0,0)" : "rgb(255,255,255)"; ]]]' 
+    name:
+      - z-index: 2
+      - margin-top: 3.5vw
+      - margin-left: -20vw
+      - font-size: 1.5vh
+      - font-weight: bold
+      - text-align: left
+      - width: 30vw
+      - height: 8vw
+      - color: |
+          [[[
+              if(variables.耗材?.length > variables.id){
+                  var convert = 1;
+                  if (variables.耗材?.[variables.id]?.convert !== undefined){
+                    convert = variables.耗材?.[variables.id]?.convert;
+                  }
+                  var state = states[variables.耗材?.[variables.id]?.entity]?.state;
+                  var entity = variables.耗材?.[variables.id]?.entity;
+                  var domain = entity.split(".")[0];
+                  
+                  if (domain=='sensor'){
+                     if((state/convert)<=21) return "rgb(255,20,0)";
+                     return variables.主题 == "on" ? "rgb(0,0,0)" : "rgb(255,255,255)";
+                  }
+                  else if (domain=='event'){
+                    if(state!='unknown' && state.length>10) {
+                        var stateDate  = new Date(state);
+                        var todayDate = new Date();
+                        var dayDifference = (todayDate -stateDate) / (1000 * 60 * 60 * 24);
+                        if( dayDifference > 5) return variables.主题 == "on" ? "rgb(0,0,0)" : "rgb(255,255,255)";
+                        return "rgb(255,20,0)";
+                      }
+                    return variables.主题 == "on" ? "rgb(0,0,0)" : "rgb(255,255,255)";
+                  }
+                  else if (domain=='binary_sensor'){
+                    if(state=='off') return variables.主题 == "on" ? "rgb(0,0,0)" : "rgb(255,255,255)";
+                    if(state=='on')  return "rgb(255,20,0)";
+                  }
+              }
+          ]]]
+    state:
+      - z-index: 2
+      - margin-top: -8vw
+      - margin-left: 20vw
+      - font-size: 1.5vh
+      - font-weight: bold
+      - text-align: right
+      - width: 20vw
+      - height: 8vw 
+      - color: |
+          [[[
+              if(variables.耗材?.length > variables.id){
+                  var convert = 1;
+                  if (variables.耗材?.[variables.id]?.convert !== undefined){
+                    convert = variables.耗材?.[variables.id]?.convert || "1";
+                  }
+                  var state = states[variables.耗材?.[variables.id]?.entity].state;
+                  var entity = variables.耗材?.[variables.id]?.entity;
+                  var domain = entity.split(".")[0];
+                  
+                  if (domain=='sensor'){
+                     if((state/convert)<=21) return "rgb(255,20,0)";
+                     return variables.主题 == "on" ? "rgb(0,0,0)" : "rgb(255,255,255)";
+                  }
+                  else if (domain=='event'){
+                    if(state!='unknown' && state.length>10) {
+                        var stateDate  = new Date(state);
+                        var todayDate = new Date();
+                        var dayDifference = (todayDate -stateDate) / (1000 * 60 * 60 * 24);
+                        if( dayDifference > 5) return variables.主题 == "on" ? "rgb(0,0,0)" : "rgb(255,255,255)";
+                        return "rgb(255,20,0)";
+                      }
+                    return variables.主题 == "on" ? "rgb(0,0,0)" : "rgb(255,255,255)";
+                  }
+                  else if (domain=='binary_sensor'){
+                    if(state=='off') return variables.主题 == "on" ? "rgb(0,0,0)" : "rgb(255,255,255)";
+                    if(state=='on')  return "rgb(255,20,0)";
+                  }
+              }
+          ]]]
+  custom_fields:
+    back: >
+      [[[
+          if(variables.耗材?.length>variables.id){
+            var color = variables.主题 == "on" ? "rgb(100,100,100,0.3)" : "rgb(200,200,200,0.3)";
+            return `
+              <div style="
+                position: absolute;
+                top: 92%;
+                left: 80%;
+                height: 8%;
+                width: 20%;
+                background: ${color};
+              "></div>
+            `;
+          } 
+      ]]]
+    progress: >
+      [[[
+          if(variables.耗材?.length > variables.id){
+              var maxValue = 100;
+              var percent =100;
+              var convert = 1;
+              if (variables.耗材?.[variables.id]?.convert !== undefined){
+                convert = variables.耗材?.[variables.id]?.convert || "1";
+              }
+              var state = states[variables.耗材?.[variables.id]?.entity]?.state;
+              var entity = variables.耗材?.[variables.id]?.entity;
+              var domain = entity.split(".")[0];
+              
+              if (domain=='sensor'){
+                percent =(state/convert)*100/maxValue;
+                if (percent<5) percent = 5;
+              }
+              else if (domain=='event'){
+                if(state!='unknown' && state.length>10) {
+                    var stateDate  = new Date(state);
+                    var todayDate = new Date();
+                    var dayDifference = (todayDate -stateDate) / (1000 * 60 * 60 * 24);
+                    if( dayDifference > 5) percent =100;
+                    else percent =5;
+                  }
+                else percent =100;
+              }
+              else if (domain=='binary_sensor'){
+                if(state=='off') percent=100;
+                if(state=='on')  percent=5;
+              }
+            var color = `hsl(${percent}, 100%, 50% ,0.8)`;
+            percent= percent*0.2;
+            return `
+              <div style="
+                position: absolute;
+                top: 92%;
+                left: 80%;
+                height: 8%;
+                width: ${percent}%;
+                background: linear-gradient(90deg, ${color} 0%, ${color} 100%);
+                transition: width 0.5s ease;
+              "></div>
+            `;
+          }
+      ]]]

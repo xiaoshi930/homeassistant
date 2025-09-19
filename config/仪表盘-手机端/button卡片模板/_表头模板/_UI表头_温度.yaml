@@ -1,0 +1,96 @@
+UI表头_温度:     
+  triggers_update:
+    - '[[[ return number1 ?? ""]]]'  
+    - '[[[ return number2 ?? ""]]]'  
+    - '[[[ return switch1 ?? ""]]]'  
+    - '[[[ return switch2 ?? ""]]]'  
+  entity: '[[[ return variables.室外温度 ]]]' 
+  layout: icon_state
+  icon: mdi:thermometer
+  show_state: true
+  state_display: |
+    [[[
+        if (variables.室外温度.startsWith("sensor.weather")) {
+          return states[variables.室外温度]?.attributes?.temp + "°C";
+        }
+        return states[variables.室外温度]?.state+"°C";
+    ]]]
+  show_name: false
+  styles: 
+    icon:
+      - width: 3.8vw
+      - height: 2vh
+      - margin-left: 1vw
+      - color: '[[[ return theme_color(0,255,0.9) ]]]' 
+    state:
+      - font-size: 1.25vh
+      - width: 10vw
+      - margin-left: -1.5vw
+      - text-align: center
+      - color: '[[[ return theme_color(0,255,0.9) ]]]' 
+    card:
+      - cursor: none
+      - --mdc-ripple-press-opacity: 0.2  
+      - padding: 0
+      - background: '[[[ return theme_color(255,50,0.5) ]]]' 
+      - border: '[[[ return theme_border(0,255,0.15) ]]]'
+      - border-radius: 4vw
+      - width: 16vw
+      - height: 2.8vh
+  tap_action: 
+    action: fire-dom-event
+    browser_mod:
+      service: browser_mod.popup
+      data:
+        style: '[[[ return theme_none(); ]]]'
+        content:
+          type: vertical-stack
+          cards:                                  
+            - type: custom:apexcharts-card
+              card_mod:
+                style: '[[[ return theme_apexcharts(); ]]]'
+              config_templates: 环境曲线模板
+              series:
+                - entity: '[[[ return variables.室外温度 ]]]'
+                  name: 🏠室外传感器温度
+                  color: '[[[ return 温度颜色 ]]]'    
+                  attribute: |
+                    [[[
+                        if (variables.室外温度.startsWith("sensor.weather")) {
+                          return "temp";
+                        }
+                        return "";
+                    ]]]
+                  unit: ℃
+                - entity:  | 
+                    [[[
+                        if (hass.user.name == name1) return weather1;
+                        if (hass.user.name == name2) return weather2;
+                    ]]]
+                  attribute: temp
+                  name: | 
+                    [[[
+                        if (hass.user.name == name1) return '📍'+name1+' 温度';
+                        if (hass.user.name == name2) return '📍'+name2+' 温度';
+                    ]]]
+                  unit: ℃
+                  color: '[[[ return 湿度颜色 ]]]'
+            - type: custom:apexcharts-card
+              card_mod:
+                style: '[[[ return theme_apexcharts(); ]]]'
+              config_templates: 空气质量AQI
+              series:
+                - entity: '[[[ return weatherh ]]]'
+                  attribute: aqi
+                  name: 🏠室外AQI
+                - entity: | 
+                    [[[
+                        if (hass.user.name == name1) return weather1;
+                        if (hass.user.name == name2) return weather2;
+                    ]]]
+                  attribute: aqi
+                  name:  | 
+                    [[[
+                        if (hass.user.name == name1) return '📍'+name1+' AQI';
+                        if (hass.user.name == name2) return '📍'+name2+' AQI';
+                    ]]]
