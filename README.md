@@ -55,10 +55,10 @@ dashboards:
 
 **🎨 仪表盘卡片UI：**
 - 手机端日期（自带弹出万年历）：`type: custom:xiaoshi-lunar-calendar-phone-date`
-- 手机端万年历：`type: custom:xiaoshi-lunar-calendar-phone`
 - 平板端日期（自带弹出万年历）：`type: custom:xiaoshi-lunar-calendar-pad-date`
+- 手机端万年历：`type: custom:xiaoshi-lunar-calendar-phone`
 - 平板端万年历：`type: custom:xiaoshi-lunar-calendar-pad`
-- 日历：`type: custom:xiaoshi-lunar-calendar`
+- 日历信息卡片：`type: custom:xiaoshi-lunar-calendar`
 - 生日信息卡片：`type: custom:xiaoshi-birthday-card`
 
 ---
@@ -150,10 +150,10 @@ dashboards:
 **🔗 项目地址：** https://github.com/xiaoshi930/xiaoshi-pad-card
 
 **🎨 仪表盘卡片UI：**
-- （平板端）温度湿度分布卡：`type: custom:xiaoshi-pad-grid-card`
+- （平板端）温度湿度分布：`type: custom:xiaoshi-pad-grid-card`
 - （通用端）HA更新信息卡：`type: custom:xiaoshi-update-card`
 - （通用端）HA离线信息卡：`type: custom:xiaoshi-offline-card`
-- （通用端）信息余额卡：`type: custom:xiaoshi-balance-card`
+- （通用端）信息余额卡片：`type: custom:xiaoshi-balance-card`
 
 ---
 
