@@ -1,8 +1,9 @@
-# Lovelace 仪表盘 YAML 配置指南
 
-## 切换仪表盘
+## ⚙️ Lovelace 仪表盘 YAML 配置指南
 
-### 1. 修改主配置文件
+### 🔄 切换仪表盘
+
+#### 1️⃣ 修改主配置文件
 
 编辑 `configuration.yaml` 文件，添加以下配置：
 
@@ -13,7 +14,9 @@ lovelace:
   # 引入资源配置文件
   resources: !include 资源配置.yaml
 ```
-### 2. 创建 资源配置.yaml 文件，内容如下：
+
+#### 2️⃣ 创建 资源配置.yaml 文件
+
 ```yaml
 # Lovelace 自定义资源配置
 mode: yaml
@@ -38,8 +41,7 @@ dashboards:
     filename: 仪表盘-手机端/手机端主UI.yaml
 ```
 
-## 添加自定义集成  
-hacs里添加自定义库
+---
 
 # 🏠 Home Assistant 自定义集成汇总
 
