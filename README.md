@@ -155,6 +155,7 @@ dashboards:
 - （通用端）HA离线信息卡：`type: custom:xiaoshi-offline-card`
 - （通用端）信息余额卡片：`type: custom:xiaoshi-balance-card`
 - （通用端）待办事项卡片：`type: custom:xiaoshi-todo-card`
+- （通用端）耗材信息卡片：`type: custom:xiaoshi-consumables-card`
 ---
 
 ### 📱 消逝卡（手机端）`v0.0.6`
