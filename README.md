@@ -68,12 +68,7 @@ dashboards:
 **🔗 项目地址：** https://github.com/xiaoshi930/state_grid_info
 
 **🎨 仪表盘卡片UI：**
-- 国网信息表格：`type: custom:xiaoshi-state-grid-table`
-- 国网信息日历：`type: custom:xiaoshi-state-grid-calendar`
-- 国网每日图表：`type: custom:xiaoshi-state-grid-chart-day`
-- 国网每月图表：`type: custom:xiaoshi-state-grid-chart-month`
-- 国网手机端UI：`type: custom:xiaoshi-state-grid-phone`
-- 国网平板端UI：`type: custom:xiaoshi-state-grid-pad`
+- 国网信息：`type: custom:xiaoshi-state-grid-info`
 
 ---
 
@@ -95,17 +90,18 @@ dashboards:
 
 ---
 
-### 📜 本地古诗词 `v1.4`
-
-**🔗 项目地址：** https://github.com/xiaoshi930/chinese_poetry
-
-**🎨 仪表盘卡片UI：** 无
-
----
-
 ### 🌤️ 和风天气 `v1.8`
 
 **🔗 项目地址：** https://github.com/xiaoshi930/qweather
+
+**🎨 仪表盘卡片UI：** 
+- 平板端UI：`type: custom:xiaoshi-weather-pad-player`
+- 手机端UI：`type: custom:xiaoshi-weather-pHONE-player`
+---
+
+### 📜 本地古诗词 `v1.4`
+
+**🔗 项目地址：** https://github.com/xiaoshi930/chinese_poetry
 
 **🎨 仪表盘卡片UI：** 无
 
