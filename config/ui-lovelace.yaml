@@ -1,0 +1,17 @@
+views:
+  - type: panel
+    title: Home       
+    cards:   
+      - type: custom:button-card
+        show_label: true
+        label: 初始页面
+        styles:
+          label: 
+            - font-size: 10px
+            - color: black
+          card:  
+            - width: 30vw   
+            - height: 30vh
+            - background: rgb(255,255,255)
+          left: 50vw
+          top: 50vh
