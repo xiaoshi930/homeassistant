@@ -1,0 +1,66 @@
+action: fire-dom-event
+browser_mod:
+  service: browser_mod.popup
+  data:
+    style: '[[[ return theme_none(825)]]]'
+    content:
+      type: horizontal-stack
+      cards:
+        - type: vertical-stack
+          cards:
+            - type: custom:button-card
+              template: 电脑屏幕
+              variables:      
+                主题: '[[[ return theme() ]]]' ## 主题颜色[on]或[off]或[函数返回值]
+                电脑: switch.diannao
+                屏幕: camera.pc_screen 
+            - type: custom:button-card
+              template: 电脑硬盘
+              variables:      
+                主题: '[[[ return theme() ]]]' ## 主题颜色[on]或[off]或[函数返回值]
+                硬盘总共: sensor.pc_storage_c_total  
+                硬盘空闲: sensor.pc_storage_c_free
+                硬盘百分比: sensor.pc_storage_c_usage
+                名称: 本地磁盘(C:)
+            - type: custom:button-card
+              template: 电脑硬盘
+              variables:      
+                主题: '[[[ return theme() ]]]' ## 主题颜色[on]或[off]或[函数返回值]
+                硬盘总共: sensor.pc_storage_d_total
+                硬盘空闲: sensor.pc_storage_d_free
+                硬盘百分比: sensor.pc_storage_d_usage
+                名称: 本地磁盘(D:)
+            - type: custom:button-card
+              template: 电脑硬盘
+              variables:      
+                主题: '[[[ return theme() ]]]' ## 主题颜色[on]或[off]或[函数返回值]
+                硬盘总共: sensor.pc_storage_e_total 
+                硬盘空闲: sensor.pc_storage_e_free
+                硬盘百分比: sensor.pc_storage_e_usage
+                名称: 本地磁盘(E:)
+            - type: custom:button-card
+              template: 电脑硬盘
+              variables:      
+                主题: '[[[ return theme() ]]]' ## 主题颜色[on]或[off]或[函数返回值]
+                硬盘总共: sensor.pc_storage_f_total 
+                硬盘空闲: sensor.pc_storage_f_free
+                硬盘百分比: sensor.pc_storage_f_usage
+                名称: 本地磁盘(F:)
+        - type: vertical-stack
+          cards:
+            - type: custom:button-card
+              template: 电脑图表cpu内存
+              variables:      
+                主题: '[[[ return theme() ]]]' ## 主题颜色[on]或[off]或[函数返回值]
+                项目1: sensor.pc_memory_usage
+                项目2: sensor.pc_cpu_usage
+                项目1名称: 内存使用率
+                项目2名称: CPU使用率
+            - type: custom:button-card
+              template: 电脑图表网络
+              variables:      
+                主题: '[[[ return theme() ]]]' ## 主题颜色[on]或[off]或[函数返回值]
+                项目1: sensor.pc_network_received
+                项目2: sensor.pc_network_sent
+                项目1名称: 下载使用率
+                项目2名称: 上传使用率

@@ -1,0 +1,276 @@
+主题信息卡片:         
+  triggers_update:
+    - '[[[ return variables.主题.模式开关 ?? ""]]]'
+    - '[[[ return variables.主题.模式 ?? ""]]]'
+    - '[[[ return variables.主题.色相开关 ?? ""]]]'
+    - '[[[ return variables.主题.色相 ?? ""]]]'
+  styles:
+    grid:    
+      - grid-template-areas: >
+          "名称"
+          "项目1"
+          "项目2"
+      - grid-template-columns: 100%
+      - grid-template-rows: 0 0 0 0 0 0 0 0 0 
+    card: 
+      - padding: 0
+      - cursor: none
+      - --mdc-ripple-press-opacity: 0
+      - border-width: 0
+      - border-radius: 10px
+      - background: |
+          [[[ 
+              if (states[variables.主题.模式]?.state == "彩平图") return "rgb(255,250,255)";
+              if (states[variables.主题.模式]?.state == "黑平图") return "rgb(50,50,50)";
+          ]]]
+      - height: 255px
+  custom_fields:
+    名称:
+      card: 
+        type: custom:button-card 
+        label: 主题信息 
+        show_label: true
+        styles:
+          card: 
+            - margin-top: 50px
+            - padding: 0
+            - border-width: 0
+            - cursor: none
+            - --mdc-ripple-press-opacity: 0
+            - border-radius: 10px
+            - height: 50px
+            - background: rgb(0,0,0,0)
+          label:
+            - font-size: 20px
+            - font-weight: bold
+            - color: |
+                [[[ 
+                    if (states[variables.主题.模式]?.state == "彩平图") return "rgb(0,0,0)";
+                    if (states[variables.主题.模式]?.state == "黑平图") return "rgb(255,255,255)";
+                ]]]
+    项目1:
+      card: 
+        type: custom:button-card 
+        styles:
+          grid:   
+            - grid-template-areas: >
+                "按钮1 按钮2 按钮3"
+            - grid-template-columns: 158px 158px 158px
+            - grid-template-rows: 100% 
+          card:
+            - padding: 0 25px 0 25px
+            - margin-top: 200px
+        custom_fields:
+          按钮1:
+            card: 
+              type: custom:button-card 
+              entity: '[[[ return variables.主题?.模式 ]]]'
+              layout: icon_name
+              show_name: true
+              name: "彩平图"
+              styles:
+                icon:
+                  - color: rgb(255,255,255)
+                name:
+                  - font-size: 15px
+                  - margin-left: -20px
+                  - color: rgb(255,255,255)
+                card:
+                  - width: 150px
+                  - height: 50px
+                  - border-radius: 10px
+                  - background: |
+                      [[[ 
+                          if (states[variables.主题.模式]?.state == "彩平图")  return "rgb(180,40,40)";
+                          return "rgb(200,200,200)";
+                      ]]]
+                  - filter: |
+                      [[[ 
+                          if (states[variables.主题.模式]?.state == "彩平图") 
+                          return "hue-rotate("+states[variables.主题.色相]?.state+"deg)"
+                      ]]]
+              tap_action:
+                action: call-service
+                service: select.select_option
+                data: 
+                  option: 彩平图
+                target:
+                  entity_id: '[[[ return variables.主题.模式]]]'    
+          按钮2:
+            card: 
+              type: custom:button-card 
+              entity: '[[[ return variables.主题.模式 ]]]'
+              layout: icon_name
+              show_name: true
+              name: "黑平图"
+              styles:
+                icon:
+                  - color: rgb(255,255,255)
+                name: 
+                  - font-size: 15px
+                  - margin-left: -20px
+                  - color: rgb(255,255,255)
+                card:
+                  - width: 150px
+                  - height: 50px
+                  - border-radius: 10px
+                  - background: |
+                      [[[ 
+                          return states[variables.主题.模式]?.state == "黑平图" ? "rgb(180,40,40)" : "rgb(0,0,0)";
+                      ]]]
+                  - filter: |
+                      [[[ 
+                          if (states[variables.主题.模式]?.state == "黑平图")
+                          return "hue-rotate("+states[variables.主题.色相]?.state+"deg)"
+                      ]]]
+              tap_action:
+                action: call-service
+                service: select.select_option
+                data: 
+                  option: 黑平图
+                target:
+                  entity_id: '[[[ return variables.主题.模式 ]]]'    
+          按钮3:
+            card: 
+              type: custom:button-card 
+              entity: '[[[ return variables.主题.模式开关 ]]]'
+              layout: icon_name
+              show_icon: true
+              icon: mdi:refresh-auto
+              show_name: true
+              name: "主题模式<br>自动切换"
+              styles:
+                icon:
+                  - color: |
+                      [[[ 
+                          var state = states[variables.主题.模式开关]?.state;
+                          var mode = states[variables.主题.模式]?.state
+                          if (state == "on") return "rgb(255,255,255)";
+                          if (state == "off" & mode=="彩平图")  return "rgb(255,255,255)";
+                          if (state == "off" & mode=="黑平图")  return "rgb(0,0,0)";
+                      ]]]
+                name:
+                  - font-size: 15px
+                  - margin-left: -20px
+                  - color: |
+                      [[[ 
+                          var state = states[variables.主题.模式开关]?.state;
+                          var mode = states[variables.主题.模式]?.state
+                          if (state == "on") return "rgb(255,255,255)";
+                          if (state == "off" & mode=="彩平图")  return "rgb(255,255,255)";
+                          if (state == "off" & mode=="黑平图")  return "rgb(0,0,0)";
+                      ]]]
+                card:
+                  - width: 150px
+                  - height: 50px
+                  - border-radius: 10px  
+                  - background: |
+                      [[[ 
+                          var state = states[variables.主题.模式开关]?.state;
+                          var mode = states[variables.主题.模式]?.state
+                          if (state == "on") return "rgb(180,40,40)";
+                          if (state == "off" & mode=="彩平图")  return "rgb(50,50,50)";
+                          if (state == "off" & mode=="黑平图")  return "rgb(255,255,255)";
+                      ]]]
+                  - filter: |
+                      [[[ 
+                          if (states[variables.主题.模式开关]?.state == "on")
+                          return "hue-rotate("+states[variables.主题.色相]?.state+"deg)"
+                      ]]]
+              tap_action:
+                action: call-service
+                service: switch.toggle
+                data: {}
+                target:
+                  entity_id: '[[[ return variables.主题.模式开关]]]'  
+
+    项目2: 
+      card: 
+        type: custom:button-card 
+        styles:
+          grid:   
+            - grid-template-areas: >
+                "按钮1 按钮1 按钮2"
+            - grid-template-columns: 158px 158px 158px
+            - grid-template-rows: 100% 
+          card:
+            - padding: 0 25px 0 25px
+            - margin-top: 350px
+        custom_fields:
+          按钮1:
+            card: 
+              type: custom:button-card
+              styles:
+                grid:   
+                  - grid-template-areas: >
+                      "色相"
+                  - grid-template-columns: 100%
+                  - grid-template-rows: 100% 
+                card:
+                  - width: 308px
+                  - height: 50px
+                  - border-radius: 10px
+                  - background: rgb(150,150,150)
+              custom_fields:
+                色相:
+                  card: 
+                    type: custom:mushroom-number-card
+                    entity: '[[[ return variables.主题.色相 ]]]'
+                    primary_info: none
+                    secondary_info: none
+                    icon_type: none
+                    card_mod:
+                      style: '[[[ return theme_number(states[variables.主题.色相]?.state)]]]'
+          按钮2:
+            card: 
+              type: custom:button-card 
+              entity: '[[[ return variables.主题.色相开关 ]]]'
+              layout: icon_name
+              show_icon: true
+              icon: mdi:refresh-auto
+              show_name: true
+              name: "主题颜色<br>自动更新"
+              styles:
+                icon:
+                  - color: |
+                      [[[ 
+                          var state = states[variables.主题.色相开关]?.state;
+                          var mode = states[variables.主题.模式]?.state
+                          if (state == "on") return "rgb(255,255,255)";
+                          if (state == "off" & mode=="彩平图")  return "rgb(255,255,255)";
+                          if (state == "off" & mode=="黑平图")  return "rgb(0,0,0)";
+                      ]]]
+                name:
+                  - font-size: 15px
+                  - margin-left: -20px
+                  - color: |
+                      [[[ 
+                          var state = states[variables.主题.色相开关]?.state;
+                          var mode = states[variables.主题.模式]?.state
+                          if (state == "on") return "rgb(255,255,255)";
+                          if (state == "off" & mode=="彩平图")  return "rgb(255,255,255)";
+                          if (state == "off" & mode=="黑平图")  return "rgb(0,0,0)";
+                      ]]]
+                card: 
+                  - width: 150px
+                  - height: 50px
+                  - border-radius: 10px  
+                  - background: |
+                      [[[ 
+                          var state = states[variables.主题.色相开关]?.state;
+                          var mode = states[variables.主题.模式]?.state
+                          if (state == "on") return "rgb(180,40,40)";
+                          if (state == "off" & mode=="彩平图")  return "rgb(50,50,50)";
+                          if (state == "off" & mode=="黑平图")  return "rgb(255,255,255)";
+                      ]]]
+                  - filter: |
+                      [[[ 
+                          if (states[variables.主题.色相开关]?.state == "on")
+                          return "hue-rotate("+states[variables.主题.色相]?.state+"deg)"
+                      ]]]
+              tap_action:
+                action: call-service
+                service: switch.toggle
+                data: {}
+                target:
+                  entity_id: '[[[ return variables.主题.色相开关]]]'  

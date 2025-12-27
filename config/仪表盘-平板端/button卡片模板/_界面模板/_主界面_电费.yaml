@@ -1,0 +1,38 @@
+主界面_电费:  
+  triggers_update: all
+    - sensor.state_grid_6103518118537
+  styles:
+    grid:
+      - grid-template-areas: > 
+          "余额 预计"  
+      - grid-template-columns: 60% 40%  
+      - grid-template-rows: 100%
+      - text-align: left 
+      - width: 240px  
+      - font-size: 14px
+      - font-weight: bold
+      - color: '[[[ return entity.state < 21 ? "rgb(250,50,0)" : "rgb(255,255,255)"]]]'
+    card:  
+      - padding: 0
+      - background: rgb(0,0,0,0)
+      - width: 240px
+  custom_fields:
+    余额: '[[[ return "电费余额: "+entity?.state+"元";  ]]]'
+    预计: '[[[ return "预计: "+entity?.attributes?.剩余天数+"天";  ]]]'
+  tap_action:   
+    action: fire-dom-event
+    browser_mod: 
+      service: browser_mod.popup
+      data:
+        style: |
+          --popup-min-width: 520px;
+          --mdc-theme-surface: rgb(0,0,0,0);
+          --dialog-backdrop-filter: blur(10px) brightness(1);
+        content:
+          type: custom:xiaoshi-state-grid-info
+          entities:
+            - entity_id: sensor.state_grid_6103518118537
+          global_warning: <20
+          width: 500px
+          charwidth: 500px
+          theme: '[[[ return theme() ]]]'

@@ -1,0 +1,172 @@
+灯光:
+  show_name: false
+  show_icon: false
+  styles:
+    card:
+      - padding: 0
+      - width: '[[[ return variables.宽度 ?? "25px" ]]]'
+      - height: '[[[ return variables.高度 ?? "25px" ]]]'
+      - border-style: solid
+      - border-color: white
+      - border-width: |
+          [[[
+              if (variables.形状 == "圆形")     return variables.线宽 ?? "2px";
+              if (variables.形状 == "方形")     return variables.线宽 ?? "2px";
+              if (variables.形状 == "线型")     return "0";
+              if (variables.形状 == "十字")     return variables.线宽 ?? "2px";
+              if (variables.形状 == "十字出头") return "0";
+              return "0";
+          ]]]
+      - border-radius: |
+          [[[
+              if (variables.形状 == "圆形")     return "50%";
+              if (variables.形状 == "方形")     return "0";
+              if (variables.形状 == "线型")     return "0";
+              if (variables.形状 == "十字")     return "50%";
+              if (variables.形状 == "十字出头") return "0";
+              return "0";
+          ]]]
+      - box-shadow: |
+          [[[
+              if (entity.state == "on"){
+                if (variables.形状 == "圆形")     return "0 0 7px 3px rgb(220,130,0)";
+                if (variables.形状 == "方形")     return "0 0 7px 3px rgb(220,130,0)";
+                if (variables.形状 == "线型")     return "";
+                if (variables.形状 == "十字")     return "0 0 7px 3px rgb(220,130,0)";
+                if (variables.形状 == "十字出头") return "";
+                return "";
+              }
+              return "";
+          ]]]
+      - background: |
+          [[[
+              if (entity.state == "on"){
+                if (variables.形状 == "圆形")     return "rgb(220,130,0)";
+                if (variables.形状 == "方形")     return "rgb(220,130,0)";
+                if (variables.形状 == "线型")     return "rgb(0,0,0,0)";
+                if (variables.形状 == "十字")     return "linear-gradient(to right, white 0, white 100%),linear-gradient(to bottom, white 0, white 100%),rgb(220,130,0)";
+                if (variables.形状 == "十字出头") return "linear-gradient(to right, white 0, white 100%),linear-gradient(to bottom, white 0, white 100%),rgb(0,0,0,0)";
+                return "rgb(0,0,0,0)";
+              }
+              if (entity.state == "off"){
+                if (variables.形状 == "圆形")     return "rgb(0,0,0,0)";
+                if (variables.形状 == "方形")     return "rgb(0,0,0,0)";
+                if (variables.形状 == "线型")     return "rgb(0,0,0,0)";
+                if (variables.形状 == "十字")     return "linear-gradient(to right, white 0, white 100%),linear-gradient(to bottom, white 0, white 100%),rgb(0,0,0,0)";
+                if (variables.形状 == "十字出头") return "linear-gradient(to right, white 0, white 100%),linear-gradient(to bottom, white 0, white 100%),rgb(0,0,0,0)";
+                return "rgb(0,0,0,0)";
+              }
+          ]]]
+      - background-size: |
+          [[[
+              if (variables.形状 == "十字")     return "100% "+ variables.线宽 +", "+ variables.线宽 +" 100%";
+              if (variables.形状 == "十字出头") return "100% "+ variables.线宽 +", "+ variables.线宽 +" 100%";
+              return "";
+          ]]]
+      - background-position: |
+          [[[
+              if (variables.形状 == "十字")     return "center";
+              if (variables.形状 == "十字出头") return "center";
+              return "";
+          ]]]
+      - background-repeat: |
+          [[[
+              if (variables.形状 == "十字")     return "no-repeat";
+              if (variables.形状 == "十字出头") return "no-repeat";
+              return "";
+          ]]]
+    custom_fields:
+      circle:
+        - padding: |
+            [[[ 
+                if(variables.形状 == "十字出头") return "0";
+                if(variables.形状 == "线型") return "0";
+            ]]]
+        - margin: |
+            [[[ 
+                if(variables.形状 == "十字出头") return "0";
+                if(variables.形状 == "线型") return "0";
+            ]]]
+        - position: |
+            [[[ 
+                if(variables.形状 == "十字出头") return "absolute";
+                if(variables.形状 == "线型") return "absolute";
+            ]]]
+        - width: |
+            [[[ 
+                if(variables.形状 == "十字出头") return parseInt(variables.宽度)/1.7 + "px";
+                if(variables.形状 == "线型") {
+                  return parseInt(variables.高度) < parseInt(variables.宽度) ? variables.宽度 : variables.线宽;
+                }
+            ]]]
+        - height: |
+            [[[ 
+                if(variables.形状 == "十字出头") return parseInt(variables.高度)/1.7 + "px";
+                if(variables.形状 == "线型") {
+                  return parseInt(variables.宽度) < parseInt(variables.高度) ? variables.高度 : variables.线宽;
+                }
+            ]]]
+        - top: |
+            [[[ 
+                if(variables.形状 == "十字出头") return "50%";
+                if(variables.形状 == "线型") return "50%";
+            ]]]
+        - left: |
+            [[[ 
+                if(variables.形状 == "十字出头") return "50%";
+                if(variables.形状 == "线型") return "50%";
+            ]]]
+        - transform: |
+            [[[ 
+                if(variables.形状 == "十字出头") return "translate(-50%, -50%)";
+                if(variables.形状 == "线型") return "translate(-50%, -50%)";
+            ]]]
+        - border-radius: |
+            [[[ 
+                if(variables.形状 == "十字出头") return "50%";
+                if(variables.形状 == "线型") return "0%";
+            ]]]
+        - border: |
+            [[[ 
+                if(variables.形状 == "十字出头") return variables.线宽+" solid white";
+                if(variables.形状 == "线型") return "0px solid rgb(0,0,0,0)";
+            ]]]
+        - background: |
+            [[[  
+                if (entity.state == "on"){
+                  if(variables.形状 == "十字出头")
+                    return "linear-gradient(to right,white 0,white 100%),linear-gradient(to bottom,white 0,white 100%),rgb(220,130,0)";
+                  if(variables.形状 == "线型") 
+                    return "rgb(255,255,255)";
+                }
+                if (entity.state == "off"){
+                  if(variables.形状 == "十字出头")
+                    return "linear-gradient(to right,white 0,white 100%),linear-gradient(to bottom,white 0,white 100%),rgb(0,0,0,0)";
+                  if(variables.形状 == "线型") 
+                    return "rgb(255,255,255)";
+                }
+            ]]]
+        - background-size: |
+            [[[ 
+                if(variables.形状 == "十字出头") return "100% "+ variables.线宽 +", "+ variables.线宽 +" 100%";
+                if(variables.形状 == "线型")     return "100% "+ variables.线宽 +", "+ variables.线宽 +" 100%";
+            ]]]
+        - background-position: |
+            [[[ 
+                if(variables.形状 == "十字出头") return "center";
+                if(variables.形状 == "线型") return "center";
+            ]]]
+        - background-repeat: |
+            [[[ 
+                if(variables.形状 == "十字出头") return "no-repeat";
+                if(variables.形状 == "线型") return "no-repeat";
+            ]]]
+        - box-shadow: |
+            [[[  
+                if (entity.state == "on"){
+                  if(variables.形状 == "十字出头") return "0 0 5px 1px rgb(220,130,0)";
+                  if(variables.形状 == "线型")     return "0 0 8px 3px rgb(220,130,0)";
+                }
+            ]]]
+  custom_fields:
+    circle: ""

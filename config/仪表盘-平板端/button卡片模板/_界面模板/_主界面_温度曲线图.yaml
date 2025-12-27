@@ -1,0 +1,92 @@
+主界面_温度曲线图:  
+  styles:
+    card: 
+      - padding: 0
+      - background: rgb(0,0,0,0)
+  tap_action:  
+    action: fire-dom-event
+    browser_mod:
+      service: browser_mod.popup
+      data:
+        style: '[[[ return theme_none(800)]]]'
+        content:
+          type: vertical-stack
+          cards: 
+            - type: custom:apexcharts-card
+              card_mod:  
+                style: '[[[ return theme_apexcharts()]]]'
+              series:   
+                - entity: sensor.wendu_keting
+                  name: 客厅
+                - entity: sensor.wendu_zhuwo
+                  name: 主卧
+                - entity: sensor.wendu_ciwo
+                  name: 次卧
+                - entity: sensor.wendu_ertongfang
+                  name: 儿童房
+                - entity: sensor.wendu_zhuwei
+                  name: 主卫
+                - entity: sensor.wendu_gongwei 
+                  name: 公卫
+                - entity: sensor.wendu_chufang
+                  name: 厨房
+              update_interval: 5s 
+              all_series_config:   
+                stroke_width: 2
+                curve: smooth
+                float_precision: 2
+                fill_raw: last
+                show:
+                  datalabels: false
+                  extremas: false
+                  name_in_header: true
+              cache: true
+              graph_span: 2d
+              now:
+                show: true 
+                color: "#fd3000"
+                label: 现在
+              header: 
+                title: "温度曲线图"
+                show: true
+                show_states: true
+                colorize_states: true
+              apex_config:
+                grid:
+                  position: front
+                  row:
+                    colors:
+                      - black
+                      - transparent
+                    opacity: 0.1
+                  xaxis:
+                    lines:
+                      show: false
+                  yaxis:
+                    lines:
+                      show: false
+                chart:
+                  height: 350
+                xaxis:
+                  labels:
+                    show: true
+                    style:
+                      colors: "#acb4dc"
+                      fontSize: 12px
+                    format: hh:mm
+                  axisBorder:
+                    show: true
+                    color: "#acb4dc"
+                    height: 1
+                  axisTicks:
+                    show: true
+                    borderType: solid
+                    color: "#acb4dc"
+                    height: 2
+                yaxis:
+                  show: true
+                markers:
+                  size: 1
+                  strokeWidth: 0
+              experimental:
+                color_threshold: true

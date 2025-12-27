@@ -1,0 +1,171 @@
+主界面_状态条_顶部:
+  triggers_update: all 
+  styles:
+    grid:
+      - grid-template-areas: |
+          "按钮1 按钮2 按钮3 按钮4 按钮5"
+      - grid-template-columns: 80px 80px 80px 80px 80px
+      - grid-template-rows: 0px 0px
+    card:
+      - --mdc-ripple-press-opacity: 0
+      - width: 440px
+      - height: 30px
+      - padding: 15px 0 0 15px
+      - background: |
+          [[[
+             return theme()=="on" ? "rgb(0,0,0,0.3)" : "rgb(255,255,255,0.25)"
+          ]]]
+      - border-radius: 15px
+  custom_fields: 
+    按钮1: 
+      card: 
+        type: custom:button-card
+        name: |
+          [[[
+              var sum = 0;
+              if (variables.灯光){
+                for (var i=0; i< variables.灯光.length; i++){
+                    if (states[variables.灯光[i]].state=="on"){
+                      sum++;
+                    }
+                }   
+              }
+              window.全屋灯光 = sum;
+              if(全屋灯光> 0) return '<font color="#FF8C00"><b>灯光&ensp;'+sum+'</b></font>';
+              if(全屋灯光==0) return '灯光&ensp;&ensp;';
+          ]]]
+        layout: icon_name
+        show_icon: true
+        show_name: true
+        icon: mdi:lightbulb-group
+        styles:
+          icon:
+            - margin-top: '-2.2px' 
+            - width: 18px
+            - color: |
+                [[[
+                  return 全屋灯光 > 0 ? "#FF8C00" : "#FFFFFF"
+                ]]]
+          name:
+            - margin-left: '-10px'
+            - font-size: 14px
+            - font-weight: bold
+            - color: white 
+          card:
+            - background: transparent 
+        tap_action:
+          action: fire-dom-event
+          browser_mod: 
+            service: browser_mod.popup
+            data:
+              style: |
+                [[[ 
+                    var columns = variables.灯光显示列数 || 3;
+                    var width = parseInt(variables.灯光显示宽度, 10) || 270;
+                    var widthsum = (width + 34) * columns + 8;
+                    return theme_none(widthsum) ;
+                ]]]
+              content: 
+                type: custom:xiaoshi-phone-light-card
+                entities: '[[[ return variables.灯光 ]]]'
+                theme: '[[[ return theme() ]]]'
+                rgb: true
+                columns: '[[[ return variables.灯光显示列数 || "3" ]]]'
+                width: '[[[ return variables.灯光显示宽度 || "270px" ]]]'
+                height: '[[[ return variables.灯光显示高度 || "70px" ]]]'
+    按钮2:
+      card:
+        type: custom:button-card
+        name: |
+          [[[
+              var sum1 =0;
+              for (var i1=0; i1<variables.通用设备?.length; i1++){
+                  var entityConfig1 = variables.通用设备?.[i1];  
+                  var statesum1 = variables.通用设备?.[i1]?.states;
+                  if (Array.isArray(entityConfig1.entity)) { 
+                    var activenumber1 =0;
+                    for (var j1=0; j1 < entityConfig1.entity.length; j1++){
+                        var singleEntity1  = entityConfig1.entity[j1];
+                        var currentState1 = states[singleEntity1].state;
+                        if (statesum1.includes(currentState1)) {
+                          activenumber1 ++;
+                        }
+                    }
+                    if (activenumber1 >0) sum1++;
+                  } else {
+                    var currentState1 = states[entityConfig1.entity].state;
+                    if (statesum1.includes(currentState1)){
+                          sum1++;
+                    }
+                  }
+              } 
+              window.通用设备=sum1;
+
+              var sum2 =0;
+              for (var i2=0; i2<variables.厨房设备?.length; i2++){
+                  var entityConfig2 = variables.厨房设备?.[i2];  
+                  var statesum2 = variables.厨房设备?.[i2]?.states;
+                  if (Array.isArray(entityConfig2.entity)) { 
+                    var activenumber2 =0;
+                    for (var j2=0; j2 < entityConfig2.entity.length; j2++){
+                        var singleEntity2  = entityConfig2.entity[j2];
+                        var currentState2 = states[singleEntity2].state;
+                        var isMatch = statesum2.some(function(condition) {
+                            if (condition.startsWith(">") && !isNaN(condition.substring(1))) {
+                                var threshold = parseFloat(condition.substring(1));
+                                return !isNaN(currentState2) && parseFloat(currentState2) > threshold;
+                            }
+                            else {
+                                return currentState2 === condition;
+                            }
+                        });
+                        if (isMatch) {
+                            activenumber2++;
+                        }
+                    }
+                    if (activenumber2 >0) sum2++;
+                  } else {
+                      var currentState2 = states[entityConfig2.entity].state;
+                      var isMatch = statesum2.some(function(condition) {
+                          if (condition.startsWith(">") && !isNaN(condition.substring(1))) {
+                              var threshold = parseFloat(condition.substring(1));
+                              return !isNaN(currentState2) && parseFloat(currentState2) > threshold;
+                          }
+                          else {
+                              return currentState2 === condition;
+                          }
+                      });
+                      
+                      if (isMatch) {
+                          sum2++;
+                      }
+                  }
+              }
+              window.厨房设备=sum2;
+              var sum =sum1+sum2;
+              if(sum > 0 && sum2>0 && sum1>=0) return '<font color="#FF6A6A"><b>设备&ensp;'+sum+'</b></font>';
+              if(sum > 0 && sum1>0 && sum2==0) return '<font color="#0AAA0A"><b>设备&ensp;'+sum+'</b></font>';
+              if(sum ==0) return '设备&ensp;&ensp;';
+          ]]]
+        layout: icon_name
+        show_icon: true
+        show_name: true 
+        icon: mdi:devices
+        styles:
+          icon:
+            - margin-top: '-2.2px'
+            - width: 18px
+            - color: |
+                [[[
+                    if(通用设备+厨房设备 > 0 && 厨房设备>0 && 通用设备>=0) return "#FF6A6A";
+                    if(通用设备+厨房设备 > 0 && 通用设备>0 && 厨房设备==0) return "#0AAA0A";
+                    if(通用设备+厨房设备 ==0) return "#FFFFFF";
+                ]]]
+          name:
+            - margin-left: '-10px'
+            - font-size: 14px
+            - font-weight: bold
+            - color: white 
+          card:
+            - background: transparent 
+        tap_action: !include  "/config/仪表盘-平板端/button卡片模板/主界面弹出菜单/顶部状态栏-设备.yaml"

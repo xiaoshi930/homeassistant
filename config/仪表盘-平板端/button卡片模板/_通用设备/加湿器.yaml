@@ -1,0 +1,546 @@
+加湿器:
+  triggers_update:
+    - '[[[ return variables.加湿器 ]]]'
+    - '[[[ return variables.模式 ]]]'
+    - '[[[ return variables.附加信息 ]]]'
+    - '[[[ return variables.指示灯 ]]]'
+    - '[[[ return variables.提示音 ]]]'
+    - '[[[ return variables.水箱提起 ]]]'
+    - '[[[ return variables.水箱缺水 ]]]'
+  styles:
+    grid:
+      - grid-template-areas: |
+          [[[
+              if (variables.附加信息=='左侧')  return '"mo b b  b  b  b  b  b  b"'+
+                                                  '"mo y a0 a0 a0 a0 a0 a0 x"'+
+                                                  '"mo y i2 i2 i2 i2 i2 i2 x"'+
+                                                  '"mo y i3 i3 i3 i3 i3 i3 x"'+
+                                                  '"mo y i4 i4 i4 i4 i4 i4 x"'+
+                                                  '"mo y z5 m  m  p  p  z6 x"'+
+                                                  '"mo y a1 a1 a1 a2 a2 a2 x"'+
+                                                  '"mo y a3 a3 a3 a3 a3 a3 x"';
+              if (variables.附加信息=='右侧')  return '"b b  b  b  b  b  b  b mo"'+
+                                                  '"y a0 a0 a0 a0 a0 a0 x mo"'+
+                                                  '"y i2 i2 i2 i2 i2 i2 x mo"'+
+                                                  '"y i3 i3 i3 i3 i3 i3 x mo"'+
+                                                  '"y i4 i4 i4 i4 i4 i4 x mo"'+
+                                                  '"y z5 m  m  p  p  z6 x mo"'+
+                                                  '"y a1 a1 a1 a2 a2 a2 x mo"'+
+                                                  '"y a3 a3 a3 a3 a3 a3 x mo"';
+             else  return '"b b  b  b  b  b  b  b"' +
+                          '"y a0 a0 a0 a0 a0 a0 x"' +
+                          '"y i2 i2 i2 i2 i2 i2 x"' +
+                          '"y i3 i3 i3 i3 i3 i3 x"' +
+                          '"y i4 i4 i4 i4 i4 i4 x"' +
+                          '"y z5 m  m  p  p  z6 x"' +
+                          '"y a1 a1 a1 a2 a2 a2 x"' +
+                          '"y a3 a3 a3 a3 a3 a3 x"' ;
+          ]]]         
+      - grid-template-columns: |
+          [[[
+             if (variables.附加信息=='左侧')  return "67px 18px 44px 44px 44px 44px 44px 44px 18px";
+             if (variables.附加信息=='右侧')  return "18px 44px 44px 44px 44px 44px 44px 25px 67px";
+             return "18px 44px 44px 44px 44px 44px 44px 18px";
+          ]]]
+      - grid-template-rows: 0px 340px 0px 0px 0px 0px 0px 0px
+    card:
+      - padding: 0 
+      - width: |
+          [[[
+              if (variables.附加信息=='左侧' || variables.附加信息=='右侧') return "370px";
+              return "300px";
+          ]]]
+      - height: 455px
+      - border-width: 0
+      - background: rgb(0,0,0,0)
+  custom_fields:
+    b:
+      card:
+        type: custom:button-card
+        styles: 
+          card: 
+            - margin-top: 455px
+            - width: 300px
+            - height: 455px
+            - border-radius: 15px
+            - border-width: 0
+            - background: '[[[ return variables.主题 =="on" ? "rgb(255,255,255)" : "rgb(50,50,50)" ]]]'
+    i2:
+      card:
+        type: custom:button-card
+        styles: 
+          card:
+            - border-width: 0
+            - margin-top: -272px
+            - background: |
+                [[[ 
+                    if(states[variables.加湿器].state=='on')  return "radial-gradient(rgba(61,119,165) -20%, rgb(0,0,0,0) 50%)" ;
+                    return "rgb(0,0,0,0)" ; 
+                ]]]
+            - width: 264px
+            - height: 264px
+    a0:
+      card:
+        type: humidifier
+        entity: '[[[ return  variables.加湿器 ]]]'
+        card_mod:
+          style: |
+            [[[ 
+                const label_on = `
+                  ha-card{ 
+                    background: rgb(0,0,0,0); 
+                    border-width: 0;
+                    color: rgb(0,0,0);
+                    --disabled-color: rgb(120,120,120);
+                  }
+                `;   
+                const label_off = ` 
+                  ha-card{ 
+                    background: rgb(0,0,0,0);
+                    border-width: 0;
+                    color: rgb(255,255,255);
+                    --disabled-color: rgb(220,220,220);
+                  }
+                `; 
+                return variables.主题 =="on"  ? label_on : label_off; 
+            ]]]
+    i3:
+      card:
+        type: custom:button-card
+        styles:
+          card:
+            - margin-top: 40px
+            - width: 264px
+            - height: 42px
+            - border-width: 0
+            - background: '[[[ return variables.主题 =="on" ? "rgb(230,230,230)" : "rgb(80,80,80)" ]]]'
+            - border-radius: 10px
+    i4:
+      card:
+        type: custom:button-card
+        styles:
+          card:
+            - margin-top: 150px
+            - width: 264px
+            - height: 42px
+            - border-width: 0
+            - background: '[[[ return variables.主题 =="on" ? "rgb(230,230,230)" : "rgb(80,80,80)" ]]]'
+            - border-radius: 10px
+    m:
+      card:
+        type: custom:button-card
+        entity: '[[[ return  variables.加湿器 ]]]'
+        show_icon: true
+        show_name: false
+        show_state: false
+        icon: 'mdi:minus'
+        styles:
+          card: 
+            - margin-top: -75px
+            - width: 50px
+            - height: 50px
+            - border-radius: 25px
+            - border: '[[[ return variables.主题 =="on" ? "2px solid rgb(150,150,150)" : "2px solid rgb(180,180,180)" ]]]'
+            - margin-left: '27px'
+            - --mdc-ripple-color: white
+            - --mdc-ripple-press-opacity: 0.3
+            - background: rgb(0,0,0,0)
+          icon:
+            - width: 25px
+            - height: 25px
+            - color: '[[[ return variables.主题 =="on" ? "rgb(150,150,150)" : "rgb(180,180,180)"; ]]]'
+        tap_action:
+          action: call-service
+          service: humidifier.set_humidity
+          data:
+            humidity: ' [[[ return states[variables.加湿器].attributes.humidity-1 ]]]'
+          target:
+            entity_id: '[[[ return  variables.加湿器 ]]]'
+    p:
+      card:
+        type: custom:button-card
+        entity: '[[[ return  variables.加湿器 ]]]'
+        show_icon: true
+        show_name: false
+        show_state: false
+        icon: 'mdi:plus'
+        styles:
+          card:
+            - margin-top: -75px
+            - width: 50px
+            - height: 50px
+            - border-radius: 25px
+            - border: '[[[ return variables.主题 =="on" ? "2px solid rgb(150,150,150)" : "2px solid rgb(180,180,180)" ]]]'
+            - margin-left: '12px'
+            - --mdc-ripple-color: white
+            - --mdc-ripple-press-opacity: 0.3 
+            - background: rgb(0,0,0,0)
+          icon:
+            - width: 25px
+            - height: 25px
+            - color: '[[[ return variables.主题 =="on" ? "rgb(150,150,150)" : "rgb(180,180,180)"; ]]]'
+        tap_action:
+          action: call-service
+          service: humidifier.set_humidity
+          data:
+            humidity: ' [[[ return states[variables.加湿器].attributes.humidity-(-1) ]]]'
+          target:
+            entity_id: '[[[ return  variables.加湿器 ]]]'
+    a1:
+      card:
+        type: custom:button-card
+        show_icon: true
+        icon: mdi:water-percent
+        styles:
+          card:
+            - margin-top: 40px
+            - width: 132px
+            - height: 42px 
+            - border-radius: 10px
+            - border-width: 0
+            - background: |
+                [[[
+                    if( states[variables.加湿器].state=='on')  return 'rgb(61,119,165)';
+                    return 'rgb(0,0,0,0)';
+                ]]]
+          icon:
+            - width: 20px
+            - height: 20px
+            - color: '[[[ return variables.主题 =="on" ? "rgb(0,0,0)" : "rgb(255,255,255)" ]]]'
+        tap_action:
+          action: call-service
+          service: humidifier.turn_on
+          target:
+            entity_id: '[[[ return  variables.加湿器 ]]]'
+    a2:
+      card:
+        type: custom:button-card
+        variables:
+          entity: '[[[ return  variables.加湿器 ]]]'
+        show_icon: true
+        icon: mdi:power
+        styles:
+          card:
+            - margin-top: 40px
+            - width: 132px
+            - height: 42px 
+            - border-radius: 10px
+            - border-width: 0
+            - background: |
+                [[[
+                    if(states[variables.加湿器].state=='off')  return variables.主题 =="on" ? "rgb(180,180,180)" : "rgb(150,150,150)"; 
+                    return 'rgb(0,0,0,0)';
+                ]]]
+          icon:
+            - width: 20px
+            - height: 20px
+            - color: '[[[ return variables.主题 =="on" ? "rgb(0,0,0)" : "rgb(255,255,255)" ]]]'
+        tap_action:
+          action: call-service
+          service: humidifier.turn_off
+          target:
+            entity_id: '[[[ return  variables.加湿器 ]]]'
+    a3:
+      card:
+        type: custom:button-card
+        styles:
+          grid:
+            - grid-template-areas: |
+                'b1 b2 b3 b4' 
+            - grid-template-columns: 25% 25% 25% 25%  
+            - grid-template-rows: 42px
+          card:
+            - padding: 0
+            - margin-top: 150px
+            - width: 264px
+            - height: 42px
+            - border-width: 0
+            - background: rgb(0,0,0,0)
+        custom_fields:
+          b1:
+            card:
+              type: custom:button-card
+              template: jiashiqi_select
+              variables:
+                主题: '[[[ return variables.主题 ]]]'
+                加湿器: '[[[ return variables.加湿器 ]]]'
+                模式1: '[[[ return variables.模式 ]]]'
+                模式2: 1挡
+                num: 1
+          b2:
+            card:
+              type: custom:button-card
+              template: jiashiqi_select
+              variables:
+                主题: '[[[ return variables.主题 ]]]'
+                加湿器: '[[[ return variables.加湿器 ]]]'
+                模式1: '[[[ return  variables.模式 ]]]'
+                模式2: 2挡
+                num: 2
+          b3:
+            card:
+              type: custom:button-card
+              template: jiashiqi_select
+              variables:
+                主题: '[[[ return variables.主题 ]]]'
+                加湿器: '[[[ return variables.加湿器 ]]]'
+                模式1: '[[[ return  variables.模式 ]]]'
+                模式2: 3挡
+                num: 3
+          b4:
+            card:
+              type: custom:button-card
+              template: jiashiqi_select
+              variables:
+                主题: '[[[ return variables.主题 ]]]'
+                加湿器: '[[[ return variables.加湿器 ]]]'
+                模式1: '[[[ return  variables.模式 ]]]'
+                模式2: 恒湿
+                num: A 
+    mo: 
+      card:
+        type: custom:button-card
+        styles:
+          grid:
+            - grid-template-areas: |
+                'b1' 'b2' 'b3' 'b4'
+            - grid-template-columns: 60px
+            - grid-template-rows: 0px 0px 0px 0px
+          card:
+            - padding: 0
+            - margin-top: 115px 
+            - width: 60px
+            - height: 455px
+            - border-radius: 15px
+            - border-width: 0
+            - background: '[[[ return variables.主题 =="on" ? "rgb(255,255,255)" : "rgb(50,50,50)" ]]]'
+        custom_fields:  
+          b1:
+            card:
+              type: custom:button-card
+              icon: |
+                [[[ 
+                    if(variables.附加信息=='左侧' || variables.附加信息=='右侧')
+                    var light =states[variables.指示灯].state;
+                    if( light=='on' ) return "mdi:lightbulb-on";
+                    if( light=='off') return "mdi:lightbulb-off";
+                ]]]
+              show_icon: true
+              show_label: true 
+              label: 指示灯
+              styles: 
+                card:
+                  - margin-top: 500px
+                  - margin-left: 8px
+                  - border-radius: 10px
+                  - width: 42px
+                  - height: 42px
+                  - border-width: 0
+                  - background: '[[[ return variables.主题 =="on" ? "rgb(230,230,230)" : "rgb(80,80,80)" ]]]'
+                label:
+                  - font-size: 11px
+                  - color: '[[[ return variables.主题 =="on" ? "rgb(0,0,0)" : "rgb(255,255,255)" ]]]'
+                icon:
+                  - color: |
+                      [[[
+                          if(variables.附加信息=='左侧' || variables.附加信息=='右侧')
+                          var light = states[variables.指示灯].state;
+                          if( light=='on' ) return "rgb(61,119,165)" ; 
+                          if( light=='off') return variables.主题 =="on" ? "rgb(0,0,0)" : "rgb(255,255,255)"
+                      ]]]
+              tap_action:
+                action: call-service
+                service: light.toggle
+                data: {}
+                target:
+                  entity_id: |
+                    [[[ 
+                        if (variables.附加信息=='左侧' || variables.附加信息=='右侧')
+                        return  variables.指示灯 
+                    ]]]
+          b2:
+            card:
+              type: custom:button-card
+              icon: |
+                [[[ 
+                    if(variables.附加信息=='左侧' || variables.附加信息=='右侧')
+                    var alarm =states[variables.提示音].state;
+                    if( alarm=='on' ) return "mdi:volume-high";
+                    if( alarm=='off') return "mdi:volume-mute";
+                ]]]
+              show_icon: true
+              show_label: true 
+              label: 提示音
+              styles: 
+                card:
+                  - margin-top: 610px
+                  - margin-left: 8px
+                  - border-radius: 10px
+                  - width: 42px
+                  - height: 42px
+                  - border-width: 0
+                  - background: '[[[ return variables.主题 =="on" ? "rgb(230,230,230)" : "rgb(80,80,80)"; ]]]'
+                label:
+                  - font-size: 11px
+                  - color: '[[[ return variables.主题 =="on" ? "rgb(0,0,0)" : "rgb(255,255,255)" ]]]'
+                icon:
+                  - color: |
+                      [[[
+                          if(variables.附加信息=='左侧' || variables.附加信息=='右侧')
+                          var alarm = states[variables.提示音].state;
+                          if( alarm=='on' ) return "rgb(61,119,165)" ; 
+                          if( alarm=='off') return variables.主题 =="on" ? "rgb(0,0,0)" : "rgb(255,255,255)";
+                      ]]]
+              tap_action:
+                action: call-service
+                service: switch.toggle
+                data: {}
+                target:
+                  entity_id: |
+                    [[[ 
+                        if (variables.附加信息=='左侧' || variables.附加信息=='右侧')
+                        return  variables.提示音 
+                    ]]]
+          b3:
+            card:
+              type: custom:button-card
+              icon: |
+                [[[ 
+                    if (variables.附加信息=='左侧' || variables.附加信息=='右侧')
+                    var tank =states[variables.水箱提起].state;
+                    if(tank=='假') return "mdi:water-boiler";
+                    if(tank=='真') return "mdi:water-boiler-off";
+                ]]]
+              show_icon: true
+              show_label: true 
+              label: | 
+                [[[
+                    if (variables.附加信息=='左侧' || variables.附加信息=='右侧')
+                    var tank =states[variables.水箱提起].state;
+                    if ( tank=='假') return "正常";
+                    if ( tank=='真') return "提起";
+                ]]]
+              styles:
+                card:
+                  - margin-top: 720px
+                  - margin-left: 8px
+                  - border-radius: 10px
+                  - width: 42px
+                  - height: 42px
+                  - border-width: 0
+                  - background: '[[[ return variables.主题 =="on" ? "rgb(230,230,230)" : "rgb(80,80,80)"; ]]]'
+                label:
+                  - font-size: 11px
+                  - color: |
+                      [[[
+                          if (variables.附加信息=='左侧' || variables.附加信息=='右侧')
+                          var tank =states[variables.水箱提起].state;
+                          if (tank=='真') return "rgb(255,99,71)";
+                          if (tank=='假') return variables.主题 =="on" ? "rgb(0,0,0)" : "rgb(255,255,255)";
+                          
+                      ]]] 
+                icon:
+                  - color: |
+                      [[[
+                          if (variables.附加信息=='左侧' || variables.附加信息=='右侧')
+                          var tank =states[variables.水箱提起].state;
+                          if (tank=='真') return "rgb(255,99,71)";
+                          if (tank=='假') return variables.主题 =="on" ? "rgb(0,0,0)" : "rgb(255,255,255)";
+                      ]]]
+          b4: 
+            card:
+              type: custom:button-card
+              icon: |
+                [[[ 
+                    if (variables.附加信息=='左侧' || variables.附加信息=='右侧')
+                    var water =states[variables.水箱缺水].state;
+                    if(water=='假') return "mdi:water-check";
+                    if(water=='真') return "mdi:water-alert";
+                ]]]
+              show_icon: true
+              show_label: true 
+              label: |
+                [[[
+                    if (variables.附加信息=='左侧' || variables.附加信息=='右侧')
+                    var water =states[variables.水箱缺水].state;
+                    if ( water=='假') return "正常";
+                    if ( water=='真') return "缺水";
+                ]]]
+              styles:
+                card:
+                  - margin-top: 830px
+                  - margin-left: 8px
+                  - border-radius: 10px
+                  - width: 42px 
+                  - height: 42px
+                  - border-width: 0
+                  - background: '[[[ return variables.主题 =="on" ? "rgb(230,230,230)" : "rgb(80,80,80)"; ]]]'
+                label:
+                  - font-size: 11px
+                  - color: |
+                      [[[
+                          if (variables.附加信息=='左侧' || variables.附加信息=='右侧')
+                          var water =states[variables.水箱缺水].state;
+                          if (water=='真') return "rgb(255,99,71)";
+                          if (water=='假') return variables.主题 =="on" ? "rgb(0,0,0)" : "rgb(255,255,255)";
+                      ]]] 
+                icon:
+                  - color: |
+                      [[[
+                          if (variables.附加信息=='左侧' || variables.附加信息=='右侧')
+                          var water =states[variables.水箱缺水].state;
+                          if (water=='真') return "rgb(255,99,71)";
+                          if (water=='假') return variables.主题 =="on" ? "rgb(0,0,0)" : "rgb(255,255,255)";
+                      ]]]
+jiashiqi_select:
+  triggers_update:
+    - '[[[ return variables.加湿器 ]]]'
+    - '[[[ return variables.模式 ]]]'
+  show_icon: true
+  icon: mdi:water-percent
+  styles:
+    card:
+      - width: 66px 
+      - height: 42px
+      - border-radius: 10px
+      - border-width: 0
+      - background: |
+          [[[
+              var entity  = states[variables.加湿器].state;
+              var select1 = states[variables.模式1].state;
+              if( entity=='on'  && select1 == variables.模式2)  return "rgb(61,119,165)"; 
+              if( entity=='off' && select1 == variables.模式2)  return variables.主题 =="on" ? "rgb(180,180,180)" : "rgb(150,150,150)";
+              if( select1 != variables.模式2)  return "rgb(0,0,0,0)"; 
+          ]]]
+    icon:
+      - width: 20px
+      - height: 20px
+      - color: '[[[ return variables.主题 =="on" ? "rgb(0,0,0)" : "rgb(255,255,255)" ]]]'
+    custom_fields: 
+      num: 
+        - position: absolute
+        - font-weight: bold
+        - font-size: 9px
+        - margin-top: 10px
+        - margin-left: 35px
+        - width: 9px 
+        - height: 9px
+        - border-radius: 9px
+        - color: '[[[ return variables.主题 =="on" ? "rgb(0,0,0)" : "rgb(255,255,255)" ]]]'
+        - background: | 
+            [[[ 
+                var entity  = states[variables.加湿器].state;
+                var select1 = states[variables.模式1].state;
+                if( entity=='on'  && select1 == variables.模式2) return "rgb(61,119,165)"; 
+                if( entity=='off' && select1 == variables.模式2) return variables.主题 =="on" ? "rgb(180,180,180)" : "rgb(150,150,150)";
+                if( select1 != variables.模式2)  return variables.主题=="on" ? "rgb(230,230,230)" : "rgb(80,80,80)";
+            ]]]
+  custom_fields:
+    num: '[[[ return  variables.num ]]]'
+  tap_action:
+    action: call-service
+    service: select.select_option
+    target:
+      entity_id: '[[[ return  variables.模式1 ]]]'
+    data:
+      option: '[[[ return  variables.模式2 ]]]' 

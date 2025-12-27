@@ -1,0 +1,364 @@
+全局函数:
+  styles:          
+    card:                                                                                                                                                                                                             
+      - function: |                                                     
+          [[[
+              /***************************************************************
+              * 全局函数  根据主题模式返回白色rgb或黑色rgb                      *
+              * 调用方式  文字颜色：theme_color(1) 和 背景颜色：theme_color(2)  *
+              ****************************************************************/
+              window.theme_color = function(mode) {
+                  if (mode=="1"){
+                    return states["select.theme_pad_mode"].state === "彩平图" ? "rgb(0,0,0)" : "rgb(255,255,255)";
+                  }
+                  if (mode=="2"){
+                    return states["select.theme_pad_mode"].state === "彩平图" ? "rgb(255,255,255)" : "rgb(50,50,50)";
+                  }
+              }    
+
+              /***************************************************************
+              * 全局函数  根据主题模式返回on 或 off                            *
+              * 调用方式  theme()                                             *
+              ****************************************************************/
+              window.theme = function() {
+                  return states["select.theme_pad_mode"].state === "彩平图" ? "on" : "off";
+              }      
+
+              /***************************************************************
+              * 全局函数  弹出菜单（browser-popup-card）的公共主题样式          *
+              * 调用方式  theme_none(size)                                    *
+              ****************************************************************/
+              window.theme_none = function(size) {
+                  return `--popup-min-width: ${size}px;
+                          --mdc-theme-surface: rgb(0,0,0,0);
+                          --dialog-backdrop-filter: blur(10px) brightness(1);
+                          --ha-card-background: rgb(0,0,0,0);
+                          --ha-card-border-width: 0;
+                          `     
+              }      
+              /***************************************************************
+              * 全局函数  返回HA系统空调控件的card_mode样式                     *
+              * 调用方式  theme_number()                                      *
+              ****************************************************************/
+              window.theme_number = function(h){  
+                  h = h / 60;
+                  const c = 255;
+                  const x = (1 - Math.abs(h % 2 - 1)) * 255;
+                  let r, g, b;
+                  if (h >= 0 && h < 1) [r, g, b] = [c, x, 0];
+                  else if (h < 2) [r, g, b] = [x, c, 0];
+                  else if (h < 3) [r, g, b] = [0, c, x];
+                  else if (h < 4) [r, g, b] = [0, x, c];
+                  else if (h < 5) [r, g, b] = [x, 0, c];
+                  else [r, g, b] = [c, 0, x];
+                  const label_on = `
+                    ha-card{ 
+                      --rgb-state-number: ${Math.round(r)},${Math.round(g)},${Math.round(b)};
+                    }
+                  `;   
+                  return label_on; 
+              }   
+
+              /***************************************************************
+              * 全局函数  返回HA系统空调控件的card_mode样式                     *
+              * 调用方式  theme_thermostat()                                  *
+              ****************************************************************/
+              window.theme_thermostat = function(){  
+                  const label_on = `
+                    ha-card{ 
+                      background: rgb(0,0,0,0); 
+                      border-width: 0; 
+                      color: rgb(0,0,0);
+                      --disabled-color: rgb(180,180,180);
+                    }
+                  `;   
+                  const label_off = ` 
+                    ha-card{ 
+                      background: rgb(0,0,0,0);
+                      border-width: 0;
+                      color: rgb(255,255,255);
+                      --disabled-color: rgb(200,200,200);
+                    }
+                  `; 
+                  return theme() =="on"  ? label_on : label_off; 
+              }  
+
+              /***************************************************************
+              * 全局函数  返回图表卡片（apexcharts-card）集成的card_mode样式    *
+              * 调用方式  theme_apexcharts()                                  *
+              ****************************************************************/
+              window.theme_apexcharts = function(){  
+                  const label_on = `
+                    ha-card {
+                      background: rgb(255,255,255);
+                      --card-background-color: rgb(255,255,255);
+                      --primary-background-color: rgb(255,255,255);
+                      color: rgb(50,50,50);
+                      --primary-text-color: rgb(50,50,50);   
+                      --secondary-text-color: rgb(50,50,50);   
+                      box-shadow: none;
+                      font-size: 1rem;
+                    }   
+                    text {
+                      fill: rgb(0,0,0);
+                    } 
+                  `;  
+                  const label_off = `
+                    ha-card { 
+                      background: rgb(50,50,50);  
+                      --card-background-color: rgb(50,50,50);
+                      --primary-background-color: rgb(50,50,50);
+                      color: rgb(255,255,255);  
+                      --primary-text-color: rgb(255,255,255);
+                      --secondary-text-color: rgb(255,255,255);                    
+                      font-size: 1rem;
+                    }     
+                    text {    
+                        fill: rgb(255,255,255);                   
+                    }
+                  `; 
+                  return theme() =="on"  ? label_on : label_off; 
+              } 
+
+              /***************************************************************
+              * 全局函数  弹出菜单（browser-popup-card）的头像部分样式          *
+              * 调用方式  theme_none_touxiang(home,size)                      *
+              ****************************************************************/
+              window.theme_none_touxiang = function(home,size){ 
+                  const color = home ==="home" ? "rgb(0,200,200)" : "rgb(200,0,0)"
+                  if (theme()=='on'){
+                    return `--popup-min-width: ${size}px;
+                            --mdc-theme-surface: rgb(0,0,0,0);
+                            --dialog-backdrop-filter: blur(10px) brightness(1);
+                            --ha-card-background: rgb(0,0,0,0);
+                            --ha-card-border-width: 0; 
+                            --map-filter: "";
+                            --mdc-icon-button-size: 30px;
+                            --state-person: ${color} ;
+                            `
+                  }
+                  if (theme()=='off'){
+                    return `--popup-min-width: ${size}px;
+                            --mdc-theme-surface: rgb(0,0,0,0);
+                            --dialog-backdrop-filter: blur(10px) brightness(1);
+                            --ha-card-background: rgb(0,0,0,0);
+                            --ha-card-border-width: 0; 
+                            --mdc-icon-button-size: 30px;
+                            --state-person: ${color};
+                            --map-filter: invert(.9) hue-rotate(170deg) brightness(2.5) contrast(2) saturate(.3);
+                            `
+                  }  
+              }  
+
+              /***************************************************************
+              * 全局函数  返回markdown卡片（markdown-card）集成的card_mode样式  *
+              * 调用方式  theme_markdown()                                    *
+              ****************************************************************/
+              window.theme_markdown = function(){
+                  const label_on = `
+                    ha-card{
+                      background: rgb(0,0,0,0);
+                      border-width: 0;
+                      padding: 0 0 0 0;
+                    }
+                    ha-markdown {
+                        padding: 0 0 0 0;
+                        text-align: start;
+                        font-weight: bold;
+                        font-size: 20px;
+                        white-space: nowrap;
+                        color: rgb(0,0,0);
+                    }
+                  `; 
+                  const label_off = `
+                    ha-card{
+                      background: rgb(0,0,0,0);
+                      border-width: 0;
+                      padding: 0 0 0 0;
+                    }
+                    ha-markdown {
+                        padding: 0 0 0 0;
+                        text-align: start;
+                        font-weight: bold;
+                        font-size: 20px;
+                        white-space: nowrap;
+                        color: rgb(255,255,255);
+                    }
+                  `; 
+                  return theme()=="on" ? label_on : label_off;
+              }   
+
+              /***************************************************************
+              * 全局函数  地图卡片（map）集成的card_mode样式                    *
+              * 调用方式  theme_ha_map(entity)                                *
+              ****************************************************************/
+              window.theme_ha_map = function(entity){
+                  const entityState = states[entity] || {};
+                  const time1 = entityState.attributes?.驾车通勤时间 || "0";
+                  const dis1 = entityState.attributes?.驾车通勤距离 || "0";
+                  const time2 = entityState.attributes?.公交通勤时间 || "0";
+                  const dis2 = entityState.attributes?.公交通勤距离 || "0";
+                  const label_on = ` 
+                    .leaflet-control-attribution {
+                      background: rgb(0,0,0,0) !important;
+                      font-size: 0px; 
+                    } 
+                    .leaflet-control-zoom-in,
+                    .leaflet-control-zoom-out {
+                      border-radius: 20% !important;
+                      padding: 0px;
+                      background: rgb(0,0,0,0.2) !important;
+                      margin: 0px 0px 0px;
+                      border: 1px solid rgb(255,255,255,0.5) !important;
+                    } 
+                    .leaflet-container:after {
+                      content: "驾车：回家距离${dis1}，预计时间${time1}\\a公交：回家距离${dis2}，预计时间${time2}";
+                      color: rgb(0,0,0);
+                      font-weight: bold; 
+                      font-size: 10px;
+                      position: absolute; 
+                      text-align: left;
+                      right: 10px;
+                      bottom: 1px;
+                      width: 55%;
+                      font-variant-numeric: tabular-nums;
+                      white-space: pre;
+                    }
+                    .leaflet-control-zoom {
+                      border: none !important;
+                    }
+                    .leaflet-bar a{
+                      color: white !important;
+                    }
+                  `; 
+                  const label_off = ` 
+                    .leaflet-control-attribution {
+                      background: rgb(0,0,0,0) !important;
+                      font-size: 0px;
+                    }
+                    .leaflet-control-zoom-in,
+                    .leaflet-control-zoom-out {
+                      border-radius: 20% !important;
+                      padding: 0px;
+                      background: rgb(0,0,0,0.2) !important;
+                      margin: 0px 0px 0px;
+                      border: 1px solid rgb(255,255,255,0.5) !important;
+                    } 
+                    .leaflet-container:after {
+                      content: "驾车：回家距离${dis1}，预计时间${time1}\\a公交：回家距离${dis2}，预计时间${time2}";
+                      color: rgb(255,255,255);
+                      font-weight: bold; 
+                      font-size: 10px;
+                      position: absolute; 
+                      text-align: left;
+                      right: 10px;
+                      bottom: 1px;
+                      width: 55%;
+                      font-variant-numeric: tabular-nums;
+                      white-space: pre;
+                    }
+                    .leaflet-control-zoom {
+                      border: none !important;
+                    }
+                    .leaflet-bar a{
+                      color: white !important;
+                    }
+                  `; 
+                  const label = ` 
+                    .leaflet-control-attribution {
+                      background: rgb(0,0,0,0) !important;
+                      font-size: 0px;
+                    }
+                    .leaflet-control-zoom-in,
+                    .leaflet-control-zoom-out {
+                      border-radius: 20% !important;
+                      padding: 0px;
+                      background: rgb(0,0,0,0.2) !important;
+                      margin: 0px 0px 0px;
+                      border: 1px solid rgb(255,255,255,0.5) !important;
+                    } 
+                    .leaflet-control-zoom {
+                      border: none !important;
+                    }
+                    .leaflet-bar a{
+                      color: white !important;
+                    }
+                  `; 
+                  if(states[entity]) return theme()=="on" ? label_on : label_off;
+                  else return label;
+              }
+
+              /***************************************************************
+              * 全局函数  电池卡片（battery-state）集成的card_mode样式          *
+              * 调用方式  theme_battery()                                     *
+              ****************************************************************/
+              window.theme_battery = function(){
+                  const label_on = `
+                    ha-card{
+                      border-width: 0;
+                      padding: 0;
+                      color: rgb(0,0,0);
+                      text-align: start;
+                    }
+                  `; 
+                  const label_off = `
+                    ha-card{
+                      border-width: 0;
+                      padding: 0;
+                      color: rgb(255,255,255);
+                      text-align: start;
+                    }
+                  `; 
+                  return theme()=="on" ? label_on : label_off;
+              }    
+
+              /***************************************************************
+              * 全局函数  气泡卡片（bubble-card）兼容theme()函数的公共主题样式   *
+              * 调用方式  theme_bubble(size)                                  *
+              ****************************************************************/
+              window.theme_bubble = function(size){  
+                  if (theme()=='on'){
+                    return `--popup-min-width: ${size}px;
+                            --mdc-theme-surface: rgb(0,0,0,0);
+                            --dialog-backdrop-filter: blur(10px) brightness(1);
+                            --secondary-background-color: rgb(255,255,255);
+                            --card-background-color: rgb(220,220,220);
+                            --accent-color: rgb(100,100,100);
+                            --text-light-primary-color: rgb(0,0,0);
+                            --primary-text-color: rgb(0,0,0);
+                            --mdc-theme-text-primary-on-background: rgb(0,0,0);
+                            --bubble-state-climate-fan-only-color: rgb(0,188,213);
+                            --bubble-state-climate-dry-color: rgb(255,151,0);
+                            --bubble-state-climate-cool-color: rgb(33,150,243);
+                            --bubble-state-climate-heat-color: rgb(254,111,33);
+                            --bubble-light-color: rgb(250,105,50);
+                            --bubble-media-player-icon-background-color: rgb(220,220,220);
+                            --bubble-accent-color: rgb(220,220,220);
+                            `
+                  }  
+                  if (theme()=='off'){
+                    return `--popup-min-width: ${size}px;
+                            --mdc-theme-surface: rgb(0,0,0,0);
+                            --dialog-backdrop-filter: blur(10px) brightness(1);
+                            --secondary-background-color: rgb(50,50,50);
+                            --card-background-color: rgb(50,50,50);
+                            --accent-color: rgb(200,200,200);
+                            --text-light-primary-color: rgb(255,255,255);
+                            --primary-text-color: rgb(255,255,255);
+                            --mdc-theme-text-primary-on-background: rgb(255,255,255);
+                            --bubble-state-climate-fan-only-color: rgb(0,188,213);
+                            --bubble-state-climate-dry-color: rgb(255,151,0);
+                            --bubble-state-climate-cool-color: rgb(33,150,243);
+                            --bubble-state-climate-heat-color: rgb(254,111,33);
+                            --bubble-light-color: rgb(250,105,50);
+                            --bubble-media-player-icon-background-color: rgb(50,50,50);
+                            --bubble-accent-color: rgb(50,50,50);
+                            `
+                  }
+              }   
+          ]]]   
+      - cursor: none      
+      - --mdc-ripple-press-opacity: 0                 
+      - background: rgb(0,0,0,0)
+  style:                
+    pointer-events: none   
