@@ -1,0 +1,19 @@
+action: fire-dom-event
+browser_mod:
+  service: browser_mod.popup
+  data:
+    style:  '[[[ return theme_none_pupup() ]]]'  ## 引用全局函数【theme_none_pupup()】style样式
+    content:
+      type: vertical-stack
+      cards:    
+        - type: custom:xiaoshi-phone-computer-card
+          entity: switch.diannao              
+          theme: '[[[ return theme() ]]]'        
+          cpu: sensor.renyuan_a_pc_cpu_renyuan_a_pc_cpu_usage                
+          memory: sensor.renyuan_a_pc_memory_renyuan_a_pc_memory_usage  
+          storage:
+            - sensor.renyuan_a_pc_harddrive_renyuan_a_pc_storage_c_usage     
+            - sensor.renyuan_a_pc_harddrive_renyuan_a_pc_storage_d_usage 
+            - sensor.renyuan_a_pc_harddrive_renyuan_a_pc_storage_e_usage 
+            - sensor.renyuan_a_pc_harddrive_renyuan_a_pc_storage_f_usage 
+      

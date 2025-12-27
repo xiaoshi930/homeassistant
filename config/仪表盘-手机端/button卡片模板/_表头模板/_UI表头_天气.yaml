@@ -1,0 +1,107 @@
+UI表头_天气:     
+  triggers_update:
+    - '[[[ return number1 ?? ""]]]'  
+    - '[[[ return number2 ?? ""]]]'  
+  layout: icon_state
+  show_state: true
+  show_name: false
+  entity: |
+      [[[
+          if (hass.user.name == name1) return weather1 ? weather1 : "";
+          if (hass.user.name == name2) return weather2 ? weather2 : "";
+      ]]]
+  icon: |
+    [[[
+        var icon = entity?.state;
+        if (icon == "晴") return "mdi:weather-sunny";
+        if (icon == "多云") return "mdi:weather-partly-cloudy";
+        if (icon == "阴") return "mdi:cloud";
+        if (icon == "雾") return "mdi:weather-fog";
+        if (icon == "小雨") return "mdi:weather-hail";
+        if (icon == "中雨") return "mdi:weather-hail";
+        if (icon == "大雨") return "mdi:weather-hail";
+        if (icon == "暴雨") return "mdi:weather-hail";
+        if (icon == "小雪") return "mdi:snowflake";
+        if (icon == "中雪") return "mdi:snowflake";
+        if (icon == "大雪") return "mdi:snowflake";
+        if (icon == "暴雪") return "mdi:snowflake";
+        if (icon == "多云") return "mdi:cloud";
+        if (icon == "雷阵雨") return "mdi:flash";
+        return "mdi:weather-sunny";
+    ]]] 
+  styles:
+    icon: 
+      - width: 13px
+      - height: 13px 
+      - margin-left: 5px
+      - color: | 
+          [[[
+              if (hass.user.name == name1) {
+                var warning  = states[weather1]?.attributes?.warning ?? "";
+              }
+              if (hass.user.name == name2) {
+                var warning  = states[weather2]?.attributes?.warning ?? "";
+              }
+              var level = "";
+              var priority = ["红色", "橙色", "黄色", "蓝色"];
+              for (let i=0;i<warning.length;i++){
+                var currentlevel = warning[i].level;
+                if (priority.indexOf(currentlevel) < priority.indexOf(level) || level === "") {
+                    level = currentlevel;
+                }
+                if (level === "红色") {
+                    break;
+                }
+              } 
+              if (level=="红色") return "rgb(255,50,50)";
+              if (level=="橙色") return "rgb(255,100,0)";
+              if (level=="黄色") return "rgb(255,200,0)";
+              if (level=="蓝色") return "rgb(50,150,200)";
+              else  return theme_color(0,255,1);
+          ]]]
+    state:
+      - font-size: 11px
+      - width: 45px
+      - margin-left: -8px
+      - text-align: center
+      - overflow: visible
+      - color: '[[[ return theme_color(0,255,1) ]]]' 
+    card:
+      - cursor: none
+      - --mdc-ripple-press-opacity: 0.2  
+      - padding: 0
+      - background: '[[[ return theme_head_color(255,83,0.6) ]]]' 
+      - border: 0px solid 
+      - border-radius: 10px
+      - width: '[[[ return button_width ]]]'
+      - height: 24px
+  tap_action: 
+    action: fire-dom-event
+    browser_mod:
+      service: browser_mod.popup
+      data:  
+        style: '[[[ return theme_none(); ]]]'
+        content:
+          type: vertical-stack
+          cards:
+            - type: custom:xiaoshi-weather-phone-card
+              entity: '[[[return weatherh ]]]'
+              theme: '[[[ return theme() ]]]'
+              mode: 家
+              use_custom_entities: true
+              temperature_entity: sensor.wendu_shiwai
+              humidity_entity: sensor.shidu_shiwai
+            - type: custom:xiaoshi-weather-phone-card
+              entity: | 
+                [[[
+                    if (hass.user.name == name1) return weather1 ? weather1 : "";
+                    if (hass.user.name == name2) return weather2 ? weather2 : "";
+                ]]] 
+              theme: '[[[ return theme() ]]]'
+              visual_style: dot
+              mode: 手机定位
+            - type: custom:xiaoshi-weather-phone-card
+              entity: '[[[return weathers ]]]'
+              theme: '[[[ return theme() ]]]'
+              mode: 搜索城市
+

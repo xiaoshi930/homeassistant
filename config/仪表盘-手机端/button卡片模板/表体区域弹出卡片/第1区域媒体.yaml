@@ -1,0 +1,12 @@
+action: fire-dom-event
+browser_mod:
+  service: browser_mod.popup
+  data:
+    style:  '[[[ return theme_none() ]]]'  ## 引用全局函数【theme_none_pupup()】style样式
+    content:
+      type: vertical-stack
+      cards: 
+        - type: custom:xiaoshi-music-player
+          xiaomi_home: media_player.yinxiang_zhuwo_home
+          xiaomi_miot: media_player.yinxiang_zhuwo_miot       
+          theme: '[[[ return theme() ]]]'

@@ -1,0 +1,55 @@
+action: fire-dom-event
+browser_mod:
+  service: browser_mod.popup
+  data:
+    style:  '[[[ return theme_none_pupup() ]]]'  ## 引用全局函数【theme_none_pupup()】style样式
+    content:
+      type: vertical-stack
+      cards: 
+        - type: custom:xiaoshi-phone-climate-card
+          entity: climate.kongtiao_keting
+          timer: timer.kongtiao_timer_keting
+          theme: '[[[ return theme() ]]]'
+          buttons:
+            - switch.kongtiao_dryer_keting
+            - switch.kongtiao_eco_keting
+            - switch.kongtiao_heater_keting
+            - switch.kongtiao_sleep_keting
+            - switch.kongtiao_alarm_keting
+            - light.kongtiao_light_keting
+        - type: custom:xiaoshi-phone-purifier-card
+          entity: switch.jinghuaqi_keting
+          select: select.jinghuaqi_keting
+          number: number.jinghuaqi_keting
+          pm25: sensor.jinghuaqi_pm25_keting
+          temperature: sensor.jinghuaqi_wendu_keting
+          humidity: sensor.jinghuaqi_shidu_keting
+          theme: '[[[ return theme() ]]]'
+          buttons:
+            - switch.jinghuaqi_alarm_keting
+            - switch.jinghuaqi_locked_keting
+            - select.jinghuaqi_light_keting
+            - sensor.haocai_jinghuaqi_lvxin_keting
+        - type: custom:xiaoshi-phone-humidifier-card
+          entity: humidifier.jiashiqi_keting
+          select: select.jiashiqi_keting
+          theme: '[[[ return theme() ]]]'
+          buttons:
+            - light.jiashiqi_light_keting
+            - switch.jiashiqi_alarm_keting
+            - sensor.jiashiqi_water_keting
+            - sensor.jiashiqi_tank_keting
+        - type: custom:xiaoshi-phone-computer-card
+          entity: switch.diannao              
+          theme: '[[[ return theme() ]]]'        
+          cpu: sensor.renyuan_a_pc_cpu_renyuan_a_pc_cpu_usage                
+          memory: sensor.renyuan_a_pc_memory_renyuan_a_pc_memory_usage  
+          storage:
+            - sensor.renyuan_a_pc_harddrive_renyuan_a_pc_storage_c_usage     
+            - sensor.renyuan_a_pc_harddrive_renyuan_a_pc_storage_d_usage 
+            - sensor.renyuan_a_pc_harddrive_renyuan_a_pc_storage_e_usage 
+            - sensor.renyuan_a_pc_harddrive_renyuan_a_pc_storage_f_usage  
+            
+            
+            
+            

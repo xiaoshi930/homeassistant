@@ -1,0 +1,20 @@
+action: fire-dom-event
+browser_mod:
+  service: browser_mod.popup
+  data:
+    style:  '[[[ return theme_none_pupup() ]]]'  ## 引用全局函数【theme_none_pupup()】style样式
+    content:
+      type: vertical-stack
+      cards:    
+        - type: custom:xiaoshi-phone-climate-card
+          entity: climate.shuinuantan
+          timer: timer.shuinuantan_timer_zhuwo
+          theme: '[[[ return theme() ]]]'
+          buttons:
+            - switch.shuinuantan_antifreeze
+            - switch.shuinuantan_antiscald
+            - switch.shuinuantan_sleep
+            - light.shuinuantan_light_keting
+            - switch.shuinuantan_alarm_keting
+            - switch.shuinuantan_locked_keting
+            - sensor.shuinuantan_water_keting

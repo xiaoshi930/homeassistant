@@ -1,0 +1,26 @@
+环境曲线模板pm25:
+  graph_span: 1d
+  header:
+    show: true
+    show_states: true
+  cache: true
+  yaxis:
+    - min: ~1000
+      max: ~-100
+      apex_config:
+        tickAmount: 5
+  series:
+    - fill_raw: last
+      stroke_width: 1
+      curve: smooth
+      group_by:
+        func: avg
+        duration: 10min
+      header_actions:
+        tap_action:
+          action: none
+        hold_action:
+          action: none
+  apex_config:
+    chart:
+      height: 160px

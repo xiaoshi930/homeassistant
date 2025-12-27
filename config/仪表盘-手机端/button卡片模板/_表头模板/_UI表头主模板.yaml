@@ -1,0 +1,23 @@
+UI表头主模板: 
+  triggers_update:
+    - '[[[ return number1 ?? ""]]]'  
+    - '[[[ return number2 ?? ""]]]'  
+    - '[[[ return switch1 ?? ""]]]'  
+    - '[[[ return switch2 ?? ""]]]'  
+  styles:
+    grid:
+      - grid-template-areas: |
+          "头像1 头像2 天气 温度 湿度"   
+          "头像1 头像2 电费 燃气 水费"                
+          "头像1 头像2 话费 HA信息 待办"              
+      - grid-template-columns: 14% 14% 20.4% 20.4% 20.4% 
+      - grid-template-rows: 33% 33% 33%
+    card: 
+      - cursor: none
+      - --mdc-ripple-press-opacity: 0
+      - background: transparent
+      - padding: 2vw 0 0 0
+      - border-radius: 0
+      - border-width: 0
+      - height: 13vh
+      - width: 92vw

@@ -1,0 +1,183 @@
+UI表头_头像: #本地js计算离家距离、在家/离家时间、显示生日天数
+  triggers_update: all 
+  show_name: false
+  show_entity_picture: true
+  entity_picture: '[[[ return states[variables.人员实体]?.attributes?.entity_picture || ""]]]'
+  size: 70%
+  show_label: true 
+  label: | 
+      [[[ 
+          var date1 = new Date(); 
+          var time1 = date1.getTime();
+          var d = states[variables.人员ip实体]?.last_changed ?? time1;
+          var date2 = new Date(typeof d === 'string' ? d.slice(0, 19) : d);
+          var time2 = date2.getTime();
+          var time = ((time1-time2)/3600000-8).toFixed(1);
+          if(time < 24) time=time+'h';
+          if(time >=24) time=(time/24).toFixed(1)+'d';
+          var lat1 = states["zone.home"]?.attributes?.latitude;
+          var lng1 = states["zone.home"]?.attributes?.longitude;
+          var lat2 = states[variables.人员app实体]?.attributes?.latitude;
+          var lng2 = states[variables.人员app实体]?.attributes?.longitude; 
+          var radLat1 =lat1 * Math.PI / 180.0
+          var radLat2 =lat2 * Math.PI / 180.0
+          var radLng1 =lng1 * Math.PI / 180.0
+          var radLng2 =lng2 * Math.PI / 180.0
+          var a = radLat1 - radLat2; 
+          var b = radLng1 - radLng2;
+          var s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(b / 2), 2)));
+          s = Math.round(s * 6378.137 *10 ) / 10 ;    //计算后的距离、单位km
+          var shengri1 = states[variables.万年历?.实体]?.attributes?.生日?.[variables.万年历?.位置]?.农历天数;
+          var shengri2 = states[variables.万年历?.实体]?.attributes?.生日?.[variables.万年历?.位置]?.阳历天数;
+          var shengri;
+          if ((shengri1 != null && shengri1 !== "") && (shengri2 != null && shengri2 !== "")) {
+              shengri = Math.min(Number(shengri1), Number(shengri2));
+          } else if (shengri1 != null && shengri1 !== "") {
+              shengri = Number(shengri1);
+          } else if (shengri2 != null && shengri2 !== "") {
+              shengri = Number(shengri2);
+          } else {
+              shengri = "-1"; 
+          }
+          shengri = shengri == 0 ? "今天" : shengri+"天";
+          if (states[variables.人员ip实体]?.state=="not_home") return '<font size="1.3vh"><b>离家</b></font><br>'+s+'km<br>'+time+'<br>'+shengri;
+          if (states[variables.人员ip实体]?.state=="home")     return '<font size="1.3vh"><b>在家</b></font><br>'+s+'km<br>'+time+'<br>'+shengri
+      ]]]
+  type: custom:button-card
+  styles:
+    custom_fields:
+      progress:
+        - padding: 0
+        - position: absolute
+        - align-self: start
+        - width: 8.6vw
+        - height: 8.6vw
+        - margin-left: 0.7vw
+        - margin-top: 1.2vw 
+        - border-radius: 50%
+        - background: |
+            [[[            
+              var dianliang =states[variables.人员app电量]?.state || "0";
+              const percentage = Math.min(100, Math.max(0, dianliang));
+              const color = `hsl(${percentage}, 80%, 50%)`;
+              return `conic-gradient(${color} 0% ${percentage}%, transparent ${percentage}% 100%)`;
+            ]]]
+        - mask: radial-gradient(transparent 57%, black 32%)
+        - z-index: 0
+    entity_picture:
+      - padding: 0
+      - border-radius: 5vw
+      - margin-top: 2vw
+      - position: absolute
+      - align-self: start
+      - z-index: 1
+    label:
+      - padding: 0
+      - font-size: 1vh
+      - margin-top: -6.5vh
+      - color: rgb(250,250,250)
+    card:
+      - padding: 0
+      - cursor: none
+      - --mdc-ripple-press-opacity: 0.2
+      - width: 10vw
+      - height: 11vh 
+      - background: orange 
+      - border-width: 0
+      - border-radius: 5vw
+      - background: |
+          [[[ 
+              var home = states[variables.人员ip实体]?.state;
+              if (hass.user.name == name1) {
+                  if (states[number1].state == 1 && home =="not_home" ) return "rgb(238,132,119)";
+                  if (states[number1].state == 2 && home =="home"     ) return "rgb(7,107,128)";
+                  if (states[number1].state == 2 && home =="not_home" ) return "rgb(165,73,65)";
+                  if (states[number1].state == 1 && home =="home"     ) return "rgb(9,193,232)";
+                  if (states[number1].state == 3 && home =="not_home" ) return "rgb(238,132,119,0.7)";
+                  if (states[number1].state == 4 && home =="home"     ) return "rgb(7,107,128,0.7)";
+                  if (states[number1].state == 4 && home =="not_home" ) return "rgb(165,73,65,0.7)";
+                  if (states[number1].state == 3 && home =="home"     ) return "rgb(9,193,232,0.7)";
+                  if (states[number1].state == 5 && home =="not_home" ) return "rgb(238,132,119,0.7)";
+                  if (states[number1].state == 6 && home =="home"     ) return "rgb(7,107,128,0.7)";
+                  if (states[number1].state == 6 && home =="not_home" ) return "rgb(165,73,65,0.7)";
+                  if (states[number1].state == 5 && home =="home"     ) return "rgb(9,193,232,0.7)";
+                  if (states[number1].state == 7 && home =="not_home" ) return "rgb(238,132,119,0.7)";
+                  if (states[number1].state == 8 && home =="home"     ) return "rgb(7,107,128,0.7)";
+                  if (states[number1].state == 8 && home =="not_home" ) return "rgb(165,73,65,0.7)";
+                  if (states[number1].state == 7 && home =="home"     ) return "rgb(9,193,232,0.7)";
+              }
+              if (hass.user.name == name2){
+                  if (states[number2].state == 1 && home =="not_home" ) return "rgb(238,132,119)";
+                  if (states[number2].state == 2 && home =="home"     ) return "rgb(7,107,128)";
+                  if (states[number2].state == 2 && home =="not_home" ) return "rgb(165,73,65)";
+                  if (states[number2].state == 1 && home =="home"     ) return "rgb(9,193,232)";
+                  if (states[number2].state == 3 && home =="not_home" ) return "rgb(238,132,119,0.7)";
+                  if (states[number2].state == 4 && home =="home"     ) return "rgb(7,107,128,0.7)";
+                  if (states[number2].state == 4 && home =="not_home" ) return "rgb(165,73,65,0.7)";
+                  if (states[number2].state == 3 && home =="home"     ) return "rgb(9,193,232,0.7)";
+              }
+              return "rgb(0,0,0,0)"
+          ]]]
+  custom_fields:
+    progress: ""
+  tap_action: 
+    action: fire-dom-event
+    browser_mod:
+      service: browser_mod.popup
+      data:
+        style: |
+          [[[ 
+              var home = states[variables.人员ip实体]?.state;
+              return theme_none_touxiang(home);  
+          ]]]
+        content:
+          type: vertical-stack
+          cards: 
+            - type: custom:xiaoshi-birthday-card
+              entity: sensor.lunar_calendar
+              theme: '[[[ return theme() ]]]'
+              items:
+                - index: "0"
+                - index: "1"
+                - index: "2"
+            - type: custom:xiaoshi-balance-card
+              theme: '[[[ return theme() ]]]'
+              entities:
+                - entity_id: sensor.tel_api
+                - entity_id: sensor.tel199_2769
+                - entity_id: sensor.tel195_0769
+                - entity_id: sensor.tel137_9221
+                - entity_id: sensor.tel182_7461
+            - type: map
+              entities:
+                - entity: '[[[ return variables.人员实体 || ""]]]'
+              hours_to_show: 24
+              aspect_ratio: "2:1"
+              theme_mode: auto
+              card_mod: 
+                style: 
+                  ha-map $ ha-entity-marker $: |
+                    .marker {
+                      border: 3px solid var(--state-person) !important;
+                      border-radius: 50% 50% 50% 0px !important;
+                      transform: rotate(-45deg) translate(50%, -50%);
+                      overflow: visible !important;
+                      background: var(--state-person) !important;
+                    }
+                    .entity-picture {
+                      transform: rotate(45deg);
+                      border-radius: 50%;
+                    }
+                  ha-map $: '[[[return theme_ha_map(variables.人员回家时间)]]]'
+                  .: |
+                    ha-card {
+                      box-shadow: none;
+                      border-width: 0;
+                    }
+                    ha-icon-button {
+                      margin: 0px 7px 0px;
+                      color: orange !important;
+                      background: rgb(0,0,0,0.2);
+                      border-radius: 20%;
+                      border: 1px solid rgb(255,255,255,0.5) !important;
+                    }   

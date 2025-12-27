@@ -1,0 +1,27 @@
+action: fire-dom-event
+browser_mod:
+  service: browser_mod.popup
+  data:
+    style:  '[[[ return theme_none_pupup() ]]]'  ## 引用全局函数【theme_none_pupup()】style样式
+    content:
+      type: vertical-stack
+      cards:    
+        - type: custom:xiaoshi-phone-humidifier-card
+          entity: humidifier.jiashiqi_keting
+          select: select.jiashiqi_keting
+          theme: '[[[ return theme() ]]]'
+          buttons:
+            - light.jiashiqi_light_keting
+            - switch.jiashiqi_alarm_keting
+            - sensor.jiashiqi_water_keting
+            - sensor.jiashiqi_tank_keting
+        - type: custom:xiaoshi-phone-humidifier-card
+          entity: humidifier.jiashiqi_zhuwo
+          select: select.jiashiqi_zhuwo
+          theme: '[[[ return theme() ]]]'
+          buttons:
+            - light.jiashiqi_light_zhuwo
+            - switch.jiashiqi_alarm_zhuwo
+            - sensor.jiashiqi_water_zhuwo
+            - sensor.jiashiqi_tank_zhuwo
+      

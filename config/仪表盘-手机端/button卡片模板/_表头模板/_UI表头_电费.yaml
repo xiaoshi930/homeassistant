@@ -1,0 +1,55 @@
+UI表头_电费:           
+  triggers_update:
+    - '[[[ return number1 ?? ""]]]'  
+    - '[[[ return number2 ?? ""]]]'
+    - '[[[ return switch1 ?? ""]]]'
+    - '[[[ return switch2 ?? ""]]]'
+  numeric_precision: 1
+  layout: icon_state
+  show_state: true
+  show_name: false
+  icon: mdi:flash     
+  state_display: |
+    [[[
+        var dianfei = entity?.state ?? "";
+        if (dianfei<100)  dianfei = Math.round(dianfei*10)/10;
+        if (dianfei>=100) dianfei = Math.round(dianfei);
+        if (dianfei<=30)  return  '<font color="#FF2000"><b>'+dianfei+' 元</b></font>';
+        if (dianfei>30)   return dianfei+" 元"
+    ]]]
+  styles:
+    icon: 
+      - width: 13px
+      - height: 13px 
+      - margin-left: 5px 
+      - color: rgb(255 127 0)
+    state:
+      - font-size: 11px
+      - width: 45px
+      - margin-left: -8px
+      - text-align: center
+      - overflow: visible
+      - color: '[[[ return theme_color(0,255,1) ]]]' 
+    card:
+      - cursor: none
+      - --mdc-ripple-press-opacity: 0.2  
+      - padding: 0
+      - background: '[[[ return theme_head_color(255,83,0.6) ]]]' 
+      - border: 0px solid 
+      - border-radius: 10px
+      - width: '[[[ return button_width ]]]'
+      - height: 24px
+  tap_action:  
+    action: fire-dom-event
+    browser_mod: 
+      service: browser_mod.popup
+      data:
+        style: |
+          --mdc-theme-surface: rgb(0,0,0,0);
+          --dialog-backdrop-filter: blur(10px) brightness(1);
+        content:
+          type: custom:xiaoshi-state-grid-info
+          entities:
+            - entity_id: sensor.state_grid_6103518118537
+          global_warning: <20
+          theme: '[[[ return theme() ]]]'

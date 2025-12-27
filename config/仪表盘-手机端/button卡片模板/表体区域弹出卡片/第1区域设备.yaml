@@ -1,0 +1,54 @@
+action: fire-dom-event
+browser_mod:
+  service: browser_mod.popup
+  data:
+    style:  '[[[ return theme_none_pupup() ]]]'  ## 引用全局函数【theme_none_pupup()】style样式
+    content:
+      type: vertical-stack
+      cards:    
+        - type: custom:xiaoshi-phone-climate-card
+          entity: climate.kongtiao_zhuwo
+          timer: timer.kongtiao_timer_zhuwo
+          theme: '[[[ return theme() ]]]'
+          buttons:
+            - switch.kongtiao_dryer_zhuwo
+            - switch.kongtiao_eco_zhuwo
+            - switch.kongtiao_heater_zhuwo
+            - switch.kongtiao_sleep_zhuwo
+            - switch.kongtiao_alarm_zhuwo
+            - light.kongtiao_light_zhuwo
+        - type: custom:xiaoshi-phone-climate-card
+          entity: climate.shuinuantan
+          timer: timer.shuinuantan_timer_zhuwo
+          theme: '[[[ return theme() ]]]'
+          buttons:
+            - switch.shuinuantan_antifreeze
+            - switch.shuinuantan_antiscald
+            - switch.shuinuantan_sleep
+            - light.shuinuantan_light_keting
+            - switch.shuinuantan_alarm_keting
+            - switch.shuinuantan_locked_keting
+            - sensor.shuinuantan_water_keting
+        - type: custom:xiaoshi-phone-humidifier-card
+          entity: humidifier.jiashiqi_zhuwo
+          select: select.jiashiqi_zhuwo
+          theme: '[[[ return theme() ]]]'
+          buttons:
+            - light.jiashiqi_light_zhuwo
+            - switch.jiashiqi_alarm_zhuwo
+            - sensor.jiashiqi_water_zhuwo
+            - sensor.jiashiqi_tank_zhuwo
+        - type: custom:xiaoshi-phone-purifier-card
+          entity: fan.jinghuaqi_zhuwo
+          number: number.jinghuaqi_zhuwo
+          pm25: sensor.jinghuaqi_pm25_zhuwo
+          temperature: sensor.jinghuaqi_wendu_zhuwo
+          humidity: sensor.jinghuaqi_shidu_zhuwo
+          theme: '[[[ return theme() ]]]'
+          buttons:
+            - switch.jinghuaqi_alarm_zhuwo
+            - switch.jinghuaqi_locked_zhuwo
+            - light.jinghuaqi_light_zhuwo
+            - sensor.haocai_jinghuaqi_lvxin_zhuwo
+
+  

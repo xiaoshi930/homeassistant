@@ -1,0 +1,32 @@
+action: fire-dom-event
+browser_mod:
+  service: browser_mod.popup
+  data:
+    style:  '[[[ return theme_none_pupup() ]]]'  ## 引用全局函数【theme_none_pupup()】style样式
+    content:
+      type: vertical-stack
+      cards:    
+        - type: custom:xiaoshi-phone-purifier-card
+          entity: switch.jinghuaqi_keting
+          select: select.jinghuaqi_keting
+          number: number.jinghuaqi_keting
+          pm25: sensor.jinghuaqi_pm25_keting
+          temperature: sensor.jinghuaqi_wendu_keting
+          humidity: sensor.jinghuaqi_shidu_keting
+          buttons:
+            - switch.jinghuaqi_alarm_keting
+            - switch.jinghuaqi_locked_keting
+            - select.jinghuaqi_light_keting
+            - sensor.haocai_jinghuaqi_lvxin_keting
+        - type: custom:xiaoshi-phone-purifier-card
+          entity: fan.jinghuaqi_zhuwo
+          number: number.jinghuaqi_zhuwo
+          pm25: sensor.jinghuaqi_pm25_zhuwo
+          temperature: sensor.jinghuaqi_wendu_zhuwo
+          humidity: sensor.jinghuaqi_shidu_zhuwo
+          buttons:
+            - switch.jinghuaqi_alarm_zhuwo
+            - switch.jinghuaqi_locked_zhuwo
+            - light.jinghuaqi_light_zhuwo
+            - sensor.haocai_jinghuaqi_lvxin_zhuwo
+      

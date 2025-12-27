@@ -1,0 +1,61 @@
+UI表头_燃气:           
+  triggers_update:
+    - '[[[ return number1 ?? ""]]]'  
+    - '[[[ return number2 ?? ""]]]'
+    - '[[[ return switch1 ?? ""]]]'
+    - '[[[ return switch2 ?? ""]]]'
+  numeric_precision: 1
+  layout: icon_state
+  show_state: true
+  show_name: false
+  icon: mdi:fire     
+  state_display: |
+    [[[
+        var ranqi = states[variables.燃气]?.state;
+        if (ranqi< 100) ranqi = Math.round(ranqi*10)/10;
+        if (ranqi>=100) ranqi = Math.round(ranqi);
+        if (ranqi< 21) return  '<font color="#FF2000"><b>'+ranqi+' 元</b></font>';
+        if (ranqi>=21) return ranqi+" 元"
+    ]]] 
+  styles:
+    icon: 
+      - width: 13px
+      - height: 13px 
+      - margin-left: 5px
+      - color: rgb(255 48 48)
+    state:
+      - font-size: 11px
+      - width: 45px
+      - margin-left: -8px
+      - text-align: center
+      - overflow: visible
+      - color: '[[[ return theme_color(0,255,1) ]]]' 
+    card:
+      - cursor: none
+      - --mdc-ripple-press-opacity: 0.2  
+      - padding: 0
+      - background: '[[[ return theme_head_color(255,83,0.6) ]]]' 
+      - border: 0px solid 
+      - border-radius: 10px
+      - width: '[[[ return button_width ]]]'
+      - height: 24px
+  tap_action:  
+    action: fire-dom-event
+    browser_mod:
+      service: browser_mod.popup
+      data:
+        style: '[[[ return theme_none(); ]]]'
+        content:                
+          type: vertical-stack
+          cards:                 
+            - type: custom:button-card  
+              template: 燃气信息卡片     
+              variables:     
+                燃气: '[[[ return variables.燃气 ]]]'
+                主题: '[[[ return theme() ]]]'
+            - type: custom:apexcharts-card
+              card_mod: 
+                style: '[[[ return theme_apexcharts(); ]]]'
+              config_templates: 每月燃气曲线
+              series:   
+                - entity: '[[[ return variables.燃气 ]]]'
