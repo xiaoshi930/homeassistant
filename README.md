@@ -1,4 +1,4 @@
-## ⚙️ Lovelace 仪表盘 YAML 更新日期 2025-12-27
+## ⚙️ Lovelace 仪表盘 YAML 更新日期 2026-06-11
 ## ⚙️ Lovelace 仪表盘 YAML 配置指南
 
 ### 🔄 切换仪表盘
