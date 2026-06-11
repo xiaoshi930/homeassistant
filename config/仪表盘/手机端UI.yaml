@@ -1,0 +1,1170 @@
+button_card_templates:
+  !include_dir_merge_named "/config/仪表盘/手机端button设备"
+views:    
+  - type: custom:xiaoshi-phone-card 
+  
+    ############################################################################
+    ###########                       头像区域                       ###########
+    ############################################################################
+    avatar_cards:
+      - type: custom:xiaoshi-avatar-card
+        persons:
+          - person_entity: person.zhangsan
+            tracker_entity: device_tracker.ip_zhangsan
+            nav_entity: sensor.tencent_zhangsan
+            commute_mode: transit
+            zone_entity: zone.home
+            calendar_entity: sensor.lunar_calendar
+            birthday_index: "0"
+            ring_type: storage
+            storage_entity: sensor.zhangsan_internal_storage
+          - person_entity: person.lisi
+            tracker_entity: device_tracker.ip_lisi
+            nav_entity: sensor.tencent_lisi 
+            commute_mode: walking
+            zone_entity: zone.home
+            calendar_entity: sensor.lunar_calendar
+            birthday_index: "1"
+            ring_type: storage
+            storage_entity: sensor.zhangsan_internal_storage
+          - person_entity: person.wangwu
+            tracker_entity: device_tracker.ip_wangwu
+            zone_entity: zone.home
+            calendar_entity: sensor.lunar_calendar
+            birthday_index: "2"
+        other_cards: |
+          - type: custom:xiaoshi-birthday-card
+            entity: sensor.lunar_calendar
+            items:
+              - index: "0"
+              - index: "1"
+              - index: "2"
+          - type: custom:xiaoshi-balance-card
+            global_warning: <30          
+            entities:
+              - entity_id: sensor.tel_api
+              - entity_id: sensor.tel199_2769
+              - entity_id: sensor.tel195_0769
+              - entity_id: sensor.tel137_9221
+              - entity_id: sensor.tel182_7461
+          
+          
+    ############################################################################
+    ###########                       表头区域                       ###########
+    ############################################################################
+    header_cards:
+      #######################   天气按钮  ######################################
+      - type: custom:xiaoshi-weather-phone-button    
+        display_entity: weather.wo_de_jia
+        entities:
+          - entity_id: weather.wo_de_jia
+            use_custom_entities: true
+            temperature_entity: sensor.wendu_shiwai
+            humidity_entity: sensor.shidu_shiwai
+          - entity_id: |
+              [[[
+                if (hass.user.name == "张三") return "weather.zhang_san";
+                if (hass.user.name == "李四") return "weather.li_si";
+              ]]]
+            auto_refresh_on_load: true
+            visual_style: dot
+            mode: 手机定位
+          - entity_id: weather.sou_suo_cheng_shi
+            mode: 搜索城市
+            
+      #######################   温度按钮  ######################################
+      - type: custom:xiaoshi-chart-button
+        merge: true
+        mergename: 室内温度平均值
+        entities:
+          - entity: sensor.wendu_zhuwo
+            name: 主卧
+          - entity: sensor.wendu_keting
+            name: 客厅
+          - entity: sensor.wendu_ciwo
+            name: 次卧
+          - entity: sensor.wendu_ertongfang
+            name: 儿童房
+          - entity: sensor.wendu_chufang
+            name: 厨房
+          - entity: sensor.wendu_gongwei
+            name: 公卫
+          - entity: sensor.wendu_zhuwei
+            name: 主卫
+        other_cards: |-    
+          - type: custom:xiaoshi-chart-card
+            merge: true
+            mergename: 室外温度
+            entities:
+              - entity: sensor.wendu_shiwai
+          - type: custom:xiaoshi-small-climate-card
+            entity: climate.dinuan
+          - type: custom:xiaoshi-small-climate-card
+            entity: climate.shuinuantan
+          - type: custom:xiaoshi-small-climate-card
+            entity: climate.kongtiao_keting 
+          - type: custom:xiaoshi-small-climate-card
+            entity: climate.kongtiao_zhuwo  
+            
+      #######################   湿度按钮  ######################################
+      - type: custom:xiaoshi-chart-button
+        merge: true
+        mergename: 室内湿度平均值
+        entities:
+          - entity: sensor.shidu_zhuwo
+            name: 主卧
+          - entity: sensor.shidu_keting
+            name: 客厅
+          - entity: sensor.shidu_ciwo
+            name: 次卧
+          - entity: sensor.shidu_ertongfang
+            name: 儿童房
+          - entity: sensor.shidu_chufang
+            name: 厨房
+          - entity: sensor.shidu_gongwei
+            name: 公卫
+          - entity: sensor.shidu_zhuwei
+            name: 主卫
+        other_cards: |-    
+          - type: custom:xiaoshi-chart-card
+            merge: true
+            mergename: 室外湿度
+            entities:
+              - entity: sensor.shidu_shiwai
+          - type: custom:xiaoshi-small-humidifier-card
+            entity: humidifier.jiashiqi_keting
+            select: select.jiashiqi_keting
+          - type: custom:xiaoshi-small-humidifier-card
+            entity: humidifier.jiashiqi_zhuwo
+            select: select.jiashiqi_zhuwo
+            
+      #######################   pm2.5按钮  #####################################
+      - type: custom:xiaoshi-chart-button
+        merge: true
+        mergename: 室内PM2.5平均值
+        entities:
+          - entity: sensor.jinghuaqi_pm25_keting
+            name: 客厅
+          - entity: sensor.jinghuaqi_pm25_zhuwo
+            name: 主卧
+        other_cards: |-
+          - type: custom:xiaoshi-small-purifier-card
+            entity: fan.jinghuaqi_keting
+            width: 100%
+            number: number.jinghuaqi_keting
+            pm25: sensor.jinghuaqi_pm25_keting
+          - type: custom:xiaoshi-small-purifier-card
+            entity: fan.jinghuaqi_zhuwo
+            width: 100%
+            number: number.jinghuaqi_zhuwo
+            pm25: sensor.jinghuaqi_pm25_zhuwo
+          - type: custom:button-card
+            template: 扫地机器人
+              
+      #######################   电费按钮  ######################################
+      - type: custom:xiaoshi-state-grid-button
+        utility_type: electric
+        default_show_calendar: none
+        global_warning: <30
+        entities:
+          - entity_id: sensor.state_grid_6103518118537
+              
+      #######################   燃气按钮  ######################################
+      - type: custom:xiaoshi-state-grid-button
+        utility_type: gas
+        default_show_calendar: none
+        global_warning: <30
+        entities:
+          - entity_id: sensor.qin_hua_ran_qi_0842342294
+              
+      #######################   水费按钮  ######################################
+      - type: custom:xiaoshi-state-grid-button
+        utility_type: water
+        default_show_calendar: none
+        global_warning: <30
+        entities:
+          - entity_id: sensor.xi_an_shui_fei_002024195152
+              
+      #######################   油价按钮  ######################################
+      - type: custom:xiaoshi-petrochina-button
+        entities:
+          - sensor.fuel_price_shaanxi
+        show_gasoline92: true
+        
+      #######################   电话余额按钮   #################################
+      - type: custom:xiaoshi-balance-button       
+        global_warning: <30
+        entities:
+          - entity_id: sensor.tel_api
+          - entity_id: sensor.tel199_2769
+          - entity_id: sensor.tel195_0769
+          - entity_id: sensor.tel137_9221 
+          - entity_id: sensor.tel182_7461
+          
+      #######################   HA按钮   #######################################
+      - type: custom:xiaoshi-ha-info-button    
+        skip_updates: false
+        exclude_devices:
+          - "*洗衣机*"
+          - "*水暖毯*"
+          - "*小米电视*"
+          - "*加湿器*"
+          - 西安水费
+          - zhangsan-PC*  
+        exclude_entities: 
+          - select.xiaomidianshi_app
+          - weather.sou_suo_cheng_shi
+        addon_entities:
+          - entity_id: sensor.node_red_cpu_percent
+            overrides:
+              name: Node Red
+              label: cpu
+          - entity_id: sensor.node_red_memory_percent
+            overrides:
+              name: Node Red
+              label: 内存  
+      #######################  待办按钮  #######################################
+      - type: custom:xiaoshi-todo-button  
+        entities:
+          - todo.item 
+          - todo.kuai_di
+
+      #######################  耗材按钮 ########################################
+      - type: custom:xiaoshi-consumables-button  
+        entities: 
+          - entity_id: sensor.dianliang_wenduji_zhuwo
+          - entity_id: sensor.dianliang_wenduji_ciwo
+          - entity_id: sensor.dianliang_wenduji_ertongfang
+          - entity_id: sensor.dianliang_wenduji_zhuwei
+          - entity_id: sensor.dianliang_wenduji_gongwei
+          - entity_id: sensor.dianliang_wenduji_chufang
+          - entity_id: event.dianliang_wenduji_shiwai
+          - entity_id: sensor.dianliang_chuanganqi_xuanguanrenti
+          - entity_id: sensor.dianliang_chufangshuiqin
+          - entity_id: sensor.dianliang_chuanganqi_chufangrenti
+          - entity_id: sensor.dianliang_mensuo
+          - entity_id: sensor.dianliang_chuanganqi_ketingmenchuang
+          - entity_id: event.dianliang_menling
+          - entity_id: event.dianliang_chuanganqi_zhuwomenchuang
+          - entity_id: sensor.dianliang_yashua_lisi
+          - entity_id: sensor.haocai_jingshuiqi_ro
+            overrides:
+              conversion: /172.80
+              unit_of_measurement: "%"
+          - entity_id: sensor.dianliang_yashua_zhangsan
+          - entity_id: sensor.haocai_jingshuiqi_3in1
+            overrides: 
+              conversion: /86.4
+              unit_of_measurement: "%"
+          - entity_id: sensor.haocai_jinghuaqi_lvxin_keting
+          - entity_id: binary_sensor.haocai_xiwanji_piaoxiji
+          - entity_id: sensor.haocai_jinghuaqi_lvxin_zhuwo
+          - entity_id: binary_sensor.haocai_xiwanji_xiwanyan
+          - entity_id: sensor.dianlaing_zhuwo_wuxiankaiguan
+          - entity_id: sensor.haocai_saodijiqiren_zhushua
+          - entity_id: sensor.dianliang_keting_wuxiankaiguan2
+          - entity_id: sensor.haocai_saodijiqiren_bianshua
+          - entity_id: sensor.dianliang_keting_wuxiankaiguan3
+          - entity_id: sensor.haocai_saodijiqiren_lvxin
+
+ 
+    ############################################################################
+    ###########                       动态区域                       ###########
+    ############################################################################
+    dynamic_cards:
+      - type: custom:xiaoshi-dynamic-card
+        areas:
+          ##########################    灯光    ################################
+          - icon: mdi:ceiling-light
+            auto_hide: "true"
+            on_color: "rgb(233,150,0)"
+            entities:
+              - light.zhuwodeng
+              - light.zhuwomentingdeng
+              - light.taideng
+              - light.ketingdeng
+              - light.ketingdengdai
+              - light.ketingtongdeng 
+              - light.ketingzoulangdeng 
+              - light.xuanguandeng 
+              - light.wangguandeng
+              - light.ertongfangdeng
+              - light.xuexideng
+              - light.cantingdeng
+              - light.cantingtongdeng
+              - light.ciwodeng
+              - light.chufangdeng
+              - light.yuba_zhuwei_deng
+              - light.zhuweijingqiandeng
+              - light.yuba_gongwei_deng
+              - light.gongweijingqiandeng
+            popup_cards: |
+              - type: custom:xiaoshi-phone-light-card
+                width: 100%
+                height: 20vw
+                rgb: true
+                show: auto
+                entities:
+                  - light.zhuwodeng
+                  - light.zhuwomentingdeng
+                  - light.taideng
+                  - light.ketingdeng
+                  - light.ketingdengdai
+                  - light.ketingtongdeng 
+                  - light.ketingzoulangdeng 
+                  - light.xuanguandeng 
+                  - light.wangguandeng
+                  - light.ertongfangdeng
+                  - light.xuexideng
+                  - light.cantingdeng
+                  - light.cantingtongdeng
+                  - light.ciwodeng
+                  - light.chufangdeng
+                  - light.yuba_zhuwei_deng
+                  - light.zhuweijingqiandeng
+                  - light.yuba_gongwei_deng
+                  - light.gongweijingqiandeng
+                  
+          ##########################    电脑    ################################
+          - icon: mdi:laptop
+            auto_hide: "true"
+            on_color: "rgb(33,150,213)"
+            entities: |+
+              switch.diannao
+            popup_auto_hide: "true"
+            popup_cards: |  
+              - type: custom:xiaoshi-phone-computer-card
+                entity: switch.diannao              
+                cpu: sensor.zhangsan_pc_cpu_zhangsan_pc_cpu_usage                
+                memory: sensor.zhangsan_pc_memory_zhangsan_pc_memory_usage  
+                storage:
+                  - sensor.zhangsan_pc_harddrive_zhangsan_pc_storage_c_usage     
+                  - sensor.zhangsan_pc_harddrive_zhangsan_pc_storage_d_usage 
+                  - sensor.zhangsan_pc_harddrive_zhangsan_pc_storage_e_usage 
+                  - sensor.zhangsan_pc_harddrive_zhangsan_pc_storage_f_usage 
+              
+          ##########################    空调    ################################
+          - icon: mdi:air-conditioner
+            auto_hide: "true"
+            on_color: "rgb(0,188,213)"
+            entities:
+              - climate.kongtiao_zhuwo
+              - climate.kongtiao_keting
+            popup_auto_hide: "true"
+            popup_cards: |  
+              - type: custom:xiaoshi-phone-climate-card
+                entity: climate.kongtiao_keting
+                timer: timer.kongtiao_timer_keting
+                buttons:
+                  - switch.kongtiao_dryer_keting
+                  - switch.kongtiao_eco_keting
+                  - switch.kongtiao_heater_keting
+                  - switch.kongtiao_sleep_keting
+                  - switch.kongtiao_alarm_keting
+                  - light.kongtiao_light_keting
+              - type: custom:xiaoshi-phone-climate-card
+                entity: climate.kongtiao_zhuwo
+                timer: timer.kongtiao_timer_zhuwo
+                buttons:
+                  - switch.kongtiao_dryer_zhuwo
+                  - switch.kongtiao_eco_zhuwo
+                  - switch.kongtiao_heater_zhuwo
+                  - switch.kongtiao_sleep_zhuwo
+                  - switch.kongtiao_alarm_zhuwo
+                  - light.kongtiao_light_zhuwo
+                        
+          ##########################    风扇    ################################
+          - icon: mdi:fan
+            auto_hide: "true"
+            on_color: "rgb(0,188,213)"
+            entities:
+              - fan.xunhuanshan_ertongfang  
+            popup_auto_hide: "true"
+            popup_cards: |  
+              - type: custom:button-card 
+                template: 循环扇  
+                
+          ##########################    地暖    ################################
+          - icon: mdi:radiator
+            auto_hide: "true"
+            on_color: "rgb(226,81,4)"
+            entities:  
+              - climate.dinuan 
+              - climate.shuinuantan  
+            popup_auto_hide: "true"
+            popup_cards: |  
+              - type: custom:xiaoshi-phone-climate-card
+                entity: climate.dinuan
+                width: 100%
+                show_preset_modes: false
+              - type: custom:xiaoshi-phone-climate-card
+                entity: climate.shuinuantan
+                timer: timer.shuinuantan_timer_zhuwo
+                buttons:
+                  - switch.shuinuantan_antifreeze
+                  - switch.shuinuantan_antiscald
+                  - switch.shuinuantan_sleep
+                  - light.shuinuantan_light_keting
+                  - switch.shuinuantan_alarm_keting
+                  - switch.shuinuantan_locked_keting
+                  - sensor.shuinuantan_water_keting
+                  type: custom:xiaoshi-phone-climate-card
+              
+          ##########################    浴霸    ################################
+          - icon: mdi:hvac
+            auto_hide: "true"
+            on_color: "rgb(226,181,4)"
+            entities:
+              - switch.yuba_gongwei_heat1
+              - switch.zhu_wei_yu_ba
+            popup_auto_hide: "true"
+            popup_cards: |  
+              - type: custom:button-card
+                template: 公卫浴霸
+              - type: custom:button-card
+                template: 主卫浴霸
+              
+          ##########################   净化器   ################################
+          - icon: mdi:air-filter
+            auto_hide: "true"
+            on_color: "rgb(76,191,104)"
+            entities:
+              - fan.jinghuaqi_keting
+              - fan.jinghuaqi_zhuwo 
+            popup_auto_hide: "true"
+            popup_cards: |  
+              - type: custom:xiaoshi-phone-purifier-card
+                entity: fan.jinghuaqi_keting
+                number: number.jinghuaqi_keting
+                pm25: sensor.jinghuaqi_pm25_keting
+                temperature: sensor.jinghuaqi_wendu_keting
+                humidity: sensor.jinghuaqi_shidu_keting
+                buttons:
+                  - switch.jinghuaqi_alarm_keting
+                  - switch.jinghuaqi_locked_keting
+                  - select.jinghuaqi_light_keting
+                  - sensor.haocai_jinghuaqi_lvxin_keting
+              - type: custom:xiaoshi-phone-purifier-card
+                entity: fan.jinghuaqi_zhuwo
+                number: number.jinghuaqi_zhuwo
+                pm25: sensor.jinghuaqi_pm25_zhuwo
+                temperature: sensor.jinghuaqi_wendu_zhuwo
+                humidity: sensor.jinghuaqi_shidu_zhuwo
+                buttons:
+                  - switch.jinghuaqi_alarm_zhuwo
+                  - switch.jinghuaqi_locked_zhuwo
+                  - light.jinghuaqi_light_zhuwo
+                  - sensor.haocai_jinghuaqi_lvxin_zhuwo
+              
+          ##########################   加湿器   ################################
+          - icon: mdi:air-humidifier
+            auto_hide: "true"
+            on_color: "rgb(30,144,255)"
+            entities: 
+              - humidifier.jiashiqi_zhuwo
+              - humidifier.jiashiqi_keting
+            popup_auto_hide: "true"
+            popup_cards: |  
+              - type: custom:xiaoshi-phone-humidifier-card
+                entity: humidifier.jiashiqi_keting
+                select: select.jiashiqi_keting
+                buttons:
+                  - light.jiashiqi_light_keting
+                  - switch.jiashiqi_alarm_keting
+                  - sensor.jiashiqi_water_keting
+                  - sensor.jiashiqi_tank_keting
+              - type: custom:xiaoshi-phone-humidifier-card
+                entity: humidifier.jiashiqi_zhuwo
+                select: select.jiashiqi_zhuwo
+                buttons:
+                  - light.jiashiqi_light_zhuwo
+                  - switch.jiashiqi_alarm_zhuwo
+                  - sensor.jiashiqi_water_zhuwo
+                  - sensor.jiashiqi_tank_zhuwo 
+              
+          ########################   扫地机器人  ###############################
+          - icon: mdi:robot-vacuum
+            auto_hide: "true"
+            on_color: "rgb(90,205,50)"
+            entities:
+              - vacuum.saodijiqiren
+            popup_auto_hide: "true"
+            popup_cards: |  
+              - type: custom:button-card
+                template: 扫地机器人
+                  
+          ##########################   厨房设备    #############################
+          - icon: mdi:countertop 
+            auto_hide: "true"
+            on_color: "rgb(200,00,0)"
+            entities:
+              - sensor.chufang_dianfanbao
+              - sensor.chufang_dianyaliguo
+              - sensor.chufang_zhengzhuguo
+              - sensor.chufang_kongqizhaguo
+              - sensor.chufang_pobiji
+              - sensor.chufang_xiwanji
+              - sensor.chufang_youyanji
+            popup_auto_hide: "true"
+            popup_cards: |  
+              - type: custom:button-card
+                entity: sensor.chufang_kongqizhaguo
+                template: 空气炸锅卡片
+              - type: custom:button-card
+                entity: sensor.chufang_zhengzhuguo
+                template: 蒸煮锅卡片
+              - type: custom:button-card
+                entity: sensor.chufang_dianfanbao
+                template: 电饭煲卡片
+              - type: custom:button-card
+                entity: sensor..chufang_dianyaliguo
+                template: 电压力锅卡片
+              - type: custom:button-card
+                entity: sensor.chufang_pobiji
+                template: 破壁机卡片
+              - type: custom:button-card
+                entity: sensor.chufang_youyanji
+                template: 油烟机卡片
+              - type: custom:button-card
+                entity: sensor.chufang_xiwanji
+                template: 洗碗机卡片 
+                  
+          ##########################    媒体    ################################
+          - icon: mdi:multimedia
+            auto_hide: "true"
+            on_color: "rgb(220,22,252)"
+            entities:
+              - media_player.yinxiang_keting_miot
+              - media_player.yinxiang_zhuwo_miot
+            popup_auto_hide: "true"
+            popup_cards: |  
+              - type: custom:xiaoshi-music-player
+                xiaomi_home: media_player.yinxiang_keting_home 
+                xiaomi_miot: media_player.yinxiang_keting_miot       
+              - type: custom:xiaoshi-music-player
+                xiaomi_home: media_player.yinxiang_zhuwo_home 
+                xiaomi_miot: media_player.yinxiang_zhuwo_miot    
+              - type: custom:button-card
+                template: 电视
+
+
+    ############################################################################
+    ###########                       房间区域                       ###########
+    ############################################################################
+    room_cards:
+      ############################   第1房间  主卧  ############################
+      - type: custom:xiaoshi-room-card
+        name: "主卧"
+        ############################   温度及弹出   ##########################
+        temperature: sensor.wendu_zhuwo 
+        temperature_popup: |-
+          - type: custom:xiaoshi-chart-card
+            merge: true
+            mergename: "主卧温度"
+            entities:
+              - entity: sensor.wendu_zhuwo
+              - entity: sensor.jinghuaqi_wendu_zhuwo
+              - entity: sensor.jiashiqi_zhuwo_keting
+          - type: custom:xiaoshi-small-climate-card
+            entity: climate.kongtiao_zhuwo  
+        ############################   湿度及弹出   ##########################
+        humidity: sensor.shidu_zhuwo 
+        humidity_popup: |-
+          - type: custom:xiaoshi-chart-card
+            merge: true
+            mergename: "主卧湿度"
+            entities:
+              - entity: sensor.shidu_zhuwo
+              - entity: sensor.jinghuaqi_shidu_zhuwo
+          - type: custom:xiaoshi-small-humidifier-card
+            entity: humidifier.jiashiqi_zhuwo
+            select: select.jiashiqi_zhuwo
+        ############################   PM2.5及弹出   #########################
+        pm25: sensor.jinghuaqi_pm25_zhuwo
+        pm25_popup: |-
+          - type: custom:xiaoshi-chart-card
+            entities:
+              - entity: sensor.jinghuaqi_pm25_zhuwo
+                name: 主卧空气质量
+          - type: custom:xiaoshi-small-purifier-card
+            entity: fan.jinghuaqi_zhuwo
+            width: 100%
+            select: select.jinghuaqi_zhuwo
+            number: number.jinghuaqi_zhuwo
+            pm25: sensor.jinghuaqi_pm25_zhuwo
+        #############################   设备按钮   ###########################
+        devices:
+          #############################   设备1.1   ########################
+          - icon: mdi:lightbulb-group
+            on_color: "#de7717"
+            entities:
+              - light.zhuwodeng        
+              - light.zhuwomentingdeng    
+              - light.taideng 
+            popup_cards: |-
+              - type: custom:xiaoshi-phone-light-card
+                width: 100%
+                height: 20vw
+                rgb: true
+                entities:
+                  - light.zhuwodeng        
+                  - light.zhuwomentingdeng    
+                  - light.taideng 
+
+          #############################   设备1.2   ########################
+          - icon: mdi:devices
+            on_color: "rgb(0,188,213)"
+            entities:
+              - climate.kongtiao_zhuwo 
+              - fan.jinghuaqi_zhuwo
+              - humidifier.jiashiqi_zhuwo
+              - climate.shuinuantan
+            popup_cards: |-
+              - type: custom:xiaoshi-phone-climate-card
+                entity: climate.kongtiao_zhuwo
+                timer: timer.kongtiao_timer_zhuwo
+                buttons:
+                  - switch.kongtiao_dryer_zhuwo
+                  - switch.kongtiao_eco_zhuwo
+                  - switch.kongtiao_heater_zhuwo
+                  - switch.kongtiao_sleep_zhuwo
+                  - switch.kongtiao_alarm_zhuwo
+                  - light.kongtiao_light_zhuwo
+              - type: custom:xiaoshi-phone-purifier-card
+                entity: fan.jinghuaqi_zhuwo
+                number: number.jinghuaqi_zhuwo
+                pm25: sensor.jinghuaqi_pm25_zhuwo
+                temperature: sensor.jinghuaqi_wendu_zhuwo
+                humidity: sensor.jinghuaqi_shidu_zhuwo
+                buttons:
+                  - switch.jinghuaqi_alarm_zhuwo
+                  - switch.jinghuaqi_locked_zhuwo
+                  - light.jinghuaqi_light_zhuwo
+                  - sensor.haocai_jinghuaqi_lvxin_zhuwo
+              - type: custom:xiaoshi-phone-humidifier-card
+                entity: humidifier.jiashiqi_zhuwo
+                select: select.jiashiqi_zhuwo
+                buttons:
+                  - light.jiashiqi_light_zhuwo
+                  - switch.jiashiqi_alarm_zhuwo
+                  - sensor.jiashiqi_water_zhuwo
+                  - sensor.jiashiqi_tank_zhuwo
+              - type: custom:xiaoshi-phone-climate-card
+                entity: climate.shuinuantan
+                timer: timer.shuinuantan_timer_zhuwo
+                buttons:
+                  - switch.shuinuantan_antifreeze
+                  - switch.shuinuantan_antiscald
+                  - switch.shuinuantan_sleep
+                  - light.shuinuantan_light_keting
+                  - switch.shuinuantan_alarm_keting
+                  - switch.shuinuantan_locked_keting
+                  - sensor.shuinuantan_water_keting
+          #############################   设备1.3   ########################
+          - icon: mdi:multimedia
+            on_color: "rgb(220,22,252)"
+            entities:
+              - media_player.yinxiang_zhuwo_miot
+            popup_cards: |- 
+              - type: custom:xiaoshi-music-player
+                xiaomi_home: media_player.yinxiang_zhuwo_home 
+                xiaomi_miot: media_player.yinxiang_zhuwo_miot    
+
+      ############################   第2房间  客厅  ############################
+      - type: custom:xiaoshi-room-card
+        name: "客厅"
+        ############################   温度及弹出   ##########################
+        temperature: sensor.wendu_keting
+        temperature_popup: |-
+          - type: custom:xiaoshi-chart-card
+            merge: true
+            mergename: "客厅温度"
+            entities:
+              - entity: sensor.wendu_keting
+              - entity: sensor.jinghuaqi_wendu_keting
+              - entity: sensor.jiashiqi_zhuwo_keting
+          - type: custom:xiaoshi-small-climate-card
+            entity: climate.kongtiao_keting 
+        ############################   湿度及弹出   ##########################
+        humidity: sensor.shidu_keting
+        humidity_popup: |-
+          - type: custom:xiaoshi-chart-card
+            merge: true
+            mergename: "客厅湿度"
+            entities:
+              - entity: sensor.shidu_keting
+              - entity: sensor.jinghuaqi_shidu_keting
+          - type: custom:xiaoshi-small-humidifier-card
+            entity: humidifier.jiashiqi_zhuwo
+            select: select.jiashiqi_zhuwo
+        ############################   PM2.5及弹出   #########################
+        pm25: sensor.jinghuaqi_pm25_keting
+        pm25_popup: |-
+          - type: custom:xiaoshi-chart-card
+            entities:
+              - entity: sensor.jinghuaqi_pm25_keting
+                name: 客厅空气质量
+          - type: custom:xiaoshi-small-purifier-card
+            entity: fan.jinghuaqi_keting
+            width: 100%
+            number: number.jinghuaqi_keting
+            pm25: sensor.jinghuaqi_pm25_keting
+        #############################   设备按钮   ###########################
+        devices:
+          #############################   设备2.1   ########################
+          - icon: mdi:lightbulb-group
+            on_color: "#de7717"
+            entities:
+              - light.ketingdeng  
+              - light.ketingdengdai   
+              - light.ketingtongdeng       
+              - light.ketingzoulangdeng     
+              - light.xuanguandeng       
+              - light.wangguandeng
+              - light.xuexideng
+            popup_cards: |-
+              - type: custom:xiaoshi-phone-light-card
+                width: 100%
+                height: 20vw
+                rgb: true
+                entities:
+                  - light.ketingdeng  
+                  - light.ketingdengdai   
+                  - light.ketingtongdeng       
+                  - light.ketingzoulangdeng     
+                  - light.xuanguandeng       
+                  - light.wangguandeng
+                  - light.xuexideng
+          #############################   设备2.2   ########################
+          - icon: mdi:devices
+            on_color: "rgb(0,188,213)"
+            entities:
+              - climate.kongtiao_keting
+              - fan.jinghuaqi_keting
+              - humidifier.jiashiqi_zhuwo
+              - climate.dinuan
+            popup_cards: |-
+              - type: custom:xiaoshi-phone-climate-card
+                entity: climate.kongtiao_keting
+                timer: timer.kongtiao_timer_keting
+                buttons:
+                  - switch.kongtiao_dryer_keting
+                  - switch.kongtiao_eco_keting
+                  - switch.kongtiao_heater_keting
+                  - switch.kongtiao_sleep_keting
+                  - switch.kongtiao_alarm_keting
+                  - light.kongtiao_light_keting
+              - type: custom:xiaoshi-phone-purifier-card
+                entity: fan.jinghuaqi_keting
+                number: number.jinghuaqi_keting
+                pm25: sensor.jinghuaqi_pm25_keting
+                temperature: sensor.jinghuaqi_wendu_keting
+                humidity: sensor.jinghuaqi_shidu_keting
+                buttons:
+                  - switch.jinghuaqi_alarm_keting
+                  - switch.jinghuaqi_locked_keting
+                  - select.jinghuaqi_light_keting
+                  - sensor.haocai_jinghuaqi_lvxin_keting
+              - type: custom:xiaoshi-phone-humidifier-card
+                entity: humidifier.jiashiqi_zhuwo
+                select: select.jiashiqi_zhuwo
+                buttons:
+                  - light.jiashiqi_light_zhuwo
+                  - switch.jiashiqi_alarm_zhuwo
+                  - sensor.jiashiqi_water_zhuwo
+                  - sensor.jiashiqi_tank_zhuwo
+              - type: custom:xiaoshi-phone-climate-card
+                entity: climate.dinuan
+                width: 100%
+                show_preset_modes: false
+          #############################   设备2.3   ########################
+          - icon: mdi:multimedia
+            on_color: "rgb(220,22,252)"
+            entities:
+              - media_player.yinxiang_keting_miot
+            popup_cards: |-
+              - type: custom:xiaoshi-music-player
+                xiaomi_home: media_player.yinxiang_keting_home  
+                xiaomi_miot: media_player.yinxiang_keting_miot    
+              - type: custom:button-card
+                template: 电视
+  
+          #############################   设备2.4   ########################
+          - icon: mdi:laptop
+            on_color: "rgb(33,150,213)"
+            entities:
+              - switch.diannao 
+            popup_cards: |-
+              - type: custom:xiaoshi-phone-computer-card
+                entity: switch.diannao              
+                cpu: sensor.zhangsan_pc_cpu_zhangsan_pc_cpu_usage                
+                memory: sensor.zhangsan_pc_memory_zhangsan_pc_memory_usage  
+                storage:
+                  - sensor.zhangsan_pc_harddrive_zhangsan_pc_storage_c_usage     
+                  - sensor.zhangsan_pc_harddrive_zhangsan_pc_storage_d_usage 
+                  - sensor.zhangsan_pc_harddrive_zhangsan_pc_storage_e_usage 
+                  - sensor.zhangsan_pc_harddrive_zhangsan_pc_storage_f_usage 
+
+      ############################   第3房间  儿童房  ##########################
+      - type: custom:xiaoshi-room-card
+        name: "儿童房"
+        ############################   温度及弹出   ##########################
+        temperature: sensor.wendu_ertongfang 
+        temperature_popup: |-
+          - type: custom:xiaoshi-chart-card
+            entities:
+              - entity: sensor.wendu_ertongfang
+                name: 儿童房温度
+        ############################   湿度及弹出   ##########################
+        humidity: sensor.shidu_ertongfang 
+        humidity_popup: |-
+          - type: custom:xiaoshi-chart-card
+            entities:
+              - entity: sensor.shidu_ertongfang
+                name: 儿童房湿度          
+        #############################   设备按钮   ###########################
+        devices:
+          #############################   设备3.1   ########################
+          - icon: mdi:lightbulb-group
+            on_color: "#de7717"
+            entities:
+              - light.ertongfangdeng  
+            popup_cards: |-
+              - type: custom:xiaoshi-phone-light-card
+                width: 100%
+                height: 20vw
+                rgb: true
+                entities:
+                  - light.ertongfangdeng  
+
+      ############################   第4房间  餐厅  ############################
+      - type: custom:xiaoshi-room-card
+        name: "餐厅"
+        ############################   温度及弹出   ##########################
+        temperature: sensor.wendu_keting 
+        temperature_popup: |-
+          - type: custom:xiaoshi-chart-card
+            entities:
+              - entity: sensor.wendu_keting
+                name: 餐厅温度
+        ############################   湿度及弹出   ##########################
+        humidity: sensor.shidu_keting 
+        humidity_popup: |-
+          - type: custom:xiaoshi-chart-card
+            entities:
+              - entity: sensor.shidu_keting
+                name: 餐厅湿度         
+        ###############################   人在   #############################
+        person: sensor.renti_xuanguan
+        #############################   设备按钮   ###########################
+        devices:
+          #############################   设备4.1   ########################
+          - icon: mdi:lightbulb-group
+            on_color: "#de7717"
+            entities:
+              - light.cantingdeng  
+              - light.cantingtongdeng
+            popup_cards: |-
+              - type: custom:xiaoshi-phone-light-card
+                width: 100%
+                height: 20vw
+                rgb: true
+                entities:
+                  - light.cantingdeng  
+                  - light.cantingtongdeng
+          #############################   设备4.2   ########################
+          - icon: mdi:robot-vacuum
+            on_color: "#de7717"
+            entities:
+              - vacuum.saodijiqiren
+            popup_cards: |-
+              - type: custom:button-card
+                template: 扫地机器人
+
+      ############################   第5房间  次卧  ############################
+      - type: custom:xiaoshi-room-card
+        name: "次卧"
+        ############################   温度及弹出   ##########################
+        temperature: sensor.wendu_ciwo 
+        temperature_popup: |-
+          - type: custom:xiaoshi-chart-card
+            entities:
+              - entity: sensor.wendu_ciwo
+                name: 次卧温度 
+        ############################   湿度及弹出   ##########################
+        humidity: sensor.shidu_ciwo 
+        humidity_popup: |-
+          - type: custom:xiaoshi-chart-card
+            entities:
+              - entity: sensor.shidu_ciwo
+                name: 次卧湿度          
+        #############################   设备按钮   ###########################
+        devices:
+          #############################   设备5.1   ########################
+          - icon: mdi:lightbulb-group
+            on_color: "#de7717"
+            entities:
+              - light.ciwodeng  
+            popup_cards: |-
+              - type: custom:xiaoshi-phone-light-card
+                width: 100%
+                height: 20vw
+                rgb: true
+                entities:
+                  - light.ciwodeng  
+          #############################   设备5.2   ########################
+          - icon: mdi:fan
+            on_color: "rgb(0,188,213)"
+            entities:
+              - fan.xunhuanshan_ertongfang  
+            popup_cards: |-
+              - type: custom:button-card
+                template: 循环扇  
+             
+
+      ############################   第6房间  厨房  ############################
+      - type: custom:xiaoshi-room-card
+        name: "厨房"
+        ############################   温度及弹出   ##########################
+        temperature: sensor.wendu_chufang 
+        temperature_popup: |-
+          - type: custom:xiaoshi-chart-card
+            entities:
+              - entity: sensor.wendu_chufang
+                name: 厨房温度
+        ############################   湿度及弹出   ##########################
+        humidity: sensor.shidu_chufang 
+        humidity_popup: |-
+          - type: custom:xiaoshi-chart-card
+            entities:
+              - entity: sensor.shidu_chufang
+                name: 厨房湿度          
+        ###############################   人在   #############################
+        person: sensor.renti_chufang
+        #############################   设备按钮   ###########################
+        devices:
+          #############################   设备6.1   ########################
+          - icon: mdi:lightbulb-group
+            on_color: "#de7717"
+            entities:
+              - light.chufangdeng  
+            popup_cards: |-
+              - type: custom:xiaoshi-phone-light-card
+                width: 100%
+                height: 20vw
+                rgb: true
+                entities:
+                  - light.chufangdeng  
+          #############################   设备6.2   ########################
+          - icon: mdi:countertop
+            on_color: "rgb(200,00,0)"
+            entities:
+              - sensor.chufang_dianfanbao
+              - sensor.chufang_dianyaliguo
+              - sensor.chufang_zhengzhuguo
+              - sensor.chufang_kongqizhaguo
+              - sensor.chufang_pobiji
+              - switch.180319907614846_power
+            popup_cards: |-
+              - type: custom:button-card
+                template: 空气炸锅卡片
+              - type: custom:button-card
+                template: 蒸煮锅卡片
+              - type: custom:button-card
+                template: 电饭煲卡片
+              - type: custom:button-card
+                template: 电压力锅卡片
+              - type: custom:button-card
+                template: 破壁机卡片
+              - type: custom:button-card
+                template: 油烟机卡片
+              - type: custom:xiaoshi-phone-other-card
+                entity: select.180319907614846_work_status
+                theme: light
+                width: 100%
+                accent_color: |-
+                  [[[
+                      var a = "select.180319907614846_work_status";
+                      if (states[a].state == "power_off") return "rgb(220,50,50,0.6)"
+                  ]]]
+                button_rows:
+                  - items:
+                      - mode: button
+                        entity: select.180319907614846_work_status
+                        custom_name: 保湿
+                        select_option_names:
+                          power_off: 关机
+                          power_on: 开机
+                          cancel: 取消
+                          pause: 暂停
+                          resume: 继续
+                  - items:
+                      - mode: button
+                        entity: select.180319907614846_wash_mode
+                        select_options:
+                          - 90min_wash
+                          - eco_wash
+                          - self_define
+                          - fruit_wash
+                          - kill_germ
+                        select_option_names:
+                          90min_wash: 90分钟洗
+                          eco_wash: 节能洗
+                          self_define: 安全洗
+                          fruit_wash: 水果洗
+                          kill_germ: 强力洗
+                  - items:
+                      - mode: button
+                        entity: button.chinese_poetry_update
+                        select_option_names: null
+                        custom_name: 烘干状态
+                      - mode: button
+                        entity: select.180319907614846_dry_step_switch
+                        select_option_names:
+                          cancel: 取消
+                          waiting: 待机
+                          running: 运行
+                  - items:
+                      - mode: button
+                        entity: button.chinese_poetry_update
+                        custom_name: 烘干时间
+                      - mode: button
+                        entity: select.180319907614846_air_set_hour
+                        select_options:
+                          - "24"
+                          - "36"
+                          - "48"
+                        select_option_names:
+                          "24": 24h
+                          "36": 36h
+                          "48": 48h
+                state_display: |-
+                  [[[
+                      if (entity.state == "power_off") return "关机";
+                      if (entity.state == "power_on") return "开机";
+                      if (entity.state == "cancel") return "取消";
+                      if (entity.state == "pause") return "暂停";
+                      if (entity.state == "resume") return "继续";
+
+                  ]]]
+
+                  
+      ############################   第7房间  主卫  ############################
+      - type: custom:xiaoshi-room-card
+        name: "主卫"
+        ############################   温度及弹出   ##########################
+        temperature: sensor.wendu_zhuwo 
+        temperature_popup: |-
+          - type: custom:xiaoshi-chart-card
+            merge: true
+            mergename: "主卫温度"
+            entities:
+              - entity: sensor.wendu_zhuwei
+              - entity: sensor.wendu_yuba_zhuwei
+        ############################   湿度及弹出   ##########################
+        humidity: sensor.shidu_zhuwei 
+        humidity_popup: |-
+          - type: custom:xiaoshi-chart-card
+            entities:
+              - entity: sensor.shidu_zhuwei
+                name: 主卫湿度          
+        ###############################   人在   #############################
+        person: sensor.renzai_zhuwei
+        #############################   设备按钮   ###########################
+        devices:
+          #############################   设备7.1   ########################
+          - icon: mdi:lightbulb-group
+            on_color: "#de7717"
+            entities:
+              - light.yuba_zhuwei_deng  
+            popup_cards: |-
+              - type: custom:xiaoshi-phone-light-card
+                width: 100%
+                height: 20vw
+                rgb: true
+                entities: 
+                  - light.yuba_zhuwei_deng  
+                  - light.zhuweijingqiandeng
+          #############################   设备7.2   ########################
+          - icon: mdi:hvac
+            on_color: "rgb(226,181,4)"
+            entities:
+              - switch.yuba_gongwei_heat1
+              - switch.zhu_wei_yu_ba
+            popup_cards: |-
+              - type: custom:button-card
+                template: 主卫浴霸
+
+      ############################   第8房间  公卫  ############################
+      - type: custom:xiaoshi-room-card
+        name: "公卫"
+        ############################   温度及弹出   ##########################
+        temperature: sensor.wendu_gongwei 
+        temperature_popup: |-
+          - type: custom:xiaoshi-chart-card
+            merge: true
+            mergename: "公卫温度"
+            entities:
+              - entity: sensor.wendu_gongwei
+              - entity: sensor.wendu_yuba_gongwei
+        ############################   湿度及弹出   ##########################
+        humidity: sensor.shidu_gongwei 
+        humidity_popup: |-
+          - type: custom:xiaoshi-chart-card
+            entities:
+              - entity: sensor.shidu_gongwei
+                name: 公卫湿度
+        ###############################   人在   #############################
+        person: sensor.renzai_gongwei
+        #############################   设备按钮   ###########################
+        devices:
+          #############################   设备8.1   ########################
+          - icon: mdi:lightbulb-group
+            on_color: "#de7717"
+            entities:
+              - light.yuba_gongwei_deng  
+              - light.gongweijingqiandeng  
+            popup_cards: |-
+              - type: custom:xiaoshi-phone-light-card
+                width: 100%
+                height: 20vw
+                rgb: true
+                entities:
+                  - light.yuba_gongwei_deng  
+                  - light.gongweijingqiandeng
+          #############################   设备8.2   ########################
+          - icon: mdi:hvac
+            on_color: "rgb(226,181,4)"
+            entities:
+              - switch.yuba_gongwei_heat1
+            popup_cards: |-
+              - type: custom:button-card
+                template: 公卫浴霸
+
+
+    ############################################################################
+    ###########                       表尾区域                       ###########
+    ############################################################################
+    footer_cards:
+      - type: custom:xiaoshi-lunar-calendar-phone-date
+
+      
+    ############################################################################
+    ###########                       背景区域                       ###########
+    ############################################################################
+    background:
+      type: media
+      bindings:
+        - name: 张三
+          select: select.theme_phone_1
+        - name: 李四
+          select: select.theme_phone_2
+      image_urls:
+        - https://api.yviii.com/img/baisi
+        - https://api.yviii.com/img/heisi
+        - https://api.suyanw.cn/api/jk.php
+        - https://api.suyanw.cn/api/hs.php
+        - https://api.suyanw.cn/api/ksxjj.php
+        - https://api.suyanw.cn/api/sjmv.php
+      video_urls:
+        - https://api.yviii.com/video/i.php

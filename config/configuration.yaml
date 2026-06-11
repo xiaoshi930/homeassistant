@@ -1,0 +1,10 @@
+homeassistant:
+default_config:
+api:
+lovelace: !include 资源配置.yaml
+logger:
+  logs:
+    homeassistant.components.recorder.db_schema: error
+
+supervisor_panel:
+

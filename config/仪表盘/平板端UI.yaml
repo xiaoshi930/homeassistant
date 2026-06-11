@@ -1,0 +1,1455 @@
+button_card_templates:           
+  !include_dir_merge_named "/config/仪表盘/平板端button设备"
+views:                                    
+  - type: panel
+    title: Home
+    cards:                                              
+      - type: picture-elements         
+        image: /local/UI/null20_15.png    #这里必须使用与屏幕像素相同比例的透明图片（我的是4:3的屏幕）
+        elements: 
+          #######################################################     
+          #                  第一大项：主背景卡                   #  
+          #  https://github.com/xiaoshi930/xiaoshi 卡片集合集成  #
+          #  功能1：背景色（自动彩色色相+晚上黑色）                #
+          #  功能2：天气动画效果填充（雨、雪、霾、雾、雷、沙、雹）   #
+          #  功能3：彩平图（白色线条+白色半透明家具填充色）         #
+          #  功能4：灯光按钮（长按开启调节亮度/色温/情景）          #
+          #  功能5：设备光效（如空调开启光效）                     #
+          #  功能6：设备按钮（不加弹出点击切换，否则点击弹出卡片）   #
+          #######################################################
+          - type: custom:xiaoshi-pad-card
+            weather_animation: true
+            weather_entity: weather.wo_de_jia
+            background_image: /local/UI/背景/彩平图.png
+            width: 1024px                 # 设备像素高度/2
+            height: 768px                 # 设备像素高度/2
+            style:                   
+              top: 384px                  # 设备像素高度/4
+              left: 512px                 # 设备像素宽度/4
+            # 灯光按钮
+            light_buttons:
+              - entity: light.ciwodeng
+                shape: 圆形
+                width: 30px
+                height: 30px
+                top: 265px    
+                left: 400px
+              - entity: light.xuanguandeng
+                shape: 圆形
+                width: 20px
+                height: 20px
+                top: 300px    
+                left: 565px
+              - entity: light.chufangdeng
+                shape: 圆形
+                width: 30px
+                height: 30px
+                top: 450px    
+                left: 378px
+              - entity: light.cantingdeng
+                shape: 圆形
+                width: 30px
+                height: 30px
+                top: 450px    
+                left: 490px
+              - entity: light.ketingdeng
+                shape: 圆形
+                width: 30px
+                height: 30px
+                top: 450px    
+                left: 713px
+              - entity: light.ertongfangdeng
+                shape: 圆形
+                width: 30px
+                height: 30px
+                top: 653px    
+                left: 378px
+              - entity: light.xuexideng
+                shape: 圆形
+                width: 20px
+                height: 20px
+                top: 522px    
+                left: 612px
+              - entity: light.zhuwodeng
+                shape: 圆形
+                width: 30px
+                height: 30px
+                top: 650px    
+                left: 816px
+              - entity: light.ketingzoulangdeng
+                shape: 圆形
+                width: 20px
+                height: 20px
+                top: 583px    
+                left: 525px
+              - entity: light.zhuwomentingdeng
+                shape: 圆形
+                width: 20px
+                height: 20px
+                top: 583px    
+                left: 645px
+              - entity: light.taideng
+                shape: 圆形
+                width: 20px
+                height: 20px
+                top: 583px    
+                left: 816px
+              - entity: light.ketingtongdeng
+                shape: 圆形外十字
+                width: 13px
+                height: 13px
+                top: 378px    
+                left: 660px 
+              - entity: light.ketingtongdeng
+                shape: 圆形外十字
+                width: 13px
+                height: 13px
+                top: 378px    
+                left: 767px 
+              - entity: light.ketingtongdeng
+                shape: 圆形外十字
+                width: 13px
+                height: 13px
+                top: 522px    
+                left: 660px 
+              - entity: light.ketingtongdeng
+                shape: 圆形外十字
+                width: 13px
+                height: 13px
+                top: 522px    
+                left: 767px 
+              - entity: light.cantingtongdeng
+                shape: 圆形外十字
+                width: 13px
+                height: 13px
+                top: 522px    
+                left: 473px 
+              - entity: light.cantingtongdeng
+                shape: 圆形外十字
+                width: 13px
+                height: 13px
+                top: 522px    
+                left: 522px 
+              - entity: light.gongweijingqiandeng
+                shape: 竖线
+                width: 16px
+                height: 50px
+                top: 646px    
+                left: 446px 
+              - entity: light.zhuweijingqiandeng
+                shape: 竖线
+                width: 16px
+                height: 50px
+                top: 646px    
+                left: 583px 
+              - entity: light.ketingdengdai
+                shape: 竖线
+                width: 16px
+                height: 190px
+                top: 450px    
+                left: 416px 
+              - entity: light.ketingdengdai
+                shape: 竖线
+                width: 16px
+                height: 190px
+                top: 450px    
+                left: 837px 
+              - entity: light.yuba_gongwei_deng
+                shape: 方形
+                width: 19px
+                height: 20px
+                top: 664px    
+                left: 510px 
+              - entity: light.yuba_zhuwei_deng
+                shape: 方形
+                width: 19px
+                height: 20px
+                top: 664px    
+                left: 640px 
+            # 设备光效
+            device_glows:
+              - entity: climate.kongtiao_keting
+                direction: 右下
+                width: 200px
+                height: 200px
+                top: 345px
+                left: 637px
+                state_colors:
+                  cool: rgb(33,150,243)
+                  heat: rgb(254,111,33)
+                  dry: rgb(255,151,0)
+                  fan_only: rgb(0,188,213)
+              - entity: climate.kongtiao_zhuwo
+                direction: 右上
+                width: 205px
+                height: 160px
+                top: 558px
+                left: 696px
+                state_colors:
+                  cool: rgb(33,150,243)
+                  heat: rgb(254,111,33)
+                  dry: rgb(255,151,0)
+                  fan_only: rgb(0,188,213)
+              - entity: fan.xunhuanshan_ertongfang
+                color: rgb(30,188,213)
+                direction: 左下
+                width: 145px
+                height: 160px
+                top: 183px
+                left: 318px
+              - entity: switch.gong_wei_yu_ba
+                color: rgb(254,41,33)
+                direction: 四周
+                width: 150px
+                height: 120px
+                top: 606px
+                left: 435px
+              - entity: switch.zhu_wei_yu_ba
+                color: rgb(254,41,33)
+                direction: 四周
+                width: 120px
+                height: 120px
+                top: 606px
+                left: 580px
+            # 设备按钮
+            device_icons:
+              # 客厅空调按钮
+              - entity: climate.kongtiao_keting
+                width: 60px
+                height: 30px
+                top: 533px
+                left: 808px
+                popup_width: 440px
+                popup_top: 50%
+                image_mode: custom
+                image_flip: flip-v
+                state_images:
+                  - state: "auto"
+                    image: "/local/UI/空调/auto.png"
+                  - state: "cool"
+                    image: "/local/UI/空调/cool.png"
+                  - state: "heat"
+                    image: "/local/UI/空调/heat.png"
+                  - state: "dry"
+                    image: "/local/UI/空调/dry.png"
+                  - state: "fan_only"
+                    image: "/local/UI/空调/fan_only.png"
+                  - state: "off"
+                    image: "/local/UI/空调/off.png"
+                popup_cards: |-
+                  - type: custom:xiaoshi-pad-climate-card
+                    entity: climate.kongtiao_keting
+                    buttons:
+                      - switch.kongtiao_heater_keting
+                      - switch.kongtiao_dryer_keting
+                      - switch.kongtiao_eco_keting
+                      - switch.kongtiao_sleep_keting
+                      - light.kongtiao_light_keting
+                      - switch.kongtiao_alarm_keting
+                    timer: timer.kongtiao_timer_keting
+                    button_position: right
+                    timer_position: right
+                    theme: theme()
+              # 主卧空调按钮
+              - entity: climate.kongtiao_zhuwo
+                width: 60px
+                height: 30px
+                top: 570px
+                left: 873px
+                popup_width: 440px
+                popup_top: 50%
+                image_mode: custom
+                state_images:
+                  - state: "auto"
+                    image: "/local/UI/空调/auto.png"
+                  - state: "cool"
+                    image: "/local/UI/空调/cool.png"
+                  - state: "heat"
+                    image: "/local/UI/空调/heat.png"
+                  - state: "dry"
+                    image: "/local/UI/空调/dry.png"
+                  - state: "fan_only"
+                    image: "/local/UI/空调/fan_only.png"
+                  - state: "off"
+                    image: "/local/UI/空调/off.png"
+                popup_cards: |-
+                  - type: custom:xiaoshi-pad-climate-card
+                    entity: climate.kongtiao_zhuwo
+                    buttons:
+                      - switch.kongtiao_heater_zhuwo
+                      - switch.kongtiao_dryer_zhuwo
+                      - switch.kongtiao_eco_zhuwo
+                      - switch.kongtiao_sleep_zhuwo
+                      - light.kongtiao_light_zhuwo
+                      - switch.kongtiao_alarm_zhuwo
+                    timer: timer.kongtiao_timer_zhuwo
+                    button_position: right
+                    timer_position: right
+                    theme: theme()
+              # 儿童房循环扇
+              - entity: fan.xunhuanshan_ertongfang
+                width: 25px
+                height: 25px
+                top: 570px
+                left: 418px
+                popup_width: 700px
+                popup_top: 50%
+                on_image: "/local/UI/环境电器/循环扇on.svg"
+                off_image: "/local/UI/环境电器/循环扇off.svg"
+                popup_cards: |-
+                  - type: custom:button-card
+                    template: 循环扇
+              # 客厅净化器
+              - entity: fan.jinghuaqi_keting
+                width: 25px
+                height: 25px
+                top: 533px
+                left: 638px
+                popup_width: 380px
+                popup_top: 50%
+                on_image: "/local/UI/环境电器/净化器on.svg"
+                off_image: "/local/UI/环境电器/净化器off.svg"
+                popup_cards: |-
+                  - type: custom:button-card
+                    template: 客厅净化器
+              # 主卧净化器
+              - entity: fan.jinghuaqi_zhuwo
+                width: 25px
+                height: 25px
+                top: 570px
+                left: 718px
+                popup_width: 380px
+                popup_top: 50%
+                on_image: "/local/UI/环境电器/净化器on.svg"
+                off_image: "/local/UI/环境电器/净化器off.svg"
+                popup_cards: |-
+                  - type: custom:button-card
+                    template: 客厅净化器
+              # 客厅加湿器
+              - entity: humidifier.jiashiqi_keting
+                width: 25px
+                height: 25px
+                top: 533px
+                left: 497px
+                popup_width: 380px
+                popup_top: 50%
+                on_image: "/local/UI/环境电器/加湿器on.svg"
+                off_image: "/local/UI/环境电器/加湿器off.svg"
+                popup_cards: |-
+                  - type: custom:xiaoshi-pad-climate-card
+                    entity: humidifier.jiashiqi_keting
+                    select_entity: select.jiashiqi_keting
+                    buttons:
+                      - light.jiashiqi_light_keting
+                      - switch.jiashiqi_alarm_keting
+                      - sensor.jiashiqi_tank_keting
+                      - sensor.jiashiqi_water_keting
+                    button_position: right
+                    timer_position: right
+                    theme: theme()
+              # 主卧加湿器
+              - entity: humidifier.jiashiqi_zhuwo
+                width: 25px
+                height: 25px
+                top: 570px
+                left: 745px
+                popup_width: 380px
+                popup_top: 50%
+                on_image: "/local/UI/环境电器/加湿器on.svg"
+                off_image: "/local/UI/环境电器/加湿器off.svg"
+                popup_cards: |-
+                  - type: custom:xiaoshi-pad-climate-card
+                    entity: humidifier.jiashiqi_zhuwo
+                    select_entity: select.jiashiqi_zhuwo
+                    buttons:
+                      - light.jiashiqi_light_zhuwo
+                      - switch.jiashiqi_alarm_zhuwo
+                      - sensor.jiashiqi_tank_zhuwo
+                      - sensor.jiashiqi_water_zhuwo
+                    button_position: right
+                    timer_position: right
+                    theme: theme()
+              # 主卧水暖毯
+              - entity: climate.shuinuantan
+                width: 25px
+                height: 25px
+                top: 714px
+                left: 873px
+                popup_width: 750px
+                popup_top: 50%
+                on_image: "/local/UI/环境电器/水暖毯on.svg"
+                off_image: "/local/UI/环境电器/水暖毯off.svg"
+                popup_cards: |-
+                  - type: horizontal-stack
+                    cards:        
+                      - type: custom:xiaoshi-pad-climate-card
+                        entity: climate.shuinuantan
+                        button_position: left
+                        buttons:
+                          - switch.shuinuantan_antifreeze
+                          - switch.shuinuantan_antiscald
+                          - switch.shuinuantan_sleep
+                          - light.shuinuantan_light_keting
+                          - switch.shuinuantan_alarm_keting
+                          - switch.shuinuantan_locked_keting
+                          - sensor.shuinuantan_water_keting
+                        theme: theme()
+                      - type: custom:xiaoshi-pad-climate-card
+                        entity: climate.dinuan
+                        timer: timer.shuinuantan_timer_zhuwo
+                        theme:  theme()
+                        timer_position: left
+                        show_fan_modes: false
+                        mode_filters:
+                          preset_modes:
+                            "1": false
+                            "2": false
+                            "3": false
+                            "4": false
+                            "8": false
+                            "9": false
+                            "10": false
+                            "11": false
+                            "12": false
+                            "13": false
+                            "14": false
+                            "15": false
+                            "16": false
+                        mode_configs:
+                          preset_modes:
+                            "5":
+                              custom_name: 舒适
+                              custom_icon: mdi:thermostat-auto
+                            "6":
+                              custom_name: 周计划
+                              custom_icon: mdi:calendar-week
+                            "7":
+                              custom_name: 防冻
+                              custom_icon: mdi:snowflake-alert
+              # 公卫浴霸
+              - entity: climate.gong_wei_yu_ba
+                width: 40px
+                height: 24px
+                top: 664px
+                left: 510px
+                popup_width: 350px
+                popup_top: 50%
+                image_mode: custom
+                state_images:
+                  - state: "heat"
+                    image: "/local/UI/环境电器/浴霸_取暖.svg"
+                  - state: "dry"
+                    image: "/local/UI/环境电器/浴霸_换气.svg"
+                  - state: "fan_only"
+                    image: "/local/UI/环境电器/浴霸_吹风.svg"
+                  - state: "off"
+                    image: "/local/UI/环境电器/浴霸_关闭.svg"
+                popup_cards: |-
+                  - type: custom:xiaoshi-pad-climate-card
+                    entity: climate.gong_wei_yu_ba
+                    theme: theme()
+              # 主卫浴霸
+              - entity: climate.zhu_wei_yu_ba
+                width: 40px
+                height: 24px
+                top: 664px
+                left: 640px
+                popup_width: 350px
+                popup_top: 50%
+                image_mode: custom
+                state_images:
+                  - state: "heat"
+                    image: "/local/UI/环境电器/浴霸_取暖.svg"
+                  - state: "dry"
+                    image: "/local/UI/环境电器/浴霸_换气.svg"
+                  - state: "fan_only"
+                    image: "/local/UI/环境电器/浴霸_吹风.svg"
+                  - state: "off"
+                    image: "/local/UI/环境电器/浴霸_关闭.svg"
+                popup_cards: |-
+                  - type: custom:xiaoshi-pad-climate-card
+                    entity: climate.zhu_wei_yu_ba
+                    theme: theme()
+              # 扫地机器人
+              - entity: vacuum.saodijiqiren
+                width: 38px
+                height: 38px
+                top: 370px
+                left: 513px
+                popup_width: 750px
+                popup_top: 50%
+                image_mode: custom
+                state_images:
+                  - state: "idle"
+                    image: "/local/UI/环境电器/扫地机器人idle.svg"
+                  - state: "docked"
+                    image: "/local/UI/环境电器/扫地机器人docked.svg"
+                  - state: "charging"
+                    image: "/local/UI/环境电器/扫地机器人charging.svg"
+                  - state: "off"
+                    image: "/local/UI/环境电器/扫地机器人off.svg"
+                popup_cards: |-
+                  - type: custom:button-card
+                    entity: vacuum.saodijiqiren
+                    template: 扫地机器人
+              # 冰箱
+              - entity: switch.85761906984912_floodlight_power
+                width: 45px
+                height: 38px
+                top: 370px
+                left: 442px
+                popup_width: 750px
+                popup_top: 50%
+                on_image: "/local/UI/厨房电器/冰箱.svg"
+                off_image: "/local/UI/厨房电器/冰箱.svg"
+                popup_cards: |-
+                  - type: custom:button-card
+                    template: 冰箱（暂时没有，占空）
+              # 洗衣机
+              - entity: switch.04fa8372e143_onoffstatus
+                width: 35px
+                height: 30px
+                top: 635px
+                left: 555px
+                popup_width: 750px
+                popup_top: 50%
+                on_image: "/local/UI/环境电器/洗衣机on.svg"
+                off_image: "/local/UI/环境电器/洗衣机off.svg"
+                popup_cards: |-
+                  - type: custom:button-card
+                    template: 洗衣机（暂时没有，占空）
+              # 门铃
+              - entity: camera.door
+                width: 50px
+                height: 50px
+                top: 235px
+                left: 555px
+                popup_width: 750px
+                popup_top: 50%
+                on_image: "/local/UI/环境电器/门.svg"
+                off_image: "/local/UI/环境电器/门.svg"
+                popup_cards: |-
+                  - type: custom:button-card
+                    template: 门铃（暂时没有，占空）
+              # 电脑
+              - entity: switch.diannao 
+                width: 50px
+                height: 30px
+                top: 370px
+                left: 623px
+                popup_width: 750px
+                popup_top: 50%
+                on_image: "/local/UI/环境电器/门.svg"
+                off_image: "/local/UI/环境电器/门.svg"
+                popup_cards: |-
+                  - type: custom:button-card
+                    template: 电脑（暂时没有，占空）
+              # 电视
+              - entity: media_player.dianshi_miot
+                width: 100px
+                height: 30px
+                top: 540px
+                left: 713px
+                popup_width: 450px
+                popup_top: 50%
+                image_mode: custom
+                state_images:
+                  - state: "idle"
+                    image: "/local/UI/电视/idle.svg"
+                  - state: "playing"
+                    image: "/local/UI/电视/playing.svg"
+                  - state: "on"
+                    image: "/local/UI/电视/扫on.svg"
+                  - state: "off"
+                    image: "/local/UI/电视/off.svg"
+                popup_cards: |-
+                  - type: custom:button-card
+                    template: 电视
+              # 洗碗机 
+              - entity: sensor.chufang_xiwanji
+                width: 30px
+                height: 30px
+                top: 530px
+                left: 435px
+                popup_width: 450px
+                popup_top: 50%
+                image_mode: custom
+                state_images:
+                  - state: "Running"
+                    image: "/local/UI/厨房电器/洗碗机on.svg"
+                  - state: "on"
+                    image: "/local/UI/厨房电器/洗碗机on.svg"
+                  - state: "off"
+                    image: "/local/UI/厨房电器/洗碗机off.svg"
+                popup_cards: |-
+                  - type: custom:button-card
+                    template: 电视（暂时没有，占空）
+              # 空气炸锅 
+              - entity: sensor.chufang_kongqizhaguo
+                width: 18px
+                height: 18px
+                top: 530px
+                left: 393px
+                popup_width: 450px
+                popup_top: 50%
+                image_mode: custom
+                state_images:
+                  - state: "烹饪中"
+                    image: "/local/UI/厨房电器/空气炸锅on.svg"
+                  - state: "预热中"
+                    image: "/local/UI/厨房电器/空气炸锅on.svg"
+                  - state: "暂停"
+                    image: "/local/UI/厨房电器/空气炸锅on.svg"
+                  - state: "off"
+                    image: "/local/UI/厨房电器/空气炸锅off.svg"
+                popup_cards: |-
+                  - type: custom:button-card
+                    template: 空气炸锅
+              # 电饭煲 
+              - entity: sensor.chufang_dianfanbao
+                width: 18px
+                height: 18px
+                top: 530px
+                left: 372px
+                popup_width: 450px
+                popup_top: 50%
+                image_mode: custom
+                state_images:
+                  - state: "烹饪中"
+                    image: "/local/UI/厨房电器/电饭锅on.svg"
+                  - state: "预热中"
+                    image: "/local/UI/厨房电器/电饭锅on.svg"
+                  - state: "预约中"
+                    image: "/local/UI/厨房电器/电饭锅on.svg"
+                  - state: "off"
+                    image: "/local/UI/厨房电器/电饭锅off.svg"
+                popup_cards: |-
+                  - type: custom:button-card
+                    template: 电饭煲
+              # 电压力锅 
+              - entity: sensor.chufang_dianyaliguo
+                width: 18px
+                height: 18px
+                top: 530px
+                left: 351px
+                popup_width: 450px
+                popup_top: 50%
+                image_mode: custom
+                state_images:
+                  - state: "工作中"
+                    image: "/local/UI/厨房电器/电压力锅on.svg"
+                  - state: "保温中"
+                    image: "/local/UI/厨房电器/电压力锅on.svg"
+                  - state: "预约中"
+                    image: "/local/UI/厨房电器/电压力锅on.svg"
+                  - state: "off"
+                    image: "/local/UI/厨房电器/电压力锅off.svg"
+                popup_cards: |-
+                  - type: custom:button-card
+                    template: 电压力锅
+              # 蒸煮锅 
+              - entity: sensor.chufang_zhengzhuguo
+                width: 18px
+                height: 18px
+                top: 530px
+                left: 330px
+                popup_width: 450px
+                popup_top: 50%
+                image_mode: custom
+                state_images:
+                  - state: "烹饪中"
+                    image: "/local/UI/厨房电器/蒸煮锅on.svg"
+                  - state: "暂停中"
+                    image: "/local/UI/厨房电器/蒸煮锅on.svg"
+                  - state: "预约中"
+                    image: "/local/UI/厨房电器/蒸煮锅on.svg"
+                  - state: "off"
+                    image: "/local/UI/厨房电器/蒸煮锅off.svg"
+                popup_cards: |-
+                  - type: custom:button-card
+                    template: 蒸煮锅
+              # 破壁机 
+              - entity: sensor.chufang_pobiji
+                width: 20px
+                height: 20px
+                top: 510px
+                left: 330px
+                popup_width: 450px
+                popup_top: 50%
+                image_mode: custom
+                state_images:
+                  - state: "Idle"
+                    image: "/local/UI/厨房电器/破壁机on.svg"
+                  - state: "Busy"
+                    image: "/local/UI/厨房电器/破壁机on.svg"
+                  - state: "Paused"
+                    image: "/local/UI/厨房电器/破壁机on.svg"
+                  - state: "Delay"
+                    image: "/local/UI/厨房电器/破壁机on.svg"
+                  - state: "Keep Warm"
+                    image: "/local/UI/厨房电器/破壁机on.svg"
+                  - state: "Completed"
+                    image: "/local/UI/厨房电器/破壁机on.svg"
+                  - state: "Fault"
+                    image: "/local/UI/厨房电器/破壁机on.svg"
+                  - state: "off"
+                    image: "/local/UI/厨房电器/破壁机off.svg"
+                popup_cards: |-
+                  - type: custom:button-card
+                    template: 破壁机
+              # 净水器
+              - entity: sensor.chufang_pobiji
+                width: 30px
+                height: 60px
+                top: 450px
+                left: 330px
+                popup_width: 750px
+                popup_top: 50%
+                on_image: "/local/UI/厨房电器/净水器.svg"
+                off_image: "/local/UI/厨房电器/净水器.svg"
+                popup_cards: |-
+                  - type: custom:button-card
+                    template: 净水器
+              # 净水器
+              - entity: sensor.chufang_youyanji
+                width: 25px
+                height: 25px
+                top: 370px
+                left: 330px
+                popup_width: 750px
+                popup_top: 50%
+                on_image: "/local/UI/厨房电器/油烟机on.svg"
+                off_image: "/local/UI/厨房电器/油烟机off.svg"
+                popup_cards: |-
+                  - type: custom:button-card
+                    template: 油烟机
+
+          ############################################################
+          #                   第二大项：时间日期                       #  
+          ############################################################  
+          - type: custom:xiaoshi-lunar-calendar-pad-date
+            theme: theme()
+            mode: B 
+            style:             
+              left: 140px                                                             
+              top: 120px   
+           
+          ############################################################  
+          #                    第三大项：电费、水费、燃气              #
+          ############################################################ 
+          # 电 utility_type: electric
+          - type: custom:xiaoshi-state-grid-button
+            utility_type: electric
+            theme: theme()
+            default_show_calendar: none 
+            global_warning: <30
+            tablet_mode: true       #平板端特性选项（区别于手机端）
+            button_font_size: 13px  #平板端特性选项（区别于手机端）
+            button_icon_size: 15px  #平板端特性选项（区别于手机端）
+            button_width: 250px     #平板端特性选项（区别于手机端）
+            popup_width: 500px      #平板端特性选项（区别于手机端）
+            entities:
+              - entity_id: sensor.state_grid_6103518118537
+            style:                             
+              left: 50.5%                                                      
+              top: 220px           
+          # 气 utility_type: gas
+          - type: custom:xiaoshi-state-grid-button
+            utility_type: gas
+            theme: theme()
+            default_show_calendar: none
+            global_warning: <30
+            tablet_mode: true       #平板端特性选项（区别于手机端）
+            button_font_size: 13px  #平板端特性选项（区别于手机端）
+            button_icon_size: 15px  #平板端特性选项（区别于手机端）
+            button_width: 250px     #平板端特性选项（区别于手机端）
+            popup_width: 500px      #平板端特性选项（区别于手机端）  
+            entities:
+              - entity_id: sensor.qin_hua_ran_qi_0842342294
+            style:                                   
+              left: 50.5%  
+              top: 240px          
+          # 水 utility_type: water
+          - type: custom:xiaoshi-state-grid-button
+            utility_type: water
+            theme: theme()
+            default_show_calendar: none
+            global_warning: <30
+            tablet_mode: true       #平板端特性选项（区别于手机端）
+            button_font_size: 13px  #平板端特性选项（区别于手机端）
+            button_icon_size: 15px  #平板端特性选项（区别于手机端）
+            button_width: 250px     #平板端特性选项（区别于手机端）
+            popup_width: 500px      #平板端特性选项（区别于手机端）
+            entities:
+              - entity_id: sensor.xi_an_shui_fei_002024195152
+            style:                              
+              left: 50.5%                                                         
+              top: 260px    
+
+          ############################################################
+          #                    第四大项：天气                         #
+          ############################################################  
+          - type: custom:xiaoshi-weather-pad-card
+            entity: weather.wo_de_jia
+            theme: theme()
+            width: 240
+            columns: 5
+            use_custom_entities: true
+            temperature_entity: sensor.wendu_shiwai
+            humidity_entity: sensor.shidu_shiwai
+            style:             
+              left: 140px
+              top: 450px        
+    
+          ############################################################
+          #                    第五大项：温湿度分布                    #
+          ############################################################
+          # mode: 温度 
+          - type: custom:xiaoshi-pad-grid-card
+            theme: theme()
+            style:             
+              left: 78px        
+              top: 680px      
+            mode: 温度                          ## 模式选择：温度 或 湿度
+            min: -20                            ## 属地的可能最低气温
+            max: 40                             ## 属地的可能最高气温
+            width: 120px  
+            height: 110px 
+            entities: 
+              - entity: sensor.wendu_ciwo
+                grid: 0%,0%,30%,29%             ## 横坐标，纵坐标，宽度，高度
+              - entity: sensor.wendu_chufang
+                grid: 0%,31%,20%,38%
+              - entity: sensor.wendu_ertongfang 
+                grid: 0%,71%,30%,29%
+              - entity: sensor.wendu_gongwei 
+                grid: 32%,80%,17%,20%
+              - entity: sensor.wendu_zhuwei 
+                grid: 51%,80%,17%,20% 
+              - entity: sensor.wendu_zhuwo
+                grid: 70%,71%,30%,29% 
+              - entity: sensor.wendu_zhuwo
+                grid: 51%,71%,19%,7%
+                state: false                    ## 不显示实体，边角料填充
+              - entity: sensor.wendu_keting
+                grid: 22%,31%,65%,38% 
+                unit: " ℃"                     ## 显示单位
+              - entity: sensor.wendu_keting
+                grid: 32%,16%,17%,15%
+                state: false
+              - entity: sensor.wendu_keting
+                grid: 32%,69%,17%,9%
+                state: false 
+            popup_width: 500px
+            popup_top: 50%
+            popup_cards: |
+              - type: custom:xiaoshi-chart-card
+                merge: true
+                mergename: 室外温度
+                entities:
+                  - entity: sensor.wendu_shiwai
+                    color: "rgb(230,20,20)"
+              - type: custom:xiaoshi-chart-card
+                merge: true
+                mergename: 室内温度平均值
+                entities:
+                  - entity: sensor.wendu_zhuwo
+                    name: 主卧
+                  - entity: sensor.wendu_keting
+                    name: 客厅
+                  - entity: sensor.wendu_ciwo
+                    name: 次卧
+                  - entity: sensor.wendu_ertongfang
+                    name: 儿童房
+                  - entity: sensor.wendu_chufang
+                    name: 厨房
+                  - entity: sensor.wendu_gongwei
+                    name: 公卫
+                  - entity: sensor.wendu_zhuwei
+                    name: 主卫  
+          # mode: 湿度 
+          - type: custom:xiaoshi-pad-grid-card
+            theme: theme()
+            style:             
+              left: 210px         
+              top: 680px    
+            mode: 湿度                    ## 模式选择：温度 或 湿度
+            min: 20                             ## 属地的可能最低气温
+            max: 80                             ## 属地的可能最高气温
+            width: 120px   
+            height: 110px   
+            entities:
+              - entity: sensor.shidu_ciwo
+                grid: 0%,0%,30%,29%             ## 横坐标，纵坐标，宽度，高度
+              - entity: sensor.shidu_chufang
+                grid: 0%,31%,20%,38%
+              - entity: sensor.shidu_ertongfang 
+                grid: 0%,71%,30%,29%
+              - entity: sensor.shidu_gongwei
+                grid: 32%,80%,17%,20%
+              - entity: sensor.shidu_zhuwei    
+                grid: 51%,80%,17%,20%
+              - entity: sensor.shidu_zhuwo  
+                grid: 70%,71%,30%,29%
+              - entity: sensor.shidu_zhuwo
+                grid: 51%,71%,19%,7%
+                state: false                    ## 不显示实体，边角料填充
+              - entity: sensor.shidu_keting
+                grid: 22%,31%,65%,38% 
+                unit: " %"                      ## 显示单位
+              - entity: sensor.shidu_keting
+                grid: 32%,16%,17%,15%
+                state: false
+              - entity: sensor.shidu_keting
+                grid: 32%,69%,17%,9%
+                state: false
+            popup_width: 500px
+            popup_top: 50%
+            popup_cards: |
+              - type: custom:xiaoshi-chart-card
+                merge: true
+                mergename: 室外湿度
+                entities:
+                  - entity: sensor.shidu_shiwai
+              - type: custom:xiaoshi-chart-card
+                merge: true
+                mergename: 室内湿度平均值
+                entities:
+                  - entity: sensor.shidu_zhuwo
+                    name: 主卧
+                  - entity: sensor.shidu_keting
+                    name: 客厅
+                  - entity: sensor.shidu_ciwo
+                    name: 次卧
+                  - entity: sensor.shidu_ertongfang
+                    name: 儿童房
+                  - entity: sensor.shidu_chufang
+                    name: 厨房
+                  - entity: sensor.shidu_gongwei
+                    name: 公卫
+                  - entity: sensor.shidu_zhuwei
+                    name: 主卫           
+       
+          # ############################################################
+          #                    第六大项：古诗词                         #
+          # ############################################################
+          - type: custom:xiaoshi-chinese-poetry-card
+            entity: sensor.chinese_poetry
+            refresh_entity: button.chinese_poetry_update
+            speaker_entity: text.xiaomi_cn_446812080_x08e_execute_text_directive_a_7_4
+            style:
+              left: 524px
+              top: 100px
+
+          # ############################################################
+          #                    第七大项：头像                           #
+          # ############################################################
+          # 头像1
+          - type: custom:xiaoshi-avatar-pad-card   
+            theme: theme()
+            style:
+              top: 106px
+              left: 820px
+            person:
+              person_entity: person.zhangsan
+              tracker_entity: device_tracker.ip_zhangsan
+              nav_entity: sensor.tencent_zhangsan
+              commute_mode: transit
+              zone_entity: zone.home
+              calendar_entity: sensor.lunar_calendar
+              birthday_index: "0"
+              ring_type: storage
+              storage_entity: sensor.zhangsan_internal_storage
+              battery_entity: sensor.zhangsan_battery_level
+            balances:
+              - entity: sensor.tel_api
+                name: Api
+              - entity: sensor.tel199_2769
+                name: 电信
+              - entity: sensor.tel195_0769
+                name: 移动
+          # 头像2
+          - type: custom:xiaoshi-avatar-pad-card  
+            theme: theme()
+            style:
+              top: 106px
+              left: 950px
+            person:
+              person_entity: person.lisi
+              tracker_entity: device_tracker.ip_lisi
+              nav_entity: sensor.tencent_lisi
+              commute_mode: walking
+              zone_entity: zone.home
+              calendar_entity: sensor.lunar_calendar
+              birthday_index: "1"
+              ring_type: storage
+              storage_entity: sensor.lisi_internal_storage
+              battery_entity: sensor.lisi_battery_level
+            balances:
+              - entity: sensor.tel137_9221
+                name: 移动
+              - entity: sensor.tel182_7461
+                name: 移动
+
+
+          ############################################################
+          #                    第八大项：顶部状态栏                    #
+          ############################################################
+          - type: custom:xiaoshi-top-bar-card
+            theme: theme()
+            width: 910px
+            style:
+              left: 556px
+              top: 24px 
+            cards: |-
+              # 按钮1：HA信息
+              - type: custom:xiaoshi-ha-info-button    
+                theme: theme()
+                transparent_bg: true    #平板端特性选项（区别于手机端）透明背景
+                lock_white_fg: true     #平板端特性选项（区别于手机端）锁定白色字体
+                popup_width: 500px      #平板端特性选项（区别于手机端）弹窗宽度
+                button_width: 80px      #平板端特性选项（区别于手机端）按钮宽度
+                button_font_size: 13px  #平板端特性选项（区别于手机端）按钮字体大小
+                button_icon_size: 13px  #平板端特性选项（区别于手机端）按钮图标大小
+                skip_updates: false
+                exclude_devices:
+                  - "*洗衣机*"
+                  - "*水暖毯*"
+                  - "*小米电视*"
+                  - "*加湿器*"
+                  - 西安水费
+                  - zhangsan-PC*  
+                exclude_entities: 
+                  - select.xiaomidianshi_app
+                  - weather.sou_suo_cheng_shi
+                addon_entities:
+                  - entity_id: sensor.node_red_cpu_percent
+                    overrides:
+                      name: Node Red
+                      label: cpu
+                  - entity_id: sensor.node_red_memory_percent
+                    overrides:
+                      name: Node Red
+                      label: 内存
+              
+              # 按钮2：灯光
+              - type: custom:xiaoshi-device-button
+                button_icon: "💡"
+                button_text: 灯光
+                theme: theme()
+                transparent_bg: true
+                lock_white_fg: true
+                popup_width: 900px
+                button_width: 80px
+                button_font_size: 13px
+                button_icon_size: 13px
+                entities:
+                  - light.zhuwodeng
+                  - light.zhuwomentingdeng
+                  - light.taideng
+                  - light.ketingdeng
+                  - light.ketingdengdai
+                  - light.ketingtongdeng
+                  - light.ketingzoulangdeng
+                  - light.xuanguandeng
+                  - light.wangguandeng
+                  - light.ertongfangdeng
+                  - light.xuexideng
+                  - light.cantingdeng
+                  - light.cantingtongdeng
+                  - light.ciwodeng
+                  - light.chufangdeng
+                  - light.yuba_zhuwei_deng
+                  - light.zhuweijingqiandeng
+                  - light.yuba_gongwei_deng
+                  - light.gongweijingqiandeng
+                popup_cards: |-
+                  - type: custom:xiaoshi-phone-light-card
+                    rgb: true
+                    theme: '[[[return theme() ]]]'
+                    show: always
+                    columns: 3
+                    width: 100%
+                    height: 60px
+                    entities:
+                      - light.zhuwodeng
+                      - light.zhuwomentingdeng
+                      - light.taideng
+                      - light.ketingdeng
+                      - light.ketingdengdai
+                      - light.ketingtongdeng
+                      - light.ketingzoulangdeng
+                      - light.xuanguandeng
+                      - light.wangguandeng
+                      - light.ertongfangdeng
+                      - light.xuexideng
+                      - light.cantingdeng
+                      - light.cantingtongdeng
+                      - light.ciwodeng
+                      - light.chufangdeng
+                      - light.yuba_zhuwei_deng
+                      - light.zhuweijingqiandeng
+                      - light.yuba_gongwei_deng
+                      - light.gongweijingqiandeng
+              
+              # 按钮3：设备
+              - type: custom:xiaoshi-device-button
+                button_icon: "🖨️"
+                button_text: 设备
+                on_color: "#00fffb"
+                theme: theme()
+                transparent_bg: true
+                lock_white_fg: true
+                popup_width: 900px
+                button_width: 80px
+                button_font_size: 13px
+                button_icon_size: 13px
+                entities:
+                  - light.zhuwodeng
+                  - light.zhuwomentingdeng
+                  - light.taideng
+                  - light.ketingdeng
+              
+              # 按钮4：待办
+              - type: custom:xiaoshi-todo-button    
+                theme: theme()
+                transparent_bg: true
+                lock_white_fg: true
+                popup_width: 500px
+                button_width: 80px
+                button_font_size: 13px
+                button_icon_size: 13px
+                entities:
+                  - todo.item 
+                  - todo.kuai_di
+              
+              # 按钮5：耗材信息
+              - type: custom:xiaoshi-consumables-button  
+                theme: theme() 
+                transparent_bg: true
+                lock_white_fg: true
+                popup_width: 500px
+                button_width: 80px
+                button_font_size: 13px
+                button_icon_size: 13px
+                entities: 
+                  - entity_id: sensor.dianliang_wenduji_zhuwo
+                  - entity_id: sensor.dianliang_wenduji_ciwo
+                  - entity_id: sensor.dianliang_wenduji_ertongfang
+                  - entity_id: sensor.dianliang_wenduji_zhuwei
+                  - entity_id: sensor.dianliang_wenduji_gongwei
+                  - entity_id: sensor.dianliang_wenduji_chufang
+                  - entity_id: event.dianliang_wenduji_shiwai
+                  - entity_id: sensor.dianliang_chuanganqi_xuanguanrenti
+                  - entity_id: sensor.dianliang_chufangshuiqin
+                  - entity_id: sensor.dianliang_chuanganqi_chufangrenti
+                  - entity_id: sensor.dianliang_mensuo
+                  - entity_id: sensor.dianliang_chuanganqi_ketingmenchuang
+                  - entity_id: event.dianliang_menling
+                  - entity_id: event.dianliang_chuanganqi_zhuwomenchuang
+                  - entity_id: sensor.dianliang_yashua_lisi
+                  - entity_id: sensor.haocai_jingshuiqi_ro
+                    overrides:
+                      conversion: /172.80
+                      unit_of_measurement: "%"
+                  - entity_id: sensor.dianliang_yashua_zhangsan
+                  - entity_id: sensor.haocai_jingshuiqi_3in1
+                    overrides: 
+                      conversion: /86.4
+                      unit_of_measurement: "%"
+                  - entity_id: sensor.haocai_jinghuaqi_lvxin_keting
+                  - entity_id: binary_sensor.haocai_xiwanji_piaoxiji
+                  - entity_id: sensor.haocai_jinghuaqi_lvxin_zhuwo
+                  - entity_id: binary_sensor.haocai_xiwanji_xiwanyan
+                  - entity_id: sensor.dianlaing_zhuwo_wuxiankaiguan
+                  - entity_id: sensor.haocai_saodijiqiren_zhushua
+                  - entity_id: sensor.dianliang_keting_wuxiankaiguan2
+                  - entity_id: sensor.haocai_saodijiqiren_bianshua
+                  - entity_id: sensor.dianliang_keting_wuxiankaiguan3
+                  - entity_id: sensor.haocai_saodijiqiren_lvxin
+              
+              # 按钮6：电费
+              - type: custom:xiaoshi-state-grid-button
+                theme: theme()
+                transparent_bg: true
+                lock_white_fg: true
+                popup_width: 500px
+                button_width: 80px
+                button_font_size: 13px
+                button_icon_size: 13px
+                utility_type: electric
+                default_show_calendar: none
+                global_warning: <30
+                entities:
+                  - entity_id: sensor.state_grid_6103518118537
+              
+              # 按钮7：燃气
+              - type: custom:xiaoshi-state-grid-button
+                theme: theme()
+                transparent_bg: true
+                lock_white_fg: true
+                popup_width: 500px
+                button_width: 80px
+                button_font_size: 13px
+                button_icon_size: 13px
+                utility_type: gas
+                default_show_calendar: none
+                global_warning: <30
+                entities:
+                  - entity_id: sensor.qin_hua_ran_qi_0842342294
+             
+              # 按钮8：水费
+              - type: custom:xiaoshi-state-grid-button
+                theme: theme()
+                transparent_bg: true
+                lock_white_fg: true
+                popup_width: 500px
+                button_width: 80px
+                button_font_size: 13px
+                button_icon_size: 13px
+                utility_type: water
+                default_show_calendar: none
+                global_warning: <30
+                entities:
+                  - entity_id: sensor.xi_an_shui_fei_002024195152 
+              
+              # 按钮9：油价
+              - type: custom:xiaoshi-petrochina-button
+                theme: theme()
+                transparent_bg: true
+                lock_white_fg: true
+                popup_width: 500px
+                button_width: 80px
+                button_font_size: 13px
+                button_icon_size: 13px
+                show_gasoline92: true
+                entities:
+                  - sensor.fuel_price_shaanxi
+              
+              # 按钮10：余额
+              - type: custom:xiaoshi-balance-button   
+                theme: theme()
+                transparent_bg: true
+                lock_white_fg: true
+                popup_width: 500px
+                button_width: 80px
+                button_font_size: 13px
+                button_icon_size: 13px
+                global_warning: <30
+                entities:
+                  - entity_id: sensor.tel_api
+                    overrides:
+                      warning: <10
+                  - entity_id: sensor.tel199_2769
+                  - entity_id: sensor.tel195_0769
+                  - entity_id: sensor.tel137_9221 
+                  - entity_id: sensor.tel182_7461
+
+          # ##########################################################
+          #                    第九大项：右侧状态栏                    #
+          # ##########################################################
+          - type: custom:xiaoshi-dynamic-pad-card
+            theme: theme()
+            style:    
+              left: 980px        
+              top: 473px   
+            areas:
+              - name: 空调
+                icon: mdi:air-conditioner
+                on_color: "rgb(0,191,255)"
+                entities:
+                  - climate.kongtiao_zhuwo
+                  - climate.kongtiao_keting
+                popup_width: 880px
+                popup_cards: |
+                  - type: horizontal-stack
+                    cards:        
+                      - type: custom:xiaoshi-pad-climate-card
+                        entity: climate.kongtiao_keting
+                        buttons:
+                          - switch.kongtiao_heater_keting
+                          - switch.kongtiao_dryer_keting
+                          - switch.kongtiao_eco_keting
+                          - switch.kongtiao_sleep_keting
+                          - light.kongtiao_light_keting
+                          - switch.kongtiao_alarm_keting
+                        timer: timer.kongtiao_timer_keting
+                        button_position: left
+                        timer_position: left
+                        theme: theme()
+                      - type: custom:xiaoshi-pad-climate-card
+                        entity: climate.kongtiao_zhuwo
+                        buttons:
+                          - switch.kongtiao_heater_zhuwo
+                          - switch.kongtiao_dryer_zhuwo
+                          - switch.kongtiao_eco_zhuwo
+                          - switch.kongtiao_sleep_zhuwo
+                          - light.kongtiao_light_zhuwo
+                          - switch.kongtiao_alarm_zhuwo
+                        timer: timer.kongtiao_timer_zhuwo
+                        button_position: right
+                        timer_position: right
+                        theme: theme()
+              - name: 风扇
+                icon: mdi:fan
+                on_color: "rgb(0,191,155)"
+                entities:
+                  - fan.xunhuanshan_ertongfang
+                popup_width: 680px
+                popup_cards: |
+                  - type: custom:button-card
+                    template: 循环扇
+              - name: 地暖
+                icon: mdi:heating-coil
+                on_color: "rgb(255,100,0)"
+                entities:
+                  - climate.shuinuantan
+                  - climate.dinuan 
+                popup_width: 750px
+                popup_cards: |
+                  - type: horizontal-stack
+                    cards:        
+                      - type: custom:xiaoshi-pad-climate-card
+                        entity: climate.shuinuantan
+                        button_position: left
+                        buttons:
+                          - switch.shuinuantan_antifreeze
+                          - switch.shuinuantan_antiscald
+                          - switch.shuinuantan_sleep
+                          - light.shuinuantan_light_keting
+                          - switch.shuinuantan_alarm_keting
+                          - switch.shuinuantan_locked_keting
+                          - sensor.shuinuantan_water_keting
+                        theme: theme()
+                      - type: custom:xiaoshi-pad-climate-card
+                        entity: climate.dinuan
+                        timer: timer.shuinuantan_timer_zhuwo
+                        theme:  theme()
+                        timer_position: left
+                        show_fan_modes: false
+                        mode_filters:
+                          preset_modes:
+                            "1": false
+                            "2": false
+                            "3": false
+                            "4": false
+                            "8": false
+                            "9": false
+                            "10": false
+                            "11": false
+                            "12": false
+                            "13": false
+                            "14": false
+                            "15": false
+                            "16": false
+                        mode_configs:
+                          preset_modes:
+                            "5":
+                              custom_name: 舒适
+                              custom_icon: mdi:thermostat-auto
+                            "6":
+                              custom_name: 周计划
+                              custom_icon: mdi:calendar-week
+                            "7":
+                              custom_name: 防冻
+                              custom_icon: mdi:snowflake-alert
+              - name: 净化器
+                icon: mdi:air-purifier
+                on_color: "rgb(50,205,50)" 
+                entities:
+                  - fan.jinghuaqi_zhuwo
+                  - fan.jinghuaqi_keting
+                popup_width: 750px
+                popup_cards: |
+                  - type: horizontal-stack
+                    cards: 
+                      - type: custom:button-card
+                        template: 主卧净化器
+                      - type: custom:button-card
+                        template: 客厅净化器
+              - name: 加湿器
+                icon: mdi:air-humidifier
+                on_color: "rgb(0,191,255)"
+                entities:
+                  - humidifier.jiashiqi_zhuwo
+                  - humidifier.jiashiqi_keting
+                popup_width: 750px
+                popup_cards: |
+                  - type: horizontal-stack
+                    cards:
+                      - type: custom:xiaoshi-pad-climate-card
+                        entity: humidifier.jiashiqi_keting
+                        select_entity: select.jiashiqi_keting
+                        buttons:
+                          - light.jiashiqi_light_keting
+                          - switch.jiashiqi_alarm_keting
+                          - sensor.jiashiqi_tank_keting
+                          - sensor.jiashiqi_water_keting
+                        button_position: left
+                        timer_position: left
+                        theme: theme()
+                      - type: custom:xiaoshi-pad-climate-card
+                        entity: humidifier.jiashiqi_zhuwo
+                        select_entity: select.jiashiqi_zhuwo
+                        buttons:
+                          - light.jiashiqi_light_zhuwo
+                          - switch.jiashiqi_alarm_zhuwo
+                          - sensor.jiashiqi_tank_zhuwo
+                          - sensor.jiashiqi_water_zhuwo
+                        button_position: right
+                        timer_position: right
+                        theme: theme()
+              - name: 浴霸
+                icon: mdi:hvac
+                on_color: "rgb(255,140,0)"
+                entities:
+                  - switch.zhu_wei_yu_ba
+                  - switch.gong_wei_yu_ba
+                popup_width: 610px
+                popup_cards: |
+                  - type: horizontal-stack
+                    cards:
+                      - type: custom:xiaoshi-pad-climate-card
+                        entity: climate.zhu_wei_yu_ba
+                        theme: theme()
+                      - type: custom:xiaoshi-pad-climate-card
+                        entity: climate.gong_wei_yu_ba
+                        theme: theme()
+              - name: 扫地机
+                icon: mdi:robot-vacuum
+                on_color: "rgb(80,195,50)" 
+                entities:
+                  - vacuum.saodijiqiren 
+                popup_width: 470px
+                popup_cards: |
+                  - type: custom:button-card
+                    template: 扫地机器人 
+              - name: 媒体
+                icon: mdi:multimedia
+                on_color: "rgb(255,0,255)"
+                entities:
+                  - media_player.yinxiang_keting_miot  
+                  - media_player.yinxiang_zhuwo_miot 
+                  - media_player.dianshi_miot
+                popup_cards: |
+                  - type: horizontal-stack
+                    cards:
+                      - type: vertical-stack   
+                        cards:
+                          - type: custom:xiaoshi-music-player
+                            xiaomi_miot: media_player.yinxiang_keting_miot
+                            always_show_lyrics: "on"
+                            lyrics_height: 185px
+                            theme: theme()
+                            width: 100%
+                          - type: custom:xiaoshi-music-player
+                            xiaomi_miot: media_player.yinxiang_zhuwo_miot
+                            always_show_lyrics: "on"
+                            lyrics_height: 185px
+                            theme: theme()
+                            width: 450px
+                      - type: vertical-stack 
+                        cards:
+                          - type: custom:button-card
+                            template: 电视
+   

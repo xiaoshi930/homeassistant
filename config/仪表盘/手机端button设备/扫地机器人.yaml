@@ -1,0 +1,1002 @@
+扫地机器人:
+  variables:
+    扫地机器人: vacuum.saodijiqiren
+    充电状态: sensor.dreame_cn_1023400391_p2140_charging_state_p_3_2 
+    回充: button.dreame_cn_1023400391_p2140_start_charge_a_3
+    定位: button.dreame_cn_1023400391_p2140_position_a_7_1
+    清扫模式: select.dreame_cn_1023400391_p2140_mode_p_2_3
+    出水量: number.dreame_cn_1023400391_p2140_mop_mode_p_4_5 
+    语音音量: number.dreame_cn_1023400391_p2140_volume_p_7_1
+    地毯增压: select.dreame_cn_1023400391_p2140_carpet_press_p_4_12 
+    断点续扫: select.dreame_cn_1023400391_p2140_break_point_restart_p_4_11
+    滤芯剩余百分比: sensor.haocai_saodijiqiren_lvxin
+    滤芯剩余时间: sensor.saodijiqiren_lvwang_shengyushijian
+    滤芯重置: button.dreame_cn_1023400391_p2140_reset_filter_life_a_11_1
+    主刷剩余百分比: sensor.haocai_saodijiqiren_zhushua
+    主刷剩余时间: sensor.saodijiqiren_zhushua_shengyushijian
+    主刷重置: button.dreame_cn_1023400391_p2140_reset_brush_life_a_9_1
+    边刷剩余百分比: sensor.haocai_saodijiqiren_bianshua
+    边刷剩余时间: sensor.saodijiqiren_bianshua_shengyushijian
+    边刷重置: button.dreame_cn_1023400391_p2140_reset_brush_life_a_10_1
+  styles:
+    grid:
+      - grid-template-areas: >
+          [[[
+              window.扫地机器人颜色 =  "rgb(90,205,50)";  
+              window.扫地机器人警告颜色 = "rgb(255,20,0)";
+              return `"背景 背景 背景 背景"
+                      "名称 名称 状态 开关"
+                      "图标 加减按钮 主按钮区域 主按钮区域"
+                      "图标 加减按钮 风力按钮 风力按钮"
+                      "图标 加减按钮 水量按钮 水量按钮"
+                      "图标 加减按钮 副按钮区域 副按钮区域"
+                      "图标 加减按钮 副按钮文字 副按钮文字"`
+          ]]] 
+      - grid-template-columns: 13% 14% 61% 12%
+      - grid-template-rows: 0 0 0 0 0 0 0 28.5vw 16.5vw
+    card:  
+      - padding: 0
+      - cursor: none
+      - --mdc-ripple-press-opacity: 0
+      - height: 45vw
+  custom_fields:
+    背景:
+      card:
+        type: custom:button-card
+        styles:
+          card:
+            - margin-top: 45vw
+            - padding: 0
+            - border-width: 0
+            - border-radius: 0
+            - cursor: none
+            - --mdc-ripple-press-opacity: 
+            - border-radius: 3vw
+            - height: 45vw
+            - background: | 
+                [[[
+                    var state = states[variables.扫地机器人]?.state;
+                    if( theme() =='dark' && state =='正在拖地') return "linear-gradient(90deg, "+扫地机器人颜色+" -50%,rgb(50,50,50) 50%)";
+                    if( theme() =='light'  && state =='正在拖地') return "linear-gradient(90deg, "+扫地机器人颜色+" -50%,rgb(255,255,255) 50%)";
+                    return theme()  == 'light' ? "rgb(255,255,255)" : "rgb(50,50,50)";
+                ]]] 
+    名称:
+      card:
+        type: custom:button-card
+        show_label: true
+        label: '[[[ return states[variables.扫地机器人]?.attributes?.friendly_name ?? "名称"]]]'
+        styles:
+          card:
+            - margin-top: 8.25vw
+            - padding: 0
+            - border-width: 0
+            - border-radius: 0
+            - width: 50vw
+            - margin-left: 2.5vw
+            - background: rgb(0,0,0,0)
+          label:
+            - justify-self: start
+            - font-size: 4vw
+            - font-weight: bold
+            - color: '[[[ return theme()  == "light" ? "rgb(50,50,50)" : "rgb(255,255,255)"; ]]]'
+    状态:  
+      card:
+        type: custom:button-card
+        label: |
+          [[[ 
+              var state   = states[variables.扫地机器人]?.state ?? "";
+              var battery = states[variables.扫地机器人]?.attributes?.battery_level ?? "";
+              var battery_state = states[variables.充电状态]?.state ?? "";
+              if (battery_state =='正在充电') battery_state="⚡"
+              if (battery_state =='正在回充') battery_state="⚡"
+              if (battery_state =='不在充电' && battery>=30) battery_state="🔋"
+              if (battery_state =='不在充电' && battery<30) battery_state="🪫"
+              var mode    = states[variables.清扫模式]?.state ?? "";
+              if (mode=="安静/静音") mode = "安静";
+              if (mode=="标准")      mode = "标准";
+              if (mode=="强力")      mode = "强力";
+              if (mode=="全速模式（Max）") mode = "超强";
+              var water = states[variables.出水量]?.state ?? "";
+              if (water=="1") water = "低";
+              if (water=="2") water = "中";
+              if (water=="3") water = "高";
+              return state+" "+"<font size='1px'><b>: ("+battery_state+battery+"%)</b></font>"+
+                    " 模式 "+"<font size='1px'><b>: ("+mode+")</b></font>"+
+                    " 水位 "+"<font size='1px'><b>: ("+water+")</b></font>";
+              return "离线";
+          ]]]
+        show_label: true
+        styles: 
+          card:
+            - margin-top: 8.25vw
+            - padding: 0 
+            - border-radius: 0
+            - border-width: 0
+            - background: rgb(0,0,0,0)
+          label:
+            - justify-self: start
+            - font-size: 3vw
+            - font-weight: bold
+            - margin-top: 0.5vw
+            - color: '[[[ return theme()  == "light" ? "rgb(50,50,50)" : "rgb(255,255,255)"; ]]]'
+    开关:  
+      card:
+        type: custom:button-card
+        entity: '[[[ return  variables.扫地机器人 ?? ""]]]'
+        tap_action:
+          action: call-service
+          service: |
+            [[[
+              var state = states[variables.扫地机器人]?.state;
+              if( state =='正在拖地') return "vacuum.stop";
+              if( state !='正在拖地') return "vacuum.start";
+              return "vacuum.stop";
+            ]]]
+          data: {}
+          target: 
+            entity_id: '[[[ return  variables.扫地机器人 ?? ""]]]'
+        show_name: false
+        show_icon: true
+        icon: | 
+          [[[       
+              var state = states[variables.扫地机器人]?.state;
+              if( state =='正在拖地') return "mdi:toggle-switch";
+              return "mdi:toggle-switch-off";
+          ]]]
+        styles:
+          card:
+            - margin-top: 8.25vw
+            - cursor: none
+            - --mdc-ripple-press-opacity: 0.2
+            - padding: 0
+            - border-radius: 2vw
+            - border-width: 0
+            - width: 8vw
+            - height: 8vw
+            - background: rgb(0,0,0,0)
+          icon:
+            - width: 8vw
+            - height: 8vw  
+            - color: |
+                [[[
+                    var state = states[variables.扫地机器人]?.state;
+                    if( state =='正在拖地') return  扫地机器人颜色;
+                    return theme()  == "light" ? "rgb(50,50,50)" : "rgb(255,255,255)";
+                ]]]   
+    图标:
+      card:
+        type: custom:button-card    
+        show_icon: true
+        icon: |
+          [[[ 
+              var state = states[variables.扫地机器人]?.state;
+              if( state =='正在拖地') return "mdi:fan";  
+              return "mdi:fan-off";  
+          ]]] 
+        styles:
+          card:
+            - margin-top: 45vw
+            - padding: 0
+            - border-radius: 0
+            - border-width: 0
+            - width: 20vw
+            - height: 20vw
+            - margin-left: '-2vw'
+            - background: rgb(0,0,0,0)
+          icon:
+            - color: |
+                [[[
+                    var state = states[variables.扫地机器人]?.state;
+                    if( state =='正在拖地') return  扫地机器人颜色;
+                    return theme()  == "light" ? "rgb(50,50,50)" : "rgb(255,255,255)";
+                ]]]
+            - animation: |
+                [[[ 
+                    var state = states[variables.扫地机器人]?.state;
+                    if( state =='正在拖地') return "rotating 1.5s linear infinite";
+                    return "";         
+                ]]]
+    加减按钮:
+      card:
+        type: custom:button-card
+        styles:
+          card:
+            - margin-top: 40vw
+            - padding: 0 0 0 3vw
+            - height: 20vw
+            - cursor: none 
+            - border-width: 0
+            - border-radius: 0
+            - background: rgb(0,0,0,0)
+          grid:
+            - grid-template-areas: |
+                "减" "数值" "加"
+            - grid-template-columns: 100%
+            - grid-template-rows: 33% 33% 33%
+        custom_fields:
+          数值: 
+            card:
+              type: custom:button-card
+              show_label: true
+              label:  |
+                [[[ 
+                    var state = states[variables.语音音量]?.state ?? "-";
+                    return state +"<font size='1px'><b>vol</b></font>" 
+                ]]]
+              styles:
+                card:
+                  - padding: 0
+                  - border-radius: 0
+                  - border-width: 0
+                  - width: 10vw
+                  - height: 6vw
+                  - background: rgb(0,0,0,0)
+                label:
+                  - font-size: 3vw
+                  - font-weight: bold
+                  - color: '[[[ return theme()  == "light" ? "rgb(50,50,50)" : "rgb(255,255,255)"; ]]]'
+          减:
+            card:
+              type: custom:button-card
+              show_icon: true
+              icon: mdi:minus
+              styles:
+                icon:
+                  - width: 6vw
+                  - height: 6vw
+                  - color: '[[[ return theme()  == "light" ? "rgb(50,50,50)" : "rgb(255,255,255)"; ]]]'
+                card:
+                  - cursor: none
+                  - --mdc-ripple-press-opacity: 0.2
+                  - padding: 0
+                  - border-radius: 2vw
+                  - margin-left: 1.5vw
+                  - width: 8vw
+                  - height: 6vw
+                  - border-width: 0
+                  - background: rgb(0,0,0,0)
+              tap_action:
+                action: call-service
+                service: number.set_value
+                data:
+                  value: |
+                    [[[ 
+                        var volume = states[variables.语音音量]?.state ?? "10";
+                        if (volume>=1 && volume<=5) return volume-1;
+                        if (volume>5 ) return volume-5;
+                        if (volume<=0 ) return volume;
+                    ]]]
+                target:
+                  entity_id: '[[[ return  variables.语音音量 ?? ""]]]'
+          加:
+            card:
+              type: custom:button-card
+              show_icon: true
+              icon: mdi:plus
+              styles:
+                icon:
+                  - width: 6vw
+                  - height: 6vw
+                  - color: '[[[ return theme()  == "light" ? "rgb(50,50,50)" : "rgb(255,255,255)"; ]]]'
+                card:
+                  - cursor: none
+                  - --mdc-ripple-press-opacity: 0.2
+                  - padding: 0
+                  - border-radius: 2vw
+                  - margin-left: 1.5vw
+                  - width: 8vw
+                  - height: 6vw
+                  - border-width: 0
+                  - background: rgb(0,0,0,0)
+              tap_action:
+                action: call-service
+                service: number.set_value
+                data:
+                  value: |
+                    [[[ 
+                        var volume = states[variables.语音音量]?.state ?? "10";
+                        if (volume>=95 && volume<100) return volume-(-1);
+                        if (volume<95 ) return volume-(-5);
+                        if (volume>=100 ) return volume;
+                    ]]]
+                target:
+                  entity_id: '[[[ return  variables.语音音量 ?? ""]]]'
+    主按钮区域:
+      card:
+        type: custom:button-card
+        tap_action:
+          action: none
+        hold_action:
+          action: none
+        styles:
+          grid:
+            - grid-template-areas: |
+                "vacuum1 vacuum2 vacuum3 vacuum4"
+            - grid-template-rows: 100%
+            - grid-auto-columns: minmax(0, 1fr)
+            - grid-auto-flow: column
+          card:
+            - margin-top: 25vw
+            - cursor: none  
+            - width: 66.5vw
+            - padding: 0
+            - border-radius: 0
+            - border-width: 0
+            - background: rgb(0,0,0,0)
+        custom_fields:
+          vacuum1: 
+            card:  
+              type: custom:button-card
+              icon: mdi:play
+              show_icon: true
+              styles:
+                card:
+                  - cursor: none
+                  - --mdc-ripple-press-opacity: 0.2
+                  - width: 13.6vw
+                  - height: 6vw
+                  - border-radius: 1.5vw
+                  - background: '[[[ return theme()  == "light" ? "rgb(50,50,50)" : "rgb(120,120,120)"; ]]]'
+                icon:
+                  - width: 4vw
+                  - height: 4vw
+                  - color: rgb(255,255,255)
+              tap_action:
+                action: call-service
+                service: vacuum.start
+                data: {}
+                target: 
+                  entity_id: '[[[ return  variables.扫地机器人 ?? ""]]]'
+          vacuum2: 
+            card:
+              type: custom:button-card
+              icon: mdi:stop
+              show_icon: true
+              styles:
+                card:
+                  - cursor: none
+                  - --mdc-ripple-press-opacity: 0.2
+                  - width: 13.6vw
+                  - height: 6vw
+                  - border-radius: 1.5vw
+                  - background: '[[[ return theme()  == "light" ? "rgb(50,50,50)" : "rgb(120,120,120)"; ]]]'
+                icon:
+                  - width: 4vw
+                  - height: 4vw
+                  - color: rgb(255,255,255)
+              tap_action:
+                action: call-service
+                service: vacuum.stop
+                data: {}
+                target: 
+                  entity_id: '[[[ return  variables.扫地机器人 ?? ""]]]'
+          vacuum3: 
+            card:
+              type: custom:button-card
+              icon: mdi:home
+              show_icon: true
+              styles:
+                card:
+                  - cursor: none
+                  - --mdc-ripple-press-opacity: 0.2
+                  - width: 13.6vw
+                  - height: 6vw
+                  - border-radius: 1.5vw
+                  - background: '[[[ return theme()  == "light" ? "rgb(50,50,50)" : "rgb(120,120,120)"; ]]]'
+                icon:
+                  - width: 4vw
+                  - height: 4vw
+                  - color: rgb(255,255,255)
+              tap_action:
+                action: call-service
+                service: button.press
+                data: {}
+                target:
+                  entity_id: '[[[ return  variables.回充 ?? ""]]]'
+          vacuum4:
+            card:
+              type: custom:button-card
+              icon: mdi:map-marker
+              show_icon: true
+              styles:
+                card:
+                  - cursor: none
+                  - --mdc-ripple-press-opacity: 0.2
+                  - width: 13.6vw
+                  - height: 6vw
+                  - border-radius: 1.5vw
+                  - background: '[[[ return theme()  == "light" ? "rgb(50,50,50)" : "rgb(120,120,120)"; ]]]'
+                icon:
+                  - width: 4vw
+                  - height: 4vw
+                  - color: rgb(255,255,255)
+              tap_action:
+                action: call-service
+                service: button.press
+                data: {}
+                target:
+                  entity_id: '[[[ return  variables.定位 ?? ""]]'
+    风力按钮:
+      card:
+        type: custom:button-card
+        tap_action:
+          action: none
+        hold_action:
+          action: none
+        styles:
+          grid:
+            - grid-template-areas: |
+                "vacuum1 vacuum2 vacuum3 vacuum4"
+            - grid-template-rows: 100%
+            - grid-auto-columns: minmax(0, 1fr)
+            - grid-auto-flow: column
+          card:
+            - margin-top: 40vw
+            - cursor: none  
+            - width: 66.5vw
+            - padding: 0
+            - border-radius: 0
+            - border-width: 0
+            - background: rgb(0,0,0,0)
+        custom_fields:
+          vacuum1: 
+            card:  
+              type: custom:button-card
+              layout: icon_name
+              icon: mdi:fan
+              show_icon: true
+              show_name: true 
+              name: 安静
+              styles: 
+                card:
+                  - cursor: none
+                  - --mdc-ripple-press-opacity: 0.2
+                  - width: 13.6vw
+                  - height: 6vw
+                  - border-radius: 1.5vw
+                  - background: '[[[ return theme()  == "light" ? "rgb(50,50,50)" : "rgb(120,120,120)"; ]]]'
+                name:
+                  - color: rgb(255,255,255)
+                  - font-size: 1.1vh
+                  - margin-left: -2vw
+                  - font-weight: bold
+                icon:
+                  - width: 4vw
+                  - height: 4vw
+                  - margin-left: 1vw
+                  - color: |
+                      [[[
+                          var mode = states[variables.清扫模式]?.state;
+                          if (mode =="安静/静音") return  扫地机器人颜色; 
+                          return "rgb(255,255,255)"; 
+                      ]]]   
+              tap_action:
+                action: call-service
+                service: select.select_option
+                data: 
+                  option: "安静/静音"
+                target: 
+                  entity_id: '[[[ return  variables.清扫模式 ?? ""]]]'
+          vacuum2: 
+            card:
+              type: custom:button-card
+              layout: icon_name
+              icon: mdi:fan
+              show_icon: true
+              show_name: true 
+              name: 标准
+              styles:
+                card:
+                  - cursor: none
+                  - --mdc-ripple-press-opacity: 0.2
+                  - width: 13.6vw
+                  - height: 6vw
+                  - border-radius: 1.5vw
+                  - background: '[[[ return theme()  == "light" ? "rgb(50,50,50)" : "rgb(120,120,120)"; ]]]'
+                name:
+                  - color: rgb(255,255,255)
+                  - font-size: 1.1vh
+                  - margin-left: -2vw
+                  - font-weight: bold
+                icon:
+                  - width: 4vw
+                  - height: 4vw
+                  - margin-left: 1vw
+                  - color: |
+                      [[[
+                          var mode = states[variables.清扫模式]?.state;
+                          if (mode =="标准") return  扫地机器人颜色; 
+                          return "rgb(255,255,255)"; 
+                      ]]]  
+              tap_action:
+                action: call-service
+                service: select.select_option
+                data: 
+                  option: "标准"
+                target: 
+                  entity_id: '[[[ return  variables.清扫模式 ?? ""]]]'
+          vacuum3: 
+            card:
+              type: custom:button-card
+              layout: icon_name
+              icon: mdi:fan
+              show_icon: true
+              show_name: true 
+              name: 强力
+              styles:
+                card:
+                  - cursor: none
+                  - --mdc-ripple-press-opacity: 0.2
+                  - width: 13.6vw
+                  - height: 6vw
+                  - border-radius: 1.5vw
+                  - background: '[[[ return theme()  == "light" ? "rgb(50,50,50)" : "rgb(120,120,120)"; ]]]'
+                name:
+                  - color: rgb(255,255,255)
+                  - font-size: 1.1vh
+                  - margin-left: -2vw
+                  - font-weight: bold
+                icon:
+                  - width: 4vw
+                  - height: 4vw
+                  - margin-left: 1vw
+                  - color: |
+                      [[[
+                          var mode = states[variables.清扫模式]?.state;
+                          if (mode =="强力") return  扫地机器人颜色; 
+                          return "rgb(255,255,255)"; 
+                      ]]]  
+              tap_action:
+                action: call-service
+                service: select.select_option
+                data: 
+                  option: "强力"
+                target: 
+                  entity_id: '[[[ return  variables.清扫模式 ?? ""]]]'
+          vacuum4:
+            card:
+              type: custom:button-card
+              layout: icon_name
+              icon: mdi:fan
+              show_icon: true
+              show_name: true 
+              name: 超强
+              styles:
+                card:
+                  - cursor: none
+                  - --mdc-ripple-press-opacity: 0.2
+                  - width: 13.6vw
+                  - height: 6vw
+                  - border-radius: 1.5vw
+                  - background: '[[[ return theme()  == "light" ? "rgb(50,50,50)" : "rgb(120,120,120)"; ]]]'
+                name:
+                  - color: rgb(255,255,255)
+                  - font-size: 1.1vh
+                  - margin-left: -2vw
+                  - font-weight: bold
+                icon:
+                  - width: 4vw
+                  - height: 4vw
+                  - margin-left: 1vw
+                  - color: |
+                      [[[
+                          var mode = states[variables.清扫模式]?.state;
+                          if (mode =="全速模式（Max）") return  扫地机器人颜色; 
+                          return "rgb(255,255,255)"; 
+                      ]]]  
+              tap_action:
+                action: call-service
+                service: select.select_option
+                data: 
+                  option: "全速模式（Max）"
+                target: 
+                  entity_id: '[[[ return  variables.清扫模式 ?? ""]]]'
+    水量按钮:
+      card:
+        type: custom:button-card
+        tap_action:
+          action: none
+        hold_action:
+          action: none
+        styles:
+          grid:
+            - grid-template-areas: |
+                "vacuum1 vacuum2 vacuum3 vacuum4"
+            - grid-template-rows: 100%
+            - grid-auto-columns: minmax(0, 1fr)
+            - grid-auto-flow: column
+          card:
+            - margin-top: 55vw
+            - cursor: none  
+            - width: 66.5vw
+            - padding: 0
+            - border-radius: 0
+            - border-width: 0
+            - background: rgb(0,0,0,0)
+        custom_fields:
+          vacuum1: 
+            card:  
+              type: custom:button-card
+              layout: icon_name
+              icon: mdi:water
+              show_icon: true
+              show_name: true 
+              name: 低水量
+              styles:
+                card:
+                  - cursor: none
+                  - --mdc-ripple-press-opacity: 0.2
+                  - width: 13.6vw
+                  - height: 6vw
+                  - border-radius: 1.5vw
+                  - background: '[[[ return theme()  == "light" ? "rgb(50,50,50)" : "rgb(120,120,120)"; ]]]'
+                name:
+                  - color: rgb(255,255,255)
+                  - font-size: 1.1vh
+                  - margin-left: -2vw
+                  - font-weight: bold
+                icon:
+                  - width: 4vw
+                  - height: 4vw
+                  - margin-left: 1vw
+                  - color: |
+                      [[[
+                          var water = states[variables.出水量]?.state;
+                          if (water =="1") return  扫地机器人颜色; 
+                          return "rgb(255,255,255)"; 
+                      ]]]   
+              tap_action:
+                action: call-service
+                service: number.set_value
+                data: 
+                  value: "1"
+                target: 
+                  entity_id: '[[[ return  variables.出水量 ?? "" ]]]'
+          vacuum2: 
+            card:
+              type: custom:button-card
+              layout: icon_name
+              icon: mdi:water
+              show_icon: true
+              show_name: true 
+              name: 中水量
+              styles:
+                card:
+                  - cursor: none
+                  - --mdc-ripple-press-opacity: 0.2
+                  - width: 13.6vw
+                  - height: 6vw
+                  - border-radius: 1.5vw
+                  - background: '[[[ return theme()  == "light" ? "rgb(50,50,50)" : "rgb(120,120,120)"; ]]]'
+                name:
+                  - color: rgb(255,255,255)
+                  - font-size: 1.1vh
+                  - margin-left: -2vw
+                  - font-weight: bold
+                icon:
+                  - width: 4vw
+                  - height: 4vw
+                  - color: |
+                      [[[
+                          var water = states[variables.出水量]?.state;
+                          if (water =="2") return  扫地机器人颜色; 
+                          return "rgb(255,255,255)"; 
+                      ]]]  
+              tap_action:
+                action: call-service
+                service: number.set_value
+                data: 
+                  value: "2"
+                target: 
+                  entity_id: '[[[ return  variables.出水量 ?? ""]]]'
+          vacuum3: 
+            card:
+              type: custom:button-card
+              layout: icon_name
+              icon: mdi:water
+              show_icon: true
+              show_name: true 
+              name: 高水量
+              styles:
+                card:
+                  - cursor: none
+                  - --mdc-ripple-press-opacity: 0.2
+                  - width: 13.6vw
+                  - height: 6vw
+                  - border-radius: 1.5vw
+                  - background: '[[[ return theme()  == "light" ? "rgb(50,50,50)" : "rgb(120,120,120)"; ]]]'
+                name:
+                  - color: rgb(255,255,255)
+                  - font-size: 1.1vh
+                  - margin-left: -2vw
+                  - font-weight: bold
+                icon:
+                  - width: 4vw
+                  - height: 4vw
+                  - color: |
+                      [[[
+                          var water = states[variables.出水量]?.state;
+                          if (water =="3") return  扫地机器人颜色; 
+                          return "rgb(255,255,255)"; 
+                      ]]]  
+              tap_action:
+                action: call-service
+                service: number.set_value
+                data: 
+                  value: "3"
+                target: 
+                  entity_id: '[[[ return  variables.出水量 ?? ""]]]'
+    副按钮区域:
+      card:
+        type: custom:button-card
+        tap_action:
+          action: none
+        hold_action:
+          action: none
+        styles:
+          grid:
+            - grid-template-areas: |
+                "info1 info2 info3 info4 info5"
+            - grid-template-rows: 100%
+            - grid-auto-columns: minmax(0, 1fr)
+            - grid-auto-flow: column
+          card:
+            - margin-top: 70.5vw
+            - cursor: none  
+            - width: 66vw
+            - padding: 0
+            - border-radius: 0
+            - border-width: 0
+            - background: rgb(0,0,0,0)
+        custom_fields:
+          info1: 
+            card:
+              type: custom:button-card
+              entity: '[[[ return  variables.地毯增压 ?? ""]]]'
+              show_icon: true
+              show_name: false
+              icon: |
+                [[[
+                    var info = states[variables.地毯增压]?.state;
+                    if( info =='打开') return "mdi:toggle-switch";
+                    if( info =='关闭') return "mdi:toggle-switch-off";
+                    return "mdi:toggle-switch-off";
+                ]]]
+              tap_action:
+                action: call-service
+                service: select.select_option
+                data: 
+                  option: |
+                    [[[
+                        var info = states[variables.地毯增压]?.state
+                        if (info=="打开") return "关闭";
+                        if (info=="关闭") return "打开";
+                        return "";
+                    ]]]
+                target: 
+                  entity_id: '[[[ return  variables.地毯增压 ?? ""]]]'
+              styles:
+                card:  
+                  - cursor: none 
+                  - --mdc-ripple-press-opacity: 0.2
+                  - width: 7vw
+                  - height: 7vw
+                  - margin-left: 3.5vw
+                  - border-radius: 3vw
+                  - border-width: 0
+                  - background: rgb(0,0,0,0)
+                icon:   
+                  - width: 7vw
+                  - height: 7vw
+                  - color: | 
+                      [[[ 
+                          var info  = states[variables.地毯增压]?.state;      
+                          if( info =="打开" ) return  扫地机器人颜色;   
+                          if( info =="关闭" && theme() =="light" ) return "rgb(50,50,50)";  
+                          if( info =="关闭" && theme() =="dark") return "rgb(250,250,250)";  
+                          return theme()  == "light" ? "rgb(50,50,50)" : "rgb(255,255,255)";
+                      ]]] 
+          info2:
+            card:
+              type: custom:button-card
+              entity: '[[[ return  variables.断点续扫 ?? ""]]]'
+              show_icon: true
+              show_name: false
+              icon: |
+                [[[
+                    var info = states[variables.断点续扫]?.state;
+                    if( info =='打开') return "mdi:toggle-switch";
+                    if( info =='关闭') return "mdi:toggle-switch-off";
+                    return "mdi:toggle-switch-off";
+                ]]]
+              tap_action:
+                action: call-service
+                service: select.select_option
+                data:  
+                  option: |
+                    [[[
+                        var info = states[variables.断点续扫]?.state
+                        if (info=="打开") return "关闭";
+                        if (info=="关闭") return "打开";
+                        return "";
+                    ]]]
+                target: 
+                  entity_id: '[[[ return  variables.断点续扫 ?? ""]]]'
+              styles:
+                card:  
+                  - cursor: none 
+                  - --mdc-ripple-press-opacity: 0.2
+                  - width: 7vw
+                  - height: 7vw
+                  - margin-left: 3vw
+                  - border-radius: 3vw
+                  - border-width: 0
+                  - background: rgb(0,0,0,0)
+                icon:   
+                  - width: 7vw
+                  - height: 7vw
+                  - color: | 
+                      [[[ 
+                          var info  = states[variables.断点续扫]?.state;      
+                          if( info =="打开" ) return  扫地机器人颜色;   
+                          if( info =="关闭" && theme() =="light" ) return "rgb(50,50,50)";  
+                          if( info =="关闭" && theme() =="dark") return "rgb(250,250,250)";   
+                          return theme()  == "light" ? "rgb(50,50,50)" : "rgb(255,255,255)";
+                      ]]] 
+          info3:
+            card:
+              type: custom:button-card
+              entity: '[[[ return  variables.滤芯重置 ?? ""]]]'
+              layout: icon_name
+              show_icon: true
+              show_name: true
+              icon: mdi:gesture-tap-button
+              name: 滤芯<br>重置
+              tap_action:
+                action: call-service
+                service: button.press
+                data: {}
+                target: 
+                  entity_id: '[[[ return  variables.滤芯重置 ?? ""]]]'
+              styles:
+                card:  
+                  - cursor: none 
+                  - --mdc-ripple-press-opacity: 0.2
+                  - width: 10vw
+                  - height: 7vw
+                  - margin-left: 2vw
+                  - border-radius: 3vw
+                  - border-width: 0
+                  - background: rgb(0,0,0,0)
+                name:
+                  - color: '[[[ return theme()  == "light" ? "rgb(50,50,50)" : "rgb(255,255,255)"; ]]]'
+                  - font-size: 2vw
+                  - font-weight: bold
+                icon:   
+                  - width: 5vw
+                  - height: 5vw
+                  - margin-left: 1vw
+                  - color: '[[[ return theme()  == "light" ? "rgb(50,50,50)" : "rgb(255,255,255)"; ]]]'
+          info4:
+            card:  
+              type: custom:button-card
+              entity: '[[[ return  variables.主刷重置 ?? ""]]]'
+              layout: icon_name
+              show_icon: true
+              show_name: true
+              icon: mdi:gesture-tap-button
+              name: 主刷<br>重置
+              tap_action:
+                action: call-service
+                service: button.press
+                data: {}
+                target: 
+                  entity_id: '[[[ return  variables.主刷重置 ?? ""]]]'
+              styles:
+                card:  
+                  - cursor: none 
+                  - --mdc-ripple-press-opacity: 0.2
+                  - width: 10vw
+                  - height: 7vw
+                  - margin-left: 2vw
+                  - border-radius: 3vw
+                  - border-width: 0
+                  - background: rgb(0,0,0,0)
+                name:
+                  - color: '[[[ return theme()  == "light" ? "rgb(50,50,50)" : "rgb(255,255,255)"; ]]]'
+                  - font-size: 2vw
+                  - font-weight: bold
+                icon:   
+                  - width: 5vw
+                  - height: 5vw
+                  - margin-left: 1vw
+                  - color: '[[[ return theme()  == "light" ? "rgb(50,50,50)" : "rgb(255,255,255)"; ]]]'
+          info5:
+            card:  
+              type: custom:button-card
+              entity: '[[[ return  variables.边刷重置 ?? ""]]]'
+              layout: icon_name
+              show_icon: true
+              show_name: true
+              icon: mdi:gesture-tap-button
+              name: 边刷<br>重置
+              tap_action:
+                action: call-service
+                service: button.press
+                data: {}
+                target: 
+                  entity_id: '[[[ return  variables.边刷重置 ?? ""]]]'
+              styles:
+                card:  
+                  - cursor: none 
+                  - --mdc-ripple-press-opacity: 0.2
+                  - width: 10vw
+                  - height: 7vw
+                  - margin-left: 2vw
+                  - border-radius: 3vw
+                  - border-width: 0
+                  - background: rgb(0,0,0,0)
+                name:
+                  - color: '[[[ return theme()  == "light" ? "rgb(50,50,50)" : "rgb(255,255,255)"; ]]]'
+                  - font-size: 2vw
+                  - font-weight: bold
+                icon:   
+                  - width: 5vw
+                  - height: 5vw
+                  - margin-left: 1vw
+                  - color: '[[[ return theme()  == "light" ? "rgb(50,50,50)" : "rgb(255,255,255)"; ]]]'
+    副按钮文字:
+      card:
+        type: custom:button-card
+        tap_action:
+          action: none
+        hold_action:
+          action: none
+        styles:
+          grid:
+            - grid-template-areas: |
+                "info1 info2 info3 info4 info5"
+            - grid-template-rows: 100%
+            - grid-auto-columns: minmax(0, 1fr)
+            - grid-auto-flow: column
+          card:
+            - margin-top: 82.5vw
+            - cursor: none  
+            - width: 66vw
+            - padding: 0
+            - border-radius: 0
+            - font-size: 1.1vh
+            - color: '[[[ return theme()  == "light" ? "rgb(50,50,50)" : "rgb(255,255,255)"; ]]]'
+            - border-width: 0
+            - background: rgb(0,0,0,0)
+        custom_fields:
+          info1: |
+            [[[
+                var carpet_press = states[variables.地毯增压]?.state;
+                if( carpet_press =='打开' || carpet_press =='关闭')  return "地毯增压";
+                return "";
+            ]]]
+          info2: |
+            [[[
+                var break_point = states[variables.断点续扫]?.state;
+                if( break_point =='打开' || break_point =='关闭')  return "断点续扫";
+                return "";
+            ]]]
+          info3: |
+            [[[
+                var lvxin1= states[variables.滤芯剩余百分比]?.state;
+                var lvxin2= states[variables.滤芯剩余时间]?.state;
+                return lvxin1+"% "+lvxin2+"h"
+            ]]]
+          info4: |
+            [[[
+                var zhushua1= states[variables.主刷剩余百分比]?.state;
+                var zhushua2= states[variables.主刷剩余时间]?.state;
+                return zhushua1+"% "+zhushua2+"h"
+            ]]]
+          info5: |
+            [[[
+                var bianshua1= states[variables.边刷剩余百分比]?.state;
+                var bianshua2= states[variables.边刷剩余时间]?.state;
+                return bianshua1+"% "+bianshua2+"h"
+            ]]]

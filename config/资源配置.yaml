@@ -1,0 +1,20 @@
+resource_mode: yaml
+resources:  
+  - url: /hacsfiles/button-card/button-card.js
+    type: module
+  - url: /hacsfiles/lovelace-mushroom/mushroom.js
+    type: module
+  # 其他资源卡片
+dashboards:
+  xiaoshi-pad-ui:
+    mode: yaml
+    title: 平板
+    icon: hass:tablet
+    show_in_sidebar: true
+    filename: 仪表盘/平板端UI.yaml
+  xiaoshi-phone-ui:
+    mode: yaml
+    title: 手机
+    icon: hass:phone
+    show_in_sidebar: true
+    filename: 仪表盘/手机端UI.yaml
