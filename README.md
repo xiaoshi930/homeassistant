@@ -49,7 +49,7 @@ dashboards:
 
 ## 📦 集成（Integration）汇总
 
-### 📅 本地万年历 `v2.0`
+### 📅 本地万年历 `v4.4`
 
 **🔗 项目地址：** https://github.com/xiaoshi930/lunar_calendar
 
@@ -63,7 +63,7 @@ dashboards:
 
 ---
 
-### ⚡ 国网信息辅助 `v2.1`
+### ⚡ 国网信息辅助 `v4.2`
 
 **🔗 项目地址：** https://github.com/xiaoshi930/state_grid_info
 
@@ -72,7 +72,7 @@ dashboards:
 
 ---
 
-### ⛽ 中国油价信息 `v2.1`
+### ⛽ 中国油价信息 `v3.5`
 
 **🔗 项目地址：** https://github.com/xiaoshi930/petrochina
 
@@ -81,7 +81,7 @@ dashboards:
 
 ---
 
-### 🎵 音乐播放器 `v2.0`
+### 🎵 音乐播放器 `v2.7`
 
 **🔗 项目地址：** https://github.com/xiaoshi930/music_player
 
@@ -90,13 +90,13 @@ dashboards:
 
 ---
 
-### 🌤️ 和风天气 `v1.8`
+### 🌤️ 和风天气 `v6.8`
 
 **🔗 项目地址：** https://github.com/xiaoshi930/qweather
 
 **🎨 仪表盘卡片UI：** 
 - 平板端UI：`type: custom:xiaoshi-weather-pad-player`
-- 手机端UI：`type: custom:xiaoshi-weather-pHONE-player`
+- 手机端UI：`type: custom:xiaoshi-weather-phone-player`
 ---
 
 ### 📜 本地古诗词 `v1.4`
@@ -107,15 +107,7 @@ dashboards:
 
 ---
 
-### 🗺️ 腾讯地图通勤 `v1.4`
-
-**🔗 项目地址：** https://github.com/xiaoshi930/tencent_commute
-
-**🎨 仪表盘卡片UI：** 无
-
----
-
-### 🖥️ PVE信息 `v1.1`
+### 🖥️ PVE信息 `v1.2`
 
 **🔗 项目地址：** https://github.com/xiaoshi930/proxmoxve
 
@@ -123,51 +115,26 @@ dashboards:
 
 ---
 
+### 📅 课程表 `v1.2`
+
+**🔗 项目地址：** https://github.com/xiaoshi930/classschedule
+
+**🎨 仪表盘卡片UI：** 无
+
+---
+
+### 🗺️ 腾讯地图通勤 `v1.6`
+
+**🔗 项目地址：** https://github.com/xiaoshi930/tencent_commute
+
+**🎨 仪表盘卡片UI：** 无
+
+---
 ### 💡 自动灯光（人在/人体）`v1.5`
 
 **🔗 项目地址：** https://github.com/xiaoshi930/auto_light
 
 **🎨 仪表盘卡片UI：** 无
-
----
-
-### 🎨 主题辅助器 `v1.5`
-
-**🔗 项目地址：** https://github.com/xiaoshi930/xiaoshi_theme
-
-**🎨 仪表盘卡片UI：** 无
-
----
-
-## 📊 仪表盘（Dashboard）
-
-### 📱 消逝卡（平板端）`v0.0.7`
-
-**🔗 项目地址：** https://github.com/xiaoshi930/xiaoshi-pad-card
-
-**🎨 仪表盘卡片UI：**
-- （平板端）温度湿度分布：`type: custom:xiaoshi-pad-grid-card`
-- （通用端）HA更新信息卡：`type: custom:xiaoshi-update-card`
-- （通用端）HA离线信息卡：`type: custom:xiaoshi-offline-card`
-- （通用端）信息余额卡片：`type: custom:xiaoshi-balance-card`
-- （通用端）待办事项卡片：`type: custom:xiaoshi-todo-card`
-- （通用端）耗材信息卡片：`type: custom:xiaoshi-consumables-card`
----
-
-### 📱 消逝卡（手机端）`v0.0.6`
-
-**🔗 项目地址：** https://github.com/xiaoshi930/xiaoshi-phone-card
-
-**🎨 仪表盘卡片UI：**
-- （手机端）空调/水暖毯/电暖器/热水器：`type: custom:xiaoshi-phone-climate-card`
-- （手机端）加湿器：`type: custom:xiaoshi-phone-humidifier-card`
-- （手机端）净化器：`type: custom:xiaoshi-phone-purifier-card`
-- （手机端）电脑卡：`type: custom:xiaoshi-phone-computer-card`
-- （手机端）灯光卡：`type: custom:xiaoshi-phone-light-card`
-- （手机端）插座卡：`type: custom:xiaoshi-phone-switch-card`
-- （手机端）输入卡：`type: custom:xiaoshi-phone-text-card`
-- （手机端）视频卡：`type: custom:xiaoshi-phone-video-card`
-- （手机端）图像卡：`type: custom:xiaoshi-phone-image-card`
 
 ---
 
