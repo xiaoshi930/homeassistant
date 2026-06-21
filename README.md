@@ -59,6 +59,91 @@ dashboards:
 
 **🔗 项目地址：** https://github.com/xiaoshi930/xiaoshi
 
+> 汇总卡版本：2026.6.4.06 | 共 **53** 个卡片类型 |
+
+---
+
+#### 一、手机端主UI框架卡片
+
+| type | 卡片名称 |
+|------|----------|
+| `custom:xiaoshi-phone-card` | 消逝手机端主UI卡片 |
+| `custom:xiaoshi-avatar-card` | 消逝手机端头像卡片 |
+| `custom:xiaoshi-dynamic-card` | 消逝手机端动态区域卡片 |
+| `custom:xiaoshi-room-card` | 消逝房间卡片 |
+
+#### 二、手机端设备卡片（全功能形，主要使用场景手机端，平板端也可使用）
+
+| type | 卡片名称 |
+|------|----------|
+| `custom:xiaoshi-phone-climate-card` | 消逝卡(B移动端)-空调/水暖毯/热水器卡 |
+| `custom:xiaoshi-phone-humidifier-card` | 消逝卡(B移动端)-加湿器/除湿机卡 |
+| `custom:xiaoshi-phone-purifier-card` | 消逝卡(B移动端)-净化器卡 |
+| `custom:xiaoshi-phone-computer-card` | 消逝卡(B移动端)-电脑卡（注：信息卡类里有新电脑卡） |
+| `custom:xiaoshi-phone-light-card` | 消逝卡(B移动端)-灯光卡（注：信息卡类里有新电脑卡）  |
+| `custom:xiaoshi-phone-switch-card` | 消逝卡(B移动端)-插座卡 |
+| `custom:xiaoshi-music-player` | 消逝卡(B移动端)-音乐播放器 |
+| `custom:xiaoshi-tv-player` | 消逝卡(B移动端)-电视播放器 |
+| `custom:xiaoshi-phone-fan-card` | 消逝卡(B移动端)-循环扇/风扇卡 |
+| `custom:xiaoshi-cover-card` | 消逝(B移动端)-窗帘/卷帘卡片 |
+| `custom:xiaoshi-phone-other-card` | 消逝卡(B移动端)-其他设备卡（注：可自行拼装不通用类设备卡片，如扫地机器人、洗碗机、洗衣机、冰箱、鱼缸等）  |
+| `custom:xiaoshi-lunar-calendar-phone` | 消逝万年历日历 - 手机端信息聚合 |
+| `custom:xiaoshi-lunar-calendar-phone-date` | 消逝万年历 - 手机日期 |
+
+#### 三、手机端设备小型卡片（只有简单开关功能，后续会继续补充）
+
+| type | 卡片名称 |
+|------|----------|
+| `custom:xiaoshi-small-climate-card` | 消逝卡(C微型卡)-空调/水暖毯/热水器卡 |
+| `custom:xiaoshi-small-humidifier-card` | 消逝卡(C微型卡)-加湿器卡 |
+| `custom:xiaoshi-small-purifier-card` | 消逝卡(C微型卡)-净化器卡 |
+
+#### 四、平板端卡片（全功能形，主要使用平板端）
+
+| type | 卡片名称 |
+|------|----------|
+| `custom:xiaoshi-pad-card` | 消逝卡(A平板端)-背景卡（主UI框架卡） |
+| `custom:xiaoshi-avatar-pad-card` | 消逝(A平板端)-头像卡片 |
+| `custom:xiaoshi-dynamic-pad-card` | 消逝(A平板端)-右侧状态条 |
+| `custom:xiaoshi-top-bar-card` | 消逝卡(A平板端)-顶部状态条 |
+| `custom:xiaoshi-chinese-poetry-card` | 消逝(A平板端)-古诗词卡片 |
+| `custom:xiaoshi-pad-climate-card` | 消逝卡(A平板端)-空调/水暖毯/热水器/加湿器/除湿机卡 |
+| `custom:xiaoshi-pad-fan-card` | 消逝卡(A平板端)-循环扇/风扇/净化器卡 |
+| `custom:xiaoshi-pad-grid-card` | 消逝卡(A平板端)-温湿度分布卡 |
+| `custom:xiaoshi-weather-pad-card` | 消逝(A平板端)-天气卡片 |
+| `custom:xiaoshi-sun-moon-card` | 消逝(A平板端)-日出日落月升月落卡片 |
+| `custom:xiaoshi-lunar-calendar-pad` | 消逝万年历日历 - 平板端信息 |
+| `custom:xiaoshi-lunar-calendar-pad-date` | 消逝万年历 - 平板日期 |
+| `custom:xiaoshi-birthday-card` | 消逝万年历 - 生日信息卡片 |
+| `custom:xiaoshi-lunar-calendar` | 消逝万年历日历 - 日历信息UI |
+
+#### 五、信息类卡片（button类的自带弹出card卡片、手机端/平板端都可使用）
+
+| type | 卡片名称 |
+|------|----------|
+| `custom:xiaoshi-ha-info-card` | 消逝HA信息卡片 |
+| `custom:xiaoshi-ha-info-button` | 消逝HA信息卡片按钮 |
+| `custom:xiaoshi-todo-card` | 消逝待办信息卡片 |
+| `custom:xiaoshi-todo-button` | 消逝待办信息片按钮 |
+| `custom:xiaoshi-chart-card` | 消逝温湿度曲线卡 |
+| `custom:xiaoshi-chart-button` | 消逝温湿度曲线片按钮 |
+| `custom:xiaoshi-balance-card` | 消逝余额信息卡片 |
+| `custom:xiaoshi-balance-button` | 消逝余额信息片按钮 |
+| `custom:xiaoshi-consumables-card` | 消逝耗材信息卡片 |
+| `custom:xiaoshi-consumables-button` | 消逝耗材信息片按钮 |
+| `custom:xiaoshi-petrochina-card` | 中国油价信息卡片 |
+| `custom:xiaoshi-petrochina-button` | 中国油价信息片按钮 |
+| `custom:xiaoshi-state-grid-info` | 消逝公用事业卡片（水、电、气） |
+| `custom:xiaoshi-state-grid-button` | 消逝公用事业片卡片按钮（水、电、气） |
+| `custom:xiaoshi-weather-phone-card` | 消逝天气卡片 |
+| `custom:xiaoshi-weather-phone-button` | 消逝天气按钮卡片 |
+| `custom:xiaoshi-button` | 消逝空白按钮 |
+| `custom:xiaoshi-device-button` | 消逝灯光按钮/设备按钮 |
+| `custom:xiaoshi-light-card` | 消逝卡(移动端)-房间灯光卡 |
+| `custom:xiaoshi-iot-computer-card` | 消逝卡(B移动端)-电脑卡(IOTLink) |
+| `custom:xiaoshi-pve-card` | 消逝卡-PVE卡片 |
+| `custom:xiaoshi-class-card` | 消逝卡-课程表卡片 |
+
 ---
 
 ### 📅 本地万年历 `v4.4`
