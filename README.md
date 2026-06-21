@@ -45,21 +45,19 @@ dashboards:
 
 # 🏠 Home Assistant 自定义集成汇总
 
-> 📋 这里汇总了所有 Home Assistant 自定义集成和仪表盘卡片项目
+> 📋  Home Assistant 自定义集成和仪表盘卡片项目
 
 ## 📦 集成（Integration）汇总
+
+### 📅 卡片汇总集成 `v2026.6.4.06`
+
+**🔗 项目地址：** https://github.com/xiaoshi930/xiaoshi
+
+---
 
 ### 📅 本地万年历 `v4.4`
 
 **🔗 项目地址：** https://github.com/xiaoshi930/lunar_calendar
-
-**🎨 仪表盘卡片UI：**
-- 手机端日期（自带弹出万年历）：`type: custom:xiaoshi-lunar-calendar-phone-date`
-- 平板端日期（自带弹出万年历）：`type: custom:xiaoshi-lunar-calendar-pad-date`
-- 手机端万年历：`type: custom:xiaoshi-lunar-calendar-phone`
-- 平板端万年历：`type: custom:xiaoshi-lunar-calendar-pad`
-- 日历信息卡片：`type: custom:xiaoshi-lunar-calendar`
-- 生日信息卡片：`type: custom:xiaoshi-birthday-card`
 
 ---
 
@@ -67,17 +65,10 @@ dashboards:
 
 **🔗 项目地址：** https://github.com/xiaoshi930/state_grid_info
 
-**🎨 仪表盘卡片UI：**
-- 国网信息：`type: custom:xiaoshi-state-grid-info`
-
 ---
 
 ### ⛽ 中国油价信息 `v3.5`
-
 **🔗 项目地址：** https://github.com/xiaoshi930/petrochina
-
-**🎨 仪表盘卡片UI：**
-- 油价信息卡片：`type: custom:xiaoshi-petrochina-card`
 
 ---
 
@@ -85,25 +76,17 @@ dashboards:
 
 **🔗 项目地址：** https://github.com/xiaoshi930/music_player
 
-**🎨 仪表盘卡片UI：**
-- 音乐播放器：`type: custom:xiaoshi-music-player`
-
 ---
 
 ### 🌤️ 和风天气 `v6.8`
 
 **🔗 项目地址：** https://github.com/xiaoshi930/qweather
 
-**🎨 仪表盘卡片UI：** 
-- 平板端UI：`type: custom:xiaoshi-weather-pad-player`
-- 手机端UI：`type: custom:xiaoshi-weather-phone-player`
 ---
 
 ### 📜 本地古诗词 `v1.4`
 
 **🔗 项目地址：** https://github.com/xiaoshi930/chinese_poetry
-
-**🎨 仪表盘卡片UI：** 无
 
 ---
 
@@ -111,15 +94,11 @@ dashboards:
 
 **🔗 项目地址：** https://github.com/xiaoshi930/proxmoxve
 
-**🎨 仪表盘卡片UI：** 无
-
 ---
 
 ### 📅 课程表 `v1.2`
 
 **🔗 项目地址：** https://github.com/xiaoshi930/classschedule
-
-**🎨 仪表盘卡片UI：** 无
 
 ---
 
@@ -127,14 +106,11 @@ dashboards:
 
 **🔗 项目地址：** https://github.com/xiaoshi930/tencent_commute
 
-**🎨 仪表盘卡片UI：** 无
-
 ---
+
 ### 💡 自动灯光（人在/人体）`v1.5`
 
 **🔗 项目地址：** https://github.com/xiaoshi930/auto_light
-
-**🎨 仪表盘卡片UI：** 无
 
 ---
 
