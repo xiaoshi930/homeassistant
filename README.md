@@ -108,6 +108,12 @@ dashboards:
 
 ---
 
+### 💡 浴霸转空调`v1.4`
+
+**🔗 项目地址：** https://github.com/xiaoshi930/bathroom_climate
+
+---
+
 ### 💡 自动灯光（人在/人体）`v1.5`
 
 **🔗 项目地址：** https://github.com/xiaoshi930/auto_light
