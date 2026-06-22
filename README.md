@@ -67,7 +67,8 @@ dashboards:
 - 原生弹窗（不依赖browser_mod，移值https://bbs.hassbian.com/thread-32007-1-1.html）
 - 原生全屏（不依赖kiosk-mode）
 - 原生定时器（不依赖辅助实体timer,不依赖设备本身是否有定时功能，覆盖卡片：空调、加湿器、净化器等设备卡片）
-
+- 原生主题切换（平板端跟随sun.sun实体+全局函数theme()给第三方卡片留有调用主题方式（如button_card的调用颜色可写，return theme() === 'light' ? '#fff' : '#000';），手机端默认跟随手机系统主题）
+- 
 ### 一、手机端主UI框架卡片
 
 | type | 卡片名称 | 功能介绍 |
