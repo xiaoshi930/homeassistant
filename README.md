@@ -1,5 +1,7 @@
 ## ⚙️ Lovelace 仪表盘 YAML 更新日期 2026-06-11
 
+#### yaml参考文件获取地址：https://github.com/xiaoshi930/homeassistant
+
 #### 1️⃣ 切换仪表盘为yaml模式：修改主配置文件
 
 编辑 `configuration.yaml` 文件，添加以下配置：
